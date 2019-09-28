@@ -1,16 +1,14 @@
-using System.Collections.Generic;
-
 namespace BlueprintDeck.Design
 {
     public class NodeDesignInstance
     {
-        public string NodeTypeKey { get; set; }
+        public string? NodeTypeKey { get; set; }
         
-        public string NodeInstanceId { get; set; }
+        public string? NodeInstanceId { get; set; }
         
-        public List<DesignPortInstance> Ports { get; set; }
+//        public List<DesignPortInstance>? Ports { get; set; }
         
-        public string Value { get; set; }
+        public string? Value { get; set; }
         
     }
 }

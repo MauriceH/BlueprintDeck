@@ -48,8 +48,8 @@ namespace BlueprintDeck.Node.Ports.Definitions
         public InputOutputType InputOutputType { get; }
         [JsonConverter(typeof(StringEnumConverter))]
         public DataMode DataMode { get; }
-        public Type PortDataType { get; }
-        public IPortData DefaultValue { get; }
+        public Type? PortDataType { get; }
+        public IPortData? DefaultValue { get; }
     }
 
     public static class NodePortDefinitionFactory

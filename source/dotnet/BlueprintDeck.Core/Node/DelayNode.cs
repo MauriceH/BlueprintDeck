@@ -2,21 +2,31 @@ using System;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions.DataTypes;
+using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node
 {
     
-    [NodeDescriptor("Delay","Delay", typeof(DelayNodeDescriptor) )]
+    [NodeDescriptor(DelayNodeDescriptor.NodeKey,"Delay", typeof(DelayNodeDescriptor) )]
     public class DelayNode : INode
     {
-        private IInput _triggerInput;
-        private IInput<PdtDuration> _durationInput;
-        private IOutput _output;
-        public string ShortTitle { get; set; }
+        private readonly ILogger<DelayNode> _logger;
+        private IInput? _triggerInput;
+        private IInput<PdtDuration>? _durationInput;
+        private IOutput? _output;
+
+        public DelayNode(ILogger<DelayNode> logger)
+        {
+            _logger = logger;
+        }
+
+        public string? ShortTitle { get; set; }
+        
+        
         
         public Task Activate(INodeContext nodeContext)
         {
-            Console.WriteLine("Initializing delay node ...");
+            _logger.LogDebug("Start initializing delay node");
             _triggerInput = nodeContext.GetPort<IInput>(DelayNodeDescriptor.Input);
             _durationInput = nodeContext.GetPort<IInput<PdtDuration>>(DelayNodeDescriptor.DelayDuration);
             _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
@@ -32,9 +42,13 @@ namespace BlueprintDeck.Node
         
         private async Task OnInput()
         {
-            Console.WriteLine("OnDelayTriggert");
-            await Task.Delay(_durationInput.Value.TimeSpan);
-            _output.Emit();
+            var valueTimeSpan = _durationInput?.Value?.TimeSpan;
+            if (valueTimeSpan == null)
+            {
+                throw new PortNotInitializedException(DelayNodeDescriptor.NodeKey,DelayNodeDescriptor.DelayDuration.Key);
+            }
+            await Task.Delay(valueTimeSpan.Value);
+            _output?.Emit();
         }
     }
 }

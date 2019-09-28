@@ -4,7 +4,7 @@ using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 
 namespace BlueprintDeck.Node.Ports
 {
-    public class DataInput<T> : IInput<T> where T : IPortData
+    public class DataInput<T> : IInput<T> where T : class , IPortData
     {
         private readonly IDisposable _subscription;
         private readonly List<Action<T>> _actions = new List<Action<T>>();

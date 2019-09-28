@@ -23,7 +23,7 @@ namespace BlueprintDeck.Node.Ports
         {
             var tasks = _actions.Select(x => x());
             await Task.WhenAll(tasks);
-            return null;
+            return new object();
         }
         
         public void Register(Func<Task> action)

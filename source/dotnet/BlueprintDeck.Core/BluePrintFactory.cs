@@ -5,6 +5,7 @@ using Autofac;
 using BlueprintDeck.Design;
 using BlueprintDeck.Instance;
 using BlueprintDeck.Node.Ports.Definitions;
+using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck
 {
@@ -12,11 +13,13 @@ namespace BlueprintDeck
     {
         private readonly ILifetimeScope _parentScope;
         private readonly INodeRepository _nodeRepository;
+        private readonly Func<ILogger<BluePrint>> _loggerFactory;
 
-        public BluePrintFactory(ILifetimeScope parentScope, INodeRepository nodeRepository)
+        public BluePrintFactory(ILifetimeScope parentScope, INodeRepository nodeRepository, Func<ILogger<BluePrint>> loggerFactory)
         {
             _parentScope = parentScope;
             _nodeRepository = nodeRepository;
+            _loggerFactory = loggerFactory;
         }
 
 
@@ -77,7 +80,7 @@ namespace BlueprintDeck
                 }
             }
 
-            return new BluePrint(scope, nodeOrder);
+            return new BluePrint(scope, nodeOrder, _loggerFactory.Invoke());
         }
     }
 }
