@@ -5,6 +5,9 @@
         <LangVersion>8</LangVersion>
         <RootNamespace>BlueprintDeck</RootNamespace>
         <Nullable>enable</Nullable>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/MauriceH/BlueprintDeck</PackageProjectUrl>
+        <PackageIconUrl></PackageIconUrl>
     </PropertyGroup>
 
     <ItemGroup>
@@ -15,6 +18,12 @@
       <PackageReference Include="System.Reactive" Version="4.1.6" />
       <PackageReference Include="System.Reactive.Core" Version="4.1.6" />
       <PackageReference Include="System.Reactive.Linq" Version="4.1.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\SolutionInfo.Settings.targets">
+        <Link>SolutionInfo.Settings.targets</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

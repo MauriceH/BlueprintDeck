@@ -46,7 +46,7 @@ namespace BlueprintDeck
         {
             if (!_logger.IsEnabled(LogLevel.Debug)) return;
             var sb = new StringBuilder();
-            sb.AppendLine("Activating blueprint in order: ");
+            sb.AppendLine("Activating BlueprintDeck nodes in order: ");
             foreach (var nodeInstance in nodes)
             {
                 sb.Append(" - (");

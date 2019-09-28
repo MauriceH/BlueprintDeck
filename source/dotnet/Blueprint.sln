@@ -1,8 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintDeck.Core", "BlueprintDeck.Core\BlueprintDeck.Core.csproj", "{CDEA86E6-A602-4CA7-A9F8-1A935946D62A}"
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueprintDeck.Core", "BlueprintDeck.Core\BlueprintDeck.Core.csproj", "{CDEA86E6-A602-4CA7-A9F8-1A935946D62A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintDeck.PrototypeTestApp", "BlueprintDeck.PrototypeTestApp\BlueprintDeck.PrototypeTestApp.csproj", "{EEB5F051-F563-4568-B281-177BFC0CB6B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueprintDeck.PrototypeTestApp", "BlueprintDeck.PrototypeTestApp\BlueprintDeck.PrototypeTestApp.csproj", "{EEB5F051-F563-4568-B281-177BFC0CB6B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +21,11 @@ Global
 		{EEB5F051-F563-4568-B281-177BFC0CB6B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEB5F051-F563-4568-B281-177BFC0CB6B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEB5F051-F563-4568-B281-177BFC0CB6B3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA55991A-1122-4D92-B31E-2B96EA904B27}
 	EndGlobalSection
 EndGlobal
