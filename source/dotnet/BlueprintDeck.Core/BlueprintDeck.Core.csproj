@@ -20,10 +20,6 @@
       <PackageReference Include="System.Reactive.Linq" Version="4.1.6" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\SolutionInfo.Settings.targets">
-        <Link>SolutionInfo.Settings.targets</Link>
-      </Content>
-    </ItemGroup>
+    <Import Project="..\SolutionInfo.Settings.targets" />
 
 </Project>
