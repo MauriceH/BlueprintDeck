@@ -7,9 +7,14 @@
         <Nullable>enable</Nullable>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/MauriceH/BlueprintDeck</PackageProjectUrl>
-        <PackageIconUrl></PackageIconUrl>
+        <PackageIconUrl>https://github.com/MauriceH/BlueprintDeck/raw/develop/assets/nugeticon.png</PackageIconUrl>
+        <PackageIcon>nugeticon.png</PackageIcon>
     </PropertyGroup>
 
+    <ItemGroup>
+        <None Include="..\..\..\assets\nugeticon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+    
     <ItemGroup>
       <PackageReference Include="Autofac" Version="4.9.4" />
       <PackageReference Include="Microsoft.Extensions.Logging" Version="3.0.0" />
