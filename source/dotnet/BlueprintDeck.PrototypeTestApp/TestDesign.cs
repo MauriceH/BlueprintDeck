@@ -18,6 +18,11 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new NodeDesignInstance
                     {
+                        NodeTypeKey = "TestNode",
+                        NodeInstanceId = "TestNode2",
+                    },
+                    new NodeDesignInstance
+                    {
                         NodeTypeKey = "Activate",
                         NodeInstanceId = "Activate1",
                     },
@@ -45,8 +50,16 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new DesignConnectionInstance
                     {
-                        Id = "DelayToTest",
+                        Id = "DelayToTest1",
                         NodeTo = "TestNode1",
+                        NodePortTo = "Trigger",
+                        NodeFrom = "Delay1",
+                        NodePortFrom = "Output"
+                    },
+                    new DesignConnectionInstance
+                    {
+                        Id = "DelayToTest2",
+                        NodeTo = "TestNode2",
                         NodePortTo = "Trigger",
                         NodeFrom = "Delay1",
                         NodePortFrom = "Output"

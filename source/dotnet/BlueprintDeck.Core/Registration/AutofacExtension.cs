@@ -3,7 +3,7 @@ using System.Reflection;
 using Autofac;
 using BlueprintDeck.Node;
 
-namespace BlueprintDeck.Design
+namespace BlueprintDeck.Registration
 {
     public static  class AutofacExtension
     {
@@ -32,6 +32,7 @@ namespace BlueprintDeck.Design
                 var registrations = _resolver.ResolveNodeRegistrations(assembly);
                 foreach (var registration in registrations)
                 {
+                    _builder.RegisterInstance(registration).As<NodeRegistration>().SingleInstance();
                     _builder.RegisterType(registration.NodeType).AsSelf().As<INode>().InstancePerDependency();
                     _builder.RegisterType(registration.NodeDescriptorType).AsSelf().InstancePerDependency();
                 }

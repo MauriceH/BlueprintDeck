@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Autofac;
 using BlueprintDeck.Design;
+using BlueprintDeck.Registration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
 
@@ -20,12 +24,19 @@ namespace BlueprintDeck.PrototypeTestApp
             {
                 var thisAssembly = Assembly.GetExecutingAssembly();
                 c.RegisterAssemblyNodes(thisAssembly);
+                
             });
             
             RegisterLogger(builder);
 
             var container = builder.Build();
 
+            var nodeTypes = container.Resolve<IEnumerable<NodeRegistration>>();
+            var json = JsonConvert.SerializeObject(new {Nodes = nodeTypes.ToList()}, Formatting.Indented, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            
             var factory = container.Resolve<BluePrintFactory>();
             var design = TestDesign.CreateDesign();
             var bluePrint = factory.CreateBluePrint(design);

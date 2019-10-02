@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="..\..\..\assets\nugeticon.png" Pack="true" PackagePath="\"/>
+        <None Include="..\..\..\assets\nugeticon.png" Pack="true" PackagePath="\" />
     </ItemGroup>
     
     <ItemGroup>

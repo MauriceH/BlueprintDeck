@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Node.ValueNode;
 
-namespace BlueprintDeck.Design
+namespace BlueprintDeck.Registration
 {
     public class NodeRegistrationAssemblyResolver
     {
@@ -35,12 +35,14 @@ namespace BlueprintDeck.Design
                     if (attribute == null) continue;
 
                     if(!typeof(INode).IsAssignableFrom(type)) continue;
+
+                    var isConstantNode = type.IsSubclassOfRawGeneric(typeof(ValueDataNode<>));
                     
                     
                     var id = attribute.Id ?? Encoding.UTF8.GetString(sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
 
                     var controller = (INodeDescriptor) Activator.CreateInstance(attribute.PortDescriptor);
-                    registrations.Add(new NodeRegistration(id, attribute.Title, type,attribute.PortDescriptor ,controller.PortDefinitions));
+                    registrations.Add(new NodeRegistration(id, attribute.Title, type,attribute.PortDescriptor ,controller.PortDefinitions, isConstantNode));
                 }
                 catch (Exception)
                 {
