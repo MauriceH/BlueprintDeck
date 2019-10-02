@@ -27,13 +27,14 @@ const prepare = taskPrepareCommon(config);
 const version = taskVersion(config);
 const target = taskDotnetSolutionTarget(meta, config, solutionDir);
 const compile = taskDotnetBuildCommon(solution, config);
-const pack = taskDotnetPackCommon(path.join(solutionDir, 'BlueprintDeck.Core'),config)
+const pack1 = taskDotnetPackCommon(path.join(solutionDir, 'BlueprintDeck.Core'),config)
+const pack2 = taskDotnetPackCommon(path.join(solutionDir, 'BlueprintDeck.ASPNetCore'),config)
 //const publish1 = taskDotnetPublishCommon(path.join(solutionDir, 'Schares.Onlineplaner.BackendService'), config);
 //const publish2 = taskDotnetPublishCommon(path.join(solutionDir, 'Schares.Onlineplaner.SyncService'), config);
 //const test = taskDotnetTestCommon(solution, config);
 
 const init = series(prepare, version, target);
-const build = series(compile, pack);//, test, publish1, publish2);
+const build = series(compile, pack1, pack2);//, test, publish1, publish2);
 
 exports.default = series(init, build);
 exports.build = series(init, build);
