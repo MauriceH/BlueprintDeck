@@ -9,6 +9,7 @@
         <PackageProjectUrl>https://github.com/MauriceH/BlueprintDeck</PackageProjectUrl>
         <PackageIconUrl>https://github.com/MauriceH/BlueprintDeck/raw/develop/assets/nugeticon.png</PackageIconUrl>
         <PackageIcon>nugeticon.png</PackageIcon>
+        <Description>Develop nodes and connect them in a blueprint-flow to interact with each other</Description>
     </PropertyGroup>
 
     <ItemGroup>
