@@ -21,17 +21,17 @@ namespace BlueprintDeck.Registration
         {
         }
 
-        public string Id { get; }
-        public string Title { get; }
+        public string Id { get; set; }
+        public string Title { get; set;}
         
         [JsonIgnore]
-        public Type NodeType { get; }
+        public Type NodeType { get; set;}
         
         [JsonIgnore]
-        public Type NodeDescriptorType { get; }
+        public Type NodeDescriptorType { get; set;}
         
-        public bool IsConstantNode { get; }
+        public bool IsConstantNode { get; set;}
         
-        public IList<NodePortDefinition> PortDefinitions { get; }
+        public IList<NodePortDefinition> PortDefinitions { get; set;}
     }
 }
