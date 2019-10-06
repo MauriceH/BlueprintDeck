@@ -16,6 +16,11 @@ namespace BlueprintDeck.Registration
             PortDefinitions = portDefinitions;
             IsConstantNode = isConstantNode;
         }
+
+        public NodeRegistration()
+        {
+        }
+
         public string Id { get; }
         public string Title { get; }
         

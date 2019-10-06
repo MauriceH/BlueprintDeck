@@ -40,20 +40,25 @@ namespace BlueprintDeck.Node.Ports.Definitions
             Mandatory = isMandatory;
         }
 
-        public string Key { get; }
-        public string Title { get; }
-        public bool Mandatory { get; }
+        public NodePortDefinition()
+        {
+        }
+
+        public string Key { get; set; }
+        public string Title { get; set;}
+        public bool Mandatory { get; set;}
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public InputOutputType InputOutputType { get; }
+        public InputOutputType InputOutputType { get; set;}
         
         [JsonConverter(typeof(StringEnumConverter))]
-        public DataMode DataMode { get; }
+        public DataMode DataMode { get; set;}
         
         [JsonIgnore]
-        public Type? PortDataType { get; }
+        public Type? PortDataType { get; set;}
         
-        public IPortData? DefaultValue { get; }
+        
+        public IPortData? DefaultValue { get; set;}
     }
 
     public static class NodePortDefinitionFactory

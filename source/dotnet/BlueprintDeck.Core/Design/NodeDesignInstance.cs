@@ -10,6 +10,8 @@ namespace BlueprintDeck.Design
         
         public string? NodeInstanceId { get; set; }
         
+        public string? Title { get; set; }
+        
 //        public List<DesignPortInstance>? Ports { get; set; }
         
         public string? Value { get; set; }
