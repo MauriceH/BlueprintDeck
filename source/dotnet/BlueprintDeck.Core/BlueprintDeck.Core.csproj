@@ -5,6 +5,9 @@
         <LangVersion>8</LangVersion>
         <RootNamespace>BlueprintDeck</RootNamespace>
         <Nullable>enable</Nullable>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/MauriceH/BlueprintDeck</PackageProjectUrl>
         <PackageIconUrl>https://github.com/MauriceH/BlueprintDeck/raw/develop/assets/nugeticon.png</PackageIconUrl>
