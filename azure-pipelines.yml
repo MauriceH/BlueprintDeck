@@ -22,13 +22,8 @@ steps:
     gulpFile: 'gulpfile.js'
     targets: 'default'
     enableCodeCoverage: false
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'build'
-    projects: 'source/dotnet/BlueprintDeck.Core/BlueprintDeck.Core.csproj'
-
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'blueprintDeck.Core NugetFiles'
+    PathtoPublish: 'build/pck'
+    ArtifactName: 'BlueprintDeck.Core'
     publishLocation: 'Container'
