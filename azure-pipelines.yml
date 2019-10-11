@@ -12,10 +12,20 @@ pool:
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
+- task: Npm@1
+  inputs:
+    command: 'install'
+    
+- task: Gulp@1
+  inputs:
+    gulpFile: 'gulpfile.js'
+    targets: 'default'
+    enableCodeCoverage: false
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
     projects: 'source/dotnet/BlueprintDeck.Core/BlueprintDeck.Core.csproj'
+
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
