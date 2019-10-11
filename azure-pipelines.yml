@@ -15,7 +15,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: 'BlueprintDeck/source/dotnet/BlueprintDeck.Core/BlueprintDeck.Core.csproj'
+    projects: 'source/dotnet/BlueprintDeck.Core/BlueprintDeck.Core.csproj'
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
