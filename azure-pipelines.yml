@@ -22,8 +22,9 @@ steps:
     gulpFile: 'gulpfile.js'
     targets: 'default'
     enableCodeCoverage: false
+
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'build/pck'
-    ArtifactName: 'BlueprintDeck.Core'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/build/pck'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
