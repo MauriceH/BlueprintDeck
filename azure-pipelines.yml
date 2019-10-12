@@ -11,8 +11,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: echo Running buildsystem!
+  displayName: ''
 - task: Npm@1
   inputs:
     command: 'install'
