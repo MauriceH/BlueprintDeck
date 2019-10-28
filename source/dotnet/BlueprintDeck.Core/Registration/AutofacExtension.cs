@@ -20,9 +20,10 @@ namespace BlueprintDeck.Registration
             
             var blueprintDeckBuilder = new BlueprintDeckAutofacBuilder(builder);
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
-            blueprintDeckBuilder.RegisterConstantValueSerializer<DoubleConstantValueSerializer>("Double");
+            blueprintDeckBuilder.RegisterConstantValueSerializer<DoubleConstantValueSerializer>("double");
             blueprintDeckBuilder.RegisterConstantValueSerializer<Int32ConstantValueSerializer>("int");
             blueprintDeckBuilder.RegisterConstantValueSerializer<TimeSpanConstantValueSerializer>("timespan");
+            blueprintDeckBuilder.RegisterConstantValueSerializer<StringConstantValueSerializer>("string");
             
             config(blueprintDeckBuilder);
         }
