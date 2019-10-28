@@ -11,8 +11,8 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: echo Running buildsystem!
+  displayName: ''
 - task: Npm@1
   inputs:
     command: 'install'
@@ -22,8 +22,9 @@ steps:
     gulpFile: 'gulpfile.js'
     targets: 'default'
     enableCodeCoverage: false
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: 'build/pck'
-    ArtifactName: 'BlueprintDeck.Core'
+    ArtifactName: 'drop'
     publishLocation: 'Container'
