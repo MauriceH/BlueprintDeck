@@ -1,5 +1,4 @@
 using System;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -18,7 +17,7 @@ namespace BlueprintDeck.Node.Ports.Definitions
             Mandatory = isMandatory;
         }
         
-        public NodePortDefinition(string key, string title, InputOutputType inputOutputType,  IPortData defaultValue, bool isMandatory)
+        public NodePortDefinition(string key, string title, InputOutputType inputOutputType,  object defaultValue, bool isMandatory)
         {
             Key = key;
             Title = title;
@@ -39,27 +38,20 @@ namespace BlueprintDeck.Node.Ports.Definitions
             DefaultValue = null;
             Mandatory = isMandatory;
         }
+        
 
-        // ReSharper disable once UnusedMember.Global
-        public NodePortDefinition()
-        {
-        }
-
-        public string Key { get; set; }
-        public string Title { get; set;}
-        public bool Mandatory { get; set;}
+        public string Key { get; }
+        public string Title { get;}
+        public bool Mandatory { get;}
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public InputOutputType InputOutputType { get; set;}
+        public InputOutputType InputOutputType { get; }
         
         [JsonConverter(typeof(StringEnumConverter))]
-        public DataMode DataMode { get; set;}
+        public DataMode DataMode { get;}
         
-        [JsonIgnore]
-        public Type? PortDataType { get; set;}
+        public Type? PortDataType { get; }
         
-        public string DataType { get; set; }
-        
-        public IPortData? DefaultValue { get; set;}
+        public object? DefaultValue { get; }
     }
 }

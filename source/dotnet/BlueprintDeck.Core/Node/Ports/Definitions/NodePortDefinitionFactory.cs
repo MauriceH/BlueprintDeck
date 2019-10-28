@@ -1,5 +1,3 @@
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
-
 namespace BlueprintDeck.Node.Ports.Definitions
 {
     public static class NodePortDefinitionFactory
@@ -16,12 +14,12 @@ namespace BlueprintDeck.Node.Ports.Definitions
             return new NodePortDefinition(key, title, InputOutputType.Input, isMandatory);
         }
 
-        public static NodePortDefinition CreateDataOutput<TDataType>(string key, string title) where TDataType : IPortData
+        public static NodePortDefinition CreateDataOutput<TDataType>(string key, string title)
         {
             return new NodePortDefinition(key, title, InputOutputType.Output,  typeof(TDataType), false);
         }
         
-        public static NodePortDefinition CreateDataInput<TDataType>(string key, string title, TDataType defaultValue, bool isMandatory = true)  where TDataType : IPortData
+        public static NodePortDefinition CreateDataInput<TDataType>(string key, string title, TDataType defaultValue, bool isMandatory = true)
         {
             return new NodePortDefinition(key, title, InputOutputType.Input,  defaultValue, isMandatory);
         }

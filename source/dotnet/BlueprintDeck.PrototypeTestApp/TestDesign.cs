@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BlueprintDeck.Design;
 
@@ -5,42 +6,46 @@ namespace BlueprintDeck.PrototypeTestApp
 {
     public class TestDesign
     {
-        public static BluePrintDesign CreateDesign()
+        public static Design.BluePrint CreateDesign()
         {
-            return new BluePrintDesign
+            return new Design.BluePrint
             {
-                Nodes = new List<NodeDesignInstance>()
+                Nodes = new List<Design.Node>()
                 {
-                    new NodeDesignInstance
+                    new Design.Node
                     {
                         NodeTypeKey = "TestNode",
-                        NodeInstanceId = "TestNode1",
+                        Key = "TestNode1",
                     },
-                    new NodeDesignInstance
+                    new Design.Node
                     {
                         NodeTypeKey = "TestNode",
-                        NodeInstanceId = "TestNode2",
+                        Key = "TestNode2",
                     },
-                    new NodeDesignInstance
+                    new Design.Node
                     {
                         NodeTypeKey = "Activate",
-                        NodeInstanceId = "Activate1",
+                        Key = "Activate1",
                     },
-                    new NodeDesignInstance
+                    new Design.Node
                     {
                         NodeTypeKey = "Delay",
-                        NodeInstanceId = "Delay1",
-                    },
-                    new NodeDesignInstance
-                    {
-                        NodeTypeKey = "PdtDuration",
-                        NodeInstanceId = "Duration1",
-                        Value = "5000"
+                        Key = "Delay1",
                     }
                 },
-                Connections = new List<DesignConnectionInstance>()
+                ConstantValues = new List<Design.ConstantValue>()
                 {
-                    new DesignConnectionInstance
+                    new Design.ConstantValue()
+                    {
+                        Key = "Duration1",
+                        Title = "RainDuration",
+                        Value = "15000",
+                        Type = "TimeSpan"
+                    }
+                },
+                Connections = new List<Connection>()
+                {
+                    new Connection
                     {
                         Id = "ActivateToDelay",
                         NodeTo = "Delay1",
@@ -48,7 +53,7 @@ namespace BlueprintDeck.PrototypeTestApp
                         NodeFrom = "Activate1",
                         NodePortFrom = "Event"
                     },
-                    new DesignConnectionInstance
+                    new Connection
                     {
                         Id = "DelayToTest1",
                         NodeTo = "TestNode1",
@@ -56,7 +61,7 @@ namespace BlueprintDeck.PrototypeTestApp
                         NodeFrom = "Delay1",
                         NodePortFrom = "Output"
                     },
-                    new DesignConnectionInstance
+                    new Connection
                     {
                         Id = "DelayToTest2",
                         NodeTo = "TestNode2",
@@ -64,13 +69,13 @@ namespace BlueprintDeck.PrototypeTestApp
                         NodeFrom = "Delay1",
                         NodePortFrom = "Output"
                     },
-                    new DesignConnectionInstance
+                    new Connection
                     {
                         Id = "DurationToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Duration",
-                        NodeFrom = "Duration1",
-                        NodePortFrom = "Value"
+                        ConstantKey = "Duration1",
+                        IsConstantConnection = true
                     }
                 }
             };

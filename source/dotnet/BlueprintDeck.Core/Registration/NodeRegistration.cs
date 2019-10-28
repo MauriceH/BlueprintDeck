@@ -17,21 +17,17 @@ namespace BlueprintDeck.Registration
             IsConstantNode = isConstantNode;
         }
 
-        public NodeRegistration()
-        {
-        }
-
-        public string Id { get; set; }
-        public string Title { get; set;}
+        public string Id { get; }
+        public string Title { get;}
         
         [JsonIgnore]
-        public Type NodeType { get; set;}
+        public Type NodeType { get;}
         
         [JsonIgnore]
-        public Type NodeDescriptorType { get; set;}
+        public Type NodeDescriptorType { get;}
         
-        public bool IsConstantNode { get; set;}
+        public bool IsConstantNode { get; }
         
-        public IList<NodePortDefinition> PortDefinitions { get; set;}
+        public IList<NodePortDefinition> PortDefinitions { get; }
     }
 }

@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 
 namespace BlueprintDeck.Node.Ports
 {
@@ -10,9 +9,9 @@ namespace BlueprintDeck.Node.Ports
         void Register(Func<Task> action);
     }
 
-    public interface IInput<out T> : IDisposable where T: IPortData
+    public interface IInput<out T> : IDisposable
     {
         T Value { get; }
-        void Register(Action<T> action);
+        void OnData(Action<T> action);
     }
 }

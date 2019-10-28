@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Autofac;
+using BlueprintDeck.ConstantValue.Serializer;
 using BlueprintDeck.Node;
 
 namespace BlueprintDeck.Registration
@@ -11,8 +12,18 @@ namespace BlueprintDeck.Registration
         public static void RegisterBlueprintDeck(this ContainerBuilder builder, Action<IBlueprintDeckAutofacBuilder> config)
         {
             builder.RegisterModule<BluePrintDependencyModule>();
+
+            builder.RegisterType<ConstantValueSerializerRegistry>()
+                .AsSelf()
+                .As<IConstantValueSerializerRepository>()
+                .SingleInstance();
+            
             var blueprintDeckBuilder = new BlueprintDeckAutofacBuilder(builder);
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
+            blueprintDeckBuilder.RegisterConstantValueSerializer<DoubleConstantValueSerializer>("Double");
+            blueprintDeckBuilder.RegisterConstantValueSerializer<Int32ConstantValueSerializer>("int");
+            blueprintDeckBuilder.RegisterConstantValueSerializer<TimeSpanConstantValueSerializer>("timespan");
+            
             config(blueprintDeckBuilder);
         }
 
@@ -37,6 +48,14 @@ namespace BlueprintDeck.Registration
                     _builder.RegisterType(registration.NodeDescriptorType).AsSelf().InstancePerDependency();
                 }
             }
+
+            public void RegisterConstantValueSerializer<T>(string typeName) where T : IConstantValueSerializer
+            {
+                ConstantValueSerializerRegistry.Register<T>(_builder, typeName);
+            }
+            
+            
+           
         }
     }
 

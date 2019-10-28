@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using BlueprintDeck.Design;
-using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

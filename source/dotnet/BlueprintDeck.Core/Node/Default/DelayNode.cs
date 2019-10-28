@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node
@@ -12,7 +11,7 @@ namespace BlueprintDeck.Node
     {
         private readonly ILogger<DelayNode> _logger;
         private IInput? _triggerInput;
-        private IInput<PdtDuration>? _durationInput;
+        private IInput<TimeSpan>? _durationInput;
         private IOutput? _output;
 
         public DelayNode(ILogger<DelayNode> logger)
@@ -28,7 +27,7 @@ namespace BlueprintDeck.Node
         {
             _logger.LogDebug("Start initializing delay node");
             _triggerInput = nodeContext.GetPort<IInput>(DelayNodeDescriptor.Input);
-            _durationInput = nodeContext.GetPort<IInput<PdtDuration>>(DelayNodeDescriptor.DelayDuration);
+            _durationInput = nodeContext.GetPort<IInput<TimeSpan>>(DelayNodeDescriptor.DelayDuration);
             _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
             _triggerInput.Register(OnInput);
             return Task.CompletedTask;
@@ -42,7 +41,7 @@ namespace BlueprintDeck.Node
         
         private async Task OnInput()
         {
-            var valueTimeSpan = _durationInput?.Value?.TimeSpan;
+            var valueTimeSpan = _durationInput?.Value;
             if (valueTimeSpan == null)
             {
                 throw new PortNotInitializedException(DelayNodeDescriptor.NodeKey,DelayNodeDescriptor.DelayDuration.Key);

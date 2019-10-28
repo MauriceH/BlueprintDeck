@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 
 namespace BlueprintDeck.Node.Ports
 {
-    public class DataInput<T> : IInput<T> where T : class , IPortData
+    public class DataInput<T> : IInput<T>
     {
         private readonly IDisposable _subscription;
         private readonly List<Action<T>> _actions = new List<Action<T>>();
@@ -31,7 +30,7 @@ namespace BlueprintDeck.Node.Ports
 
         public T Value => _lastValue;
         
-        public void Register(Action<T> onValue)
+        public void OnData(Action<T> onValue)
         {
             _actions.Add(onValue);
         }

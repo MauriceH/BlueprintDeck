@@ -1,10 +1,9 @@
 using System;
 using System.Reactive.Subjects;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 
 namespace BlueprintDeck.Node.Ports
 {
-    public class DataOutput<T> : IOutput<T> where T : IPortData
+    public class DataOutput<T> : IOutput<T>
     {
         private readonly ReplaySubject<T> _replaySubject;
 

@@ -1,5 +1,3 @@
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
-
 namespace BlueprintDeck.Node.Ports
 {
     public interface IOutput
@@ -7,7 +5,7 @@ namespace BlueprintDeck.Node.Ports
         void Emit();
     }
 
-    public interface IOutput<in T>  where T: IPortData
+    public interface IOutput<in T>
     {
         void Emit(T data);
     }
