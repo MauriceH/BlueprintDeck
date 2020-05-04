@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using BlueprintDeck.Design;
 
@@ -6,9 +5,9 @@ namespace BlueprintDeck.PrototypeTestApp
 {
     public class TestDesign
     {
-        public static Design.BluePrint CreateDesign()
+        public static BluePrint CreateDesign()
         {
-            return new Design.BluePrint
+            return new BluePrint
             {
                 Nodes = new List<Design.Node>()
                 {
@@ -40,14 +39,13 @@ namespace BlueprintDeck.PrototypeTestApp
                         Key = "Duration1",
                         Title = "RainDuration",
                         Value = "15000",
-                        Type = "TimeSpan"
                     }
                 },
                 Connections = new List<Connection>()
                 {
                     new Connection
                     {
-                        Id = "ActivateToDelay",
+                        Key = "ActivateToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Input",
                         NodeFrom = "Activate1",
@@ -55,7 +53,7 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new Connection
                     {
-                        Id = "DelayToTest1",
+                        Key = "DelayToTest1",
                         NodeTo = "TestNode1",
                         NodePortTo = "Trigger",
                         NodeFrom = "Delay1",
@@ -63,15 +61,15 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new Connection
                     {
-                        Id = "DelayToTest2",
+                        Key = "DelayToTest2",
                         NodeTo = "TestNode2",
                         NodePortTo = "Trigger",
-                        NodeFrom = "Delay1",
-                        NodePortFrom = "Output"
+                        NodeFrom = "Activate1",
+                        NodePortFrom = "Event"
                     },
                     new Connection
                     {
-                        Id = "DurationToDelay",
+                        Key = "DurationToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Duration",
                         ConstantKey = "Duration1",

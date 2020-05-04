@@ -10,7 +10,7 @@ namespace BlueprintDeck.Registration
 {
     public class NodeRegistrationAssemblyResolver
     {
-        public IList<NodeRegistration> ResolveNodeRegistrations(Assembly assembly)
+        internal IList<NodeRegistration> ResolveNodeRegistrations(Assembly assembly)
         {
             var sha1 = SHA1.Create();
             var registrations = new List<NodeRegistration>();
@@ -39,7 +39,7 @@ namespace BlueprintDeck.Registration
 
                     var controller = (INodeDescriptor) Activator.CreateInstance(attribute.PortDescriptor);
                     
-                    registrations.Add(new NodeRegistration(id, attribute.Title, type,attribute.PortDescriptor ,controller.PortDefinitions, false));
+                    registrations.Add(new NodeRegistration(id, attribute.Title, type,attribute.PortDescriptor ,controller.PortDefinitions));
                 }
                 catch (Exception)
                 {

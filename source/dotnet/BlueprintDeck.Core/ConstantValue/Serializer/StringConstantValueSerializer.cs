@@ -1,20 +1,15 @@
-using System;
-
 namespace BlueprintDeck.ConstantValue.Serializer
 {
-    public class StringConstantValueSerializer : IConstantValueSerializer
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class StringConstantValueSerializer : IConstantValueSerializer<string>
     {
-        public string Serialize(object value)
+        public string? Serialize(object? value)
         {
-            return $"{value}";
+            return value == null ? null : $"{value}";
         }
+        
 
-        public Type GetDataType()
-        {
-            return typeof(string);
-        }
-
-        public object Deserialize(string serializedValue)
+        public object? Deserialize(string? serializedValue)
         {
             return serializedValue;
         }

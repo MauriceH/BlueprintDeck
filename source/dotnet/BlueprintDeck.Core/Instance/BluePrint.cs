@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac;
-using BlueprintDeck.Instance;
 using Microsoft.Extensions.Logging;
 
-namespace BlueprintDeck
+namespace BlueprintDeck.Instance
 {
     public class BluePrint : IDisposable
     {
@@ -16,7 +15,7 @@ namespace BlueprintDeck
         private readonly List<NodeInstance> _nodes;
         private readonly ILifetimeScope _scope;
 
-        public BluePrint(ILifetimeScope scope, List<NodeInstance> nodes, List<ConstantValueInstance> values, ILogger<BluePrint> logger)
+        public BluePrint(ILogger<BluePrint> logger, ILifetimeScope scope, List<NodeInstance> nodes, List<ConstantValueInstance> values)
         {
             _nodes = nodes;
             _logger = logger;
@@ -43,8 +42,7 @@ namespace BlueprintDeck
             LogActivationOrder(reverseNodes);
             foreach (var nodeInstance in reverseNodes)
             {
-                var validation = nodeInstance.CheckIfValid();
-                if (validation)
+                if (nodeInstance.AllRequiredInputsConnected)
                 {
                     nodeInstance.Activate();
                 }

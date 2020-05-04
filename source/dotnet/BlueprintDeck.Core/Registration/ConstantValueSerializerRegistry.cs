@@ -1,32 +1,30 @@
-using Autofac;
+using System;
+using System.Collections.Generic;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.DependencyInjection;
 
 namespace BlueprintDeck.Registration
 {
     public class ConstantValueSerializerRegistry : IConstantValueSerializerRepository
     {
-        private readonly ILifetimeScope _lifetimeScope;
+        private readonly IDependencyRegistry _dependencyRegistry;
+        private readonly Dictionary<Type, IRawConstantValueSerializer> _serializers = new Dictionary<Type, IRawConstantValueSerializer>();
 
-        public ConstantValueSerializerRegistry(ILifetimeScope lifetimeScope)
+        public ConstantValueSerializerRegistry(IDependencyRegistry dependencyRegistry)
         {
-            _lifetimeScope = lifetimeScope;
+            _dependencyRegistry = dependencyRegistry;
         }
 
-        public static void Register<T>(ContainerBuilder builder, string typeName) where T: IConstantValueSerializer
+        public IRawConstantValueSerializer LoadSerializer(Type type)
         {
-            builder.RegisterType(typeof(T))
-                .Named<IConstantValueSerializer>(CreateTypeName(typeName));
-        }
-
-        private static string CreateTypeName(string typeName)
-        {
-            return $"serializer:{typeName.ToLower()}";
-        }
-
-        public IConstantValueSerializer LoadSerializer(string typeName)
-        {
-            var serializer = _lifetimeScope.ResolveNamed<IConstantValueSerializer>(CreateTypeName(typeName));
-            return serializer;
+            lock (_serializers)
+            {
+                if (_serializers.TryGetValue(type, out var serializer)) return serializer;
+                var serializerType = typeof(IConstantValueSerializer<>).MakeGenericType(type);
+                serializer = (IRawConstantValueSerializer) _dependencyRegistry.ResolveOptional(serializerType);
+                _serializers[type] = serializer ?? throw new ConstantValueSerializerNotFoundException(type);
+                return serializer;
+            }
         }
 
     }

@@ -19,7 +19,7 @@ namespace BlueprintDeck.Node.Ports.Definitions
             return new NodePortDefinition(key, title, InputOutputType.Output,  typeof(TDataType), false);
         }
         
-        public static NodePortDefinition CreateDataInput<TDataType>(string key, string title, TDataType defaultValue, bool isMandatory = true)
+        public static NodePortDefinition CreateDataInput<TDataType>(string key, string title, TDataType defaultValue, bool isMandatory = true) where TDataType : notnull
         {
             return new NodePortDefinition(key, title, InputOutputType.Input,  defaultValue, isMandatory);
         }

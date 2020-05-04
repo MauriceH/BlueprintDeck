@@ -2,24 +2,22 @@ using System;
 
 namespace BlueprintDeck.ConstantValue.Serializer
 {
-    public class TimeSpanConstantValueSerializer : IConstantValueSerializer
+    // ReSharper disable once ClassNeverInstantiated.Global
+    public class TimeSpanConstantValueSerializer : IConstantValueSerializer<TimeSpan>
     {
-        public string Serialize(object value)
+        public string? Serialize(object? value)
         {
-            if (value is TimeSpan ts)
+            return value switch
             {
-                return ((long) ts.TotalMilliseconds).ToString();
-            }
-            throw new Exception("Cannot convert timespan to long");
-        }
-        
-        public Type GetDataType()
-        {
-            return typeof(TimeSpan);
+                null => null,
+                TimeSpan ts => ((long) ts.TotalMilliseconds).ToString(),
+                _ => throw new Exception("Cannot convert timespan to long")
+            };
         }
 
-        public object Deserialize(string serializedValue)
+        public object? Deserialize(string? serializedValue)
         {
+            if (serializedValue == null) return null;
             if (long.TryParse(serializedValue, out var result))
             {
                 return TimeSpan.FromMilliseconds(result);

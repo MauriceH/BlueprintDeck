@@ -1,13 +1,14 @@
-using System;
-
 namespace BlueprintDeck.ConstantValue.Serializer
 {
-    public interface IConstantValueSerializer
+    // ReSharper disable once UnusedTypeParameter
+    public interface IConstantValueSerializer<TDataType> : IRawConstantValueSerializer
     {
-        string Serialize(object value);
-        Type GetDataType();
-        object Deserialize(string serializedValue);
+    }
 
+    public interface IRawConstantValueSerializer
+    {
+        string? Serialize(object? value);
+        object? Deserialize(string? serializedValue);
     }
     
 }

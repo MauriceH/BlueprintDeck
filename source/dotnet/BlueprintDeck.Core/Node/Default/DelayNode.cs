@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
 using Microsoft.Extensions.Logging;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Default
 {
     
     [NodeDescriptor(DelayNodeDescriptor.NodeKey,"Delay", typeof(DelayNodeDescriptor) )]
@@ -29,7 +29,7 @@ namespace BlueprintDeck.Node
             _triggerInput = nodeContext.GetPort<IInput>(DelayNodeDescriptor.Input);
             _durationInput = nodeContext.GetPort<IInput<TimeSpan>>(DelayNodeDescriptor.DelayDuration);
             _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
-            _triggerInput.Register(OnInput);
+            _triggerInput?.Register(OnInput);
             return Task.CompletedTask;
         }
        

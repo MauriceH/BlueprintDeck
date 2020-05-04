@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
 using Microsoft.Extensions.Logging;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Default
 {
     [NodeDescriptor("Activate", "Activate Node", typeof(ActivateNodeDescriptor))]
     public class ActivateNode : INode
@@ -20,7 +20,9 @@ namespace BlueprintDeck.Node
         public Task Activate(INodeContext nodeContext)
         {
             _logger.LogDebug("Start initializing activate node");
-            nodeContext.GetPort<IOutput>(ActivateNodeDescriptor.Definition).Emit();
+            var output = nodeContext.GetPort<IOutput>(ActivateNodeDescriptor.Definition);
+            if(output == null) throw new Exception("output port not initialized");
+            output.Emit();
             _logger.LogInformation("activate node emitted and initialized");
             return Task.CompletedTask;
         }

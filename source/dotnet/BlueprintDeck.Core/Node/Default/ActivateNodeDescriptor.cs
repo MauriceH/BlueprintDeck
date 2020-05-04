@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BlueprintDeck.Node.Ports.Definitions;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Default
 {
     public class ActivateNodeDescriptor : INodeDescriptor
     {

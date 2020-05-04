@@ -2,9 +2,11 @@ using System;
 using System.Reflection;
 using Autofac;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.DependencyInjection;
 using BlueprintDeck.Node;
+using BlueprintDeck.Registration;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.AutoFac
 {
     public static  class AutofacExtension
     {
@@ -12,18 +14,24 @@ namespace BlueprintDeck.Registration
         public static void RegisterBlueprintDeck(this ContainerBuilder builder, Action<IBlueprintDeckAutofacBuilder> config)
         {
             builder.RegisterModule<BluePrintDependencyModule>();
+            builder.RegisterType<AutofacLifetimeDependencyRegistry>().As<IDependencyRegistry>().InstancePerDependency();
 
             builder.RegisterType<ConstantValueSerializerRegistry>()
                 .AsSelf()
                 .As<IConstantValueSerializerRepository>()
                 .SingleInstance();
             
+            builder.RegisterType<NodeRegistryFactory>()
+                .AsSelf()
+                .As<INodeRegistryFactory>()
+                .SingleInstance();
+            
             var blueprintDeckBuilder = new BlueprintDeckAutofacBuilder(builder);
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
-            blueprintDeckBuilder.RegisterConstantValueSerializer<DoubleConstantValueSerializer>("double");
-            blueprintDeckBuilder.RegisterConstantValueSerializer<Int32ConstantValueSerializer>("int");
-            blueprintDeckBuilder.RegisterConstantValueSerializer<TimeSpanConstantValueSerializer>("timespan");
-            blueprintDeckBuilder.RegisterConstantValueSerializer<StringConstantValueSerializer>("string");
+            blueprintDeckBuilder.RegisterConstantValueSerializer<DoubleConstantValueSerializer,double>();
+            blueprintDeckBuilder.RegisterConstantValueSerializer<Int32ConstantValueSerializer,int>();
+            blueprintDeckBuilder.RegisterConstantValueSerializer<TimeSpanConstantValueSerializer,TimeSpan>();
+            blueprintDeckBuilder.RegisterConstantValueSerializer<StringConstantValueSerializer,string>();
             
             config(blueprintDeckBuilder);
         }
@@ -49,14 +57,11 @@ namespace BlueprintDeck.Registration
                     _builder.RegisterType(registration.NodeDescriptorType).AsSelf().InstancePerDependency();
                 }
             }
-
-            public void RegisterConstantValueSerializer<T>(string typeName) where T : IConstantValueSerializer
+            
+            public void RegisterConstantValueSerializer<TSerializer,TDataType>() where TSerializer : IConstantValueSerializer<TDataType>
             {
-                ConstantValueSerializerRegistry.Register<T>(_builder, typeName);
+                _builder.RegisterType<TSerializer>().AsSelf().As<IConstantValueSerializer<TDataType>>().SingleInstance();
             }
-            
-            
-           
         }
     }
 

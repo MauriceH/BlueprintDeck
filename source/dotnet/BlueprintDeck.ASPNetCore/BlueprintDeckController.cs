@@ -1,28 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using BlueprintDeck.Registration;
+﻿using BlueprintDeck.Registration;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace BlueprintDeck.ASPNetCore
 {
     [Route("blueprintdeck")]
     public class BlueprintDeckController : Controller
     {
-        private readonly IEnumerable<NodeRegistration> _nodes;
+        private readonly INodeRegistryFactory _nodeRegistryFactory;
 
-        public BlueprintDeckController(IEnumerable<NodeRegistration> nodes)
+        public BlueprintDeckController(INodeRegistryFactory nodeRegistryFactory)
         {
-            _nodes = nodes;
+            _nodeRegistryFactory = nodeRegistryFactory;
         }
 
-        [HttpGet("nodes")]
+        [HttpGet("types")]
         public IActionResult Get()
         {
-            return Json(new {Nodes = _nodes.ToList()},new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+            var registry = _nodeRegistryFactory.LoadNodeRegistry();
+            return Json(registry);
         }
     }
 }

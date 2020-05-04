@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Reflection;
 using Autofac;
+using BlueprintDeck.AutoFac;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -15,6 +15,7 @@ namespace BlueprintDeck.PrototypeTestApp
     {
         private const LogEventLevel LogLevel = LogEventLevel.Verbose;
 
+        // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
             var builder = new ContainerBuilder();
@@ -30,11 +31,14 @@ namespace BlueprintDeck.PrototypeTestApp
 
             var container = builder.Build();
 
-            var nodeTypes = container.Resolve<IEnumerable<NodeRegistration>>();
-            var json = JsonConvert.SerializeObject(new {Nodes = nodeTypes.ToList()}, Formatting.Indented, new JsonSerializerSettings()
+            var registry = container.Resolve<INodeRegistryFactory>().LoadNodeRegistry();
+            var json = JsonConvert.SerializeObject(registry, Formatting.Indented, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
             });
+            
+            File.WriteAllText(@"C:\temp\BluePrint\NodeRegistration.json",json);
+            
             
             var factory = container.Resolve<BluePrintFactory>();
             var design = TestDesign.CreateDesign();

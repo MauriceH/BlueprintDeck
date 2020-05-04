@@ -1,11 +1,11 @@
 namespace BlueprintDeck.Node.Ports
 {
-    public interface IOutput
+    public interface IOutput : IPortInputOutput
     {
         void Emit();
     }
 
-    public interface IOutput<in T>
+    public interface IOutput<in T> : IPortInputOutput
     {
         void Emit(T data);
     }

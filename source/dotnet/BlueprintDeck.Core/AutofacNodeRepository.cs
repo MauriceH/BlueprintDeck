@@ -18,14 +18,11 @@ namespace BlueprintDeck
             _parentScope = parentScope;
             _nodeTypes = _parentScope.ComponentRegistry.Registrations
                 .Where(r => typeof(INode).IsAssignableFrom(r.Activator.LimitType))
-                .Select(r =>
-                {
-                    var type = r.Activator.LimitType;
-                    var descriptor = type.GetCustomAttributes<NodeDescriptorAttribute>()?.FirstOrDefault();
-                    return descriptor == null ? null : new NodeRegistration(type, descriptor);
-                })
+                .Select(x=> new {Type=x.Activator.LimitType, Attribute=x.Activator.LimitType.GetCustomAttributes<NodeDescriptorAttribute>()?.FirstOrDefault()})
+                .Where(x=>x.Attribute != null)
+                .Select(x => new NodeRegistration(x.Type, x.Attribute!))
                 .Where(x => x?.Descriptor != null)
-                .ToDictionary(x => x.Descriptor.Id);
+                .ToDictionary(x => x!.Descriptor!.Id!);
         }
 
         public INodeDescriptor CreatePortDescriptor(string nodeTypeKey)

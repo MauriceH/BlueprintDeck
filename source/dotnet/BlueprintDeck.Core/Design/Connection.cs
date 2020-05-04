@@ -2,7 +2,7 @@ namespace BlueprintDeck.Design
 {
     public class Connection
     {
-        public string? Id { get; set; }
+        public string? Key { get; set; }
         public string? NodeFrom { get; set; }
         public string? NodePortFrom { get; set; }
         public bool IsConstantConnection { get; set; }

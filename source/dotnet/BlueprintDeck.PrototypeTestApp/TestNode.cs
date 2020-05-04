@@ -1,11 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions;
 using Microsoft.Extensions.Logging;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.PrototypeTestApp
 {
     [NodeDescriptor("TestNode","Test node",typeof(Descriptor) )]
     public class TestNode : INode
@@ -23,9 +23,9 @@ namespace BlueprintDeck.Node
         {
             _logger.LogDebug("Start initializing test node");
             var inputPort = nodeContext.GetPort<IInput>(Descriptor.TriggerInput);
-            inputPort.Register(() =>
+            inputPort?.Register(() =>
             {
-                _logger.LogInformation("Trigger event received");
+                _logger.LogInformation("TestNode trigger event received");
                 return Task.CompletedTask;
             });
             return Task.CompletedTask;
@@ -37,10 +37,9 @@ namespace BlueprintDeck.Node
             return Task.CompletedTask;
         }
 
-
         public class Descriptor : INodeDescriptor
         {
-            public static readonly NodePortDefinition TriggerInput  = NodePortDefinitionFactory.CreateInput("Trigger","Trigger",true);
+            public static readonly NodePortDefinition TriggerInput  = NodePortDefinitionFactory.CreateInput("Trigger","Trigger");
             public IList<NodePortDefinition> PortDefinitions => new List<NodePortDefinition>() { TriggerInput };
         }
     }

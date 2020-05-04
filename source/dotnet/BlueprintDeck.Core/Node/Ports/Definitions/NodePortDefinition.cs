@@ -50,6 +50,7 @@ namespace BlueprintDeck.Node.Ports.Definitions
         [JsonConverter(typeof(StringEnumConverter))]
         public DataMode DataMode { get;}
         
+        [JsonIgnore]
         public Type? PortDataType { get; }
         
         public object? DefaultValue { get; }
