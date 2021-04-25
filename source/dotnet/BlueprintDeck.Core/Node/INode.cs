@@ -4,7 +4,7 @@ namespace BlueprintDeck.Node
 {
     public interface INode
     {
-        string? ShortTitle { get; set; }
+        Design.Node DesignValues { get; set; }
         Task Activate(INodeContext nodeContext);
         Task Deactivate();
     }

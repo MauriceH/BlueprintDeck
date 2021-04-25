@@ -10,5 +10,7 @@ namespace BlueprintDeck.Design.Registry
         
         public IEnumerable<DataType>? DataTypes { get; set; }
         
+        public IEnumerable<ConstantValueNodeType>? ConstantValueNodeTypes { get; set; }
+        
     }
 }

@@ -14,15 +14,14 @@ namespace BlueprintDeck.Node.Default
         private IInput<TimeSpan>? _durationInput;
         private IOutput? _output;
 
+        public Design.Node DesignValues { get; set; }
+        
         public DelayNode(ILogger<DelayNode> logger)
         {
             _logger = logger;
         }
+       
 
-        public string? ShortTitle { get; set; }
-        
-        
-        
         public Task Activate(INodeContext nodeContext)
         {
             _logger.LogDebug("Start initializing delay node");

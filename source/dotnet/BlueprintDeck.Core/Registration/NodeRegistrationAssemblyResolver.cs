@@ -39,7 +39,7 @@ namespace BlueprintDeck.Registration
 
                     var controller = (INodeDescriptor) Activator.CreateInstance(attribute.PortDescriptor);
                     
-                    registrations.Add(new NodeRegistration(id, attribute.Title, type,attribute.PortDescriptor ,controller.PortDefinitions));
+                    registrations.Add(new NodeRegistration(id, attribute.Title, type, controller.PortDefinitions));
                 }
                 catch (Exception)
                 {

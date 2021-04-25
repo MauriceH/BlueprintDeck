@@ -15,11 +15,13 @@ namespace BlueprintDeck.PrototypeTestApp
                     {
                         NodeTypeKey = "TestNode",
                         Key = "TestNode1",
+                        Title = "TestNode1"
                     },
                     new Design.Node
                     {
                         NodeTypeKey = "TestNode",
                         Key = "TestNode2",
+                        Title = "TestNode2"
                     },
                     new Design.Node
                     {
@@ -32,13 +34,14 @@ namespace BlueprintDeck.PrototypeTestApp
                         Key = "Delay1",
                     }
                 },
-                ConstantValues = new List<Design.ConstantValue>()
+                ConstantValues = new List<ConstantValueNode>()
                 {
-                    new Design.ConstantValue()
+                    new ConstantValueNode()
                     {
                         Key = "Duration1",
                         Title = "RainDuration",
                         Value = "15000",
+                        NodeTypeKey = "timespan"
                     }
                 },
                 Connections = new List<Connection>()
@@ -72,8 +75,8 @@ namespace BlueprintDeck.PrototypeTestApp
                         Key = "DurationToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Duration",
-                        ConstantKey = "Duration1",
-                        IsConstantConnection = true
+                        NodeFrom = "Duration1",
+                        NodePortFrom = "value"
                     }
                 }
             };

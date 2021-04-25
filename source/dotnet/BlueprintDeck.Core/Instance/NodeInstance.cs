@@ -4,21 +4,22 @@ using System.Linq;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Registration;
 
 namespace BlueprintDeck.Instance
 {
     public class NodeInstance : INodeContext
     {
-        public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeDescriptorAttribute descriptor)
+        public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeRegistration registration)
         {
-            Descriptor = descriptor;
+            Registration = registration;
             Node = node;
             Design = nodeDesign;
             LifeTimeId = lifeTimeId;
             Ports = new List<PortInstance>();
         }
 
-        public NodeDescriptorAttribute Descriptor { get; }
+        public NodeRegistration Registration { get; }
         public Design.Node Design { get; }
         public INode Node { get; }
 
@@ -45,7 +46,7 @@ namespace BlueprintDeck.Instance
 
         public override string ToString()
         {
-            return $"Type {Descriptor.Id}";
+            return $"Type {Registration.Key}";
         }
     }
 }

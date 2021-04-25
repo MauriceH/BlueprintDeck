@@ -17,15 +17,15 @@ namespace BlueprintDeck.PrototypeTestApp
             _logger = logger;
         }
 
-        public string? ShortTitle { get; set; }
-        
+        public Design.Node DesignValues { get; set; }
+
         public Task Activate(INodeContext nodeContext)
         {
             _logger.LogDebug("Start initializing test node");
             var inputPort = nodeContext.GetPort<IInput>(Descriptor.TriggerInput);
             inputPort?.Register(() =>
             {
-                _logger.LogInformation("TestNode trigger event received");
+                _logger.LogInformation("TestNode {ShortTitle} trigger event received", DesignValues.Title);
                 return Task.CompletedTask;
             });
             return Task.CompletedTask;

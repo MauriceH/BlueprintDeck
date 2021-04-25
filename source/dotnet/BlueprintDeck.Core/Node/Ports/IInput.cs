@@ -12,7 +12,7 @@ namespace BlueprintDeck.Node.Ports
 
     public interface IInput<out T> : IDisposable,  IPortInputOutput
     {
-        T Value { get; }
+        T? Value { get; }
         void OnData(Action<T> action);
     }
 }

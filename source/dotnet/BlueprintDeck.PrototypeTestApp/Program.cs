@@ -2,8 +2,10 @@
 using System.IO;
 using System.Reflection;
 using Autofac;
-using BlueprintDeck.AutoFac;
+using BlueprintDeck.DependencyInjection;
+using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Registration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
@@ -15,23 +17,31 @@ namespace BlueprintDeck.PrototypeTestApp
     {
         private const LogEventLevel LogLevel = LogEventLevel.Verbose;
 
+       
         // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
-            var builder = new ContainerBuilder();
+            var services = new ServiceCollection();
             
-            builder.RegisterBlueprintDeck(c =>
+            services.AddBlueprintDeck(c =>
             {
                 var thisAssembly = Assembly.GetExecutingAssembly();
                 c.RegisterAssemblyNodes(thisAssembly);
                 
             });
             
-            RegisterLogger(builder);
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
+            
+            services.AddLogging(builder =>
+            {
+                builder.AddSerilog();
+            });
 
-            var container = builder.Build();
+            var container = services.BuildServiceProvider();
 
-            var registry = container.Resolve<INodeRegistryFactory>().LoadNodeRegistry();
+            var registry = container.GetRequiredService<IRegistryFactory>().CreateNodeRegistry();
             var json = JsonConvert.SerializeObject(registry, Formatting.Indented, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore
@@ -40,8 +50,15 @@ namespace BlueprintDeck.PrototypeTestApp
             File.WriteAllText(@"C:\temp\BluePrint\NodeRegistration.json",json);
             
             
-            var factory = container.Resolve<BluePrintFactory>();
+            var factory = container.GetRequiredService<IBluePrintFactory>();
             var design = TestDesign.CreateDesign();
+            
+            json = JsonConvert.SerializeObject(design, Formatting.Indented, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore
+            });
+            File.WriteAllText(@"C:\temp\BluePrint\Design.json",json);
+            
             var bluePrint = factory.CreateBluePrint(design);
             bluePrint.Activate();
             
@@ -50,24 +67,6 @@ namespace BlueprintDeck.PrototypeTestApp
                 var line = Console.ReadLine();
                 if (line == "exit") return;
             }
-        }
-
-        private static void RegisterLogger(ContainerBuilder builder)
-        {
-            var logEventLevel = LogLevel;
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Is(logEventLevel)
-                .Enrich.FromLogContext()
-                .MinimumLevel.Verbose()
-                .WriteTo.Console(logEventLevel, outputTemplate:
-                    "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}")
-                .CreateLogger();
-            var loggerFactory = new LoggerFactory().AddSerilog(Log.Logger);
-            builder.RegisterInstance(loggerFactory)
-                .As<ILoggerFactory>()
-                .SingleInstance();
-            builder.RegisterGeneric(typeof(Logger<>)).As(typeof(ILogger<>)).SingleInstance();
         }
 
         

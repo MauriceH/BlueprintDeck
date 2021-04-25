@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Instance
@@ -13,9 +14,9 @@ namespace BlueprintDeck.Instance
 
         private readonly List<ConstantValueInstance> _values;
         private readonly List<NodeInstance> _nodes;
-        private readonly ILifetimeScope _scope;
+        private readonly IServiceScope _scope;
 
-        public BluePrint(ILogger<BluePrint> logger, ILifetimeScope scope, List<NodeInstance> nodes, List<ConstantValueInstance> values)
+        public BluePrint(ILogger<BluePrint> logger, IServiceScope scope, List<NodeInstance> nodes, List<ConstantValueInstance> values)
         {
             _nodes = nodes;
             _logger = logger;
@@ -59,9 +60,9 @@ namespace BlueprintDeck.Instance
             foreach (var nodeInstance in nodes)
             {
                 sb.Append(" - (");
-                sb.Append(nodeInstance.Descriptor.Id);
+                sb.Append(nodeInstance.Registration.Key);
                 sb.Append(") ");
-                sb.AppendLine(nodeInstance.Descriptor.Title);
+                sb.AppendLine(nodeInstance.Registration.Title);
             }
 
             _logger.LogTrace(sb.ToString());

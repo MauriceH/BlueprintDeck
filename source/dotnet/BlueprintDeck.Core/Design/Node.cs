@@ -1,4 +1,5 @@
 using System.Drawing;
+using Newtonsoft.Json.Linq;
 
 namespace BlueprintDeck.Design
 {
@@ -9,6 +10,8 @@ namespace BlueprintDeck.Design
         public string? Key { get; set; }
         
         public string? NodeTypeKey { get; set; }
+        
+        public JToken? Data { get; set; }
         
     }
 }

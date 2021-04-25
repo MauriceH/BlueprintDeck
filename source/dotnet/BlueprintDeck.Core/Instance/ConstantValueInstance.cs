@@ -8,14 +8,14 @@ namespace BlueprintDeck.Instance
         private readonly Subject<object> _subject;
         public IObservable<object> Observable => _subject;
         
-        public Design.ConstantValue Descriptor { get; }
+        public Design.ConstantValueNode Descriptor { get; }
         
         public Type DataType { get; }
         public object? CurrentValue { get; set; }
 
-        public ConstantValueInstance(Design.ConstantValue constantValue, Type dataType)
+        public ConstantValueInstance(Design.ConstantValueNode constantValueNode, Type dataType)
         {
-            Descriptor = constantValue;
+            Descriptor = constantValueNode;
             DataType = dataType;
             _subject = new Subject<object>();
         }

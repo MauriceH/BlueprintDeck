@@ -14,8 +14,8 @@ namespace BlueprintDeck.Node.Default
         {
             _logger = logger;
         }
-
-        public string? ShortTitle { get; set; }
+        
+        public Design.Node DesignValues { get; set; }
 
         public Task Activate(INodeContext nodeContext)
         {

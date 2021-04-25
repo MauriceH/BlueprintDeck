@@ -2,8 +2,8 @@ using BlueprintDeck.Design.Registry;
 
 namespace BlueprintDeck.Registration
 {
-    public interface INodeRegistryFactory
+    public interface IRegistryFactory
     {
-        NodeRegistry LoadNodeRegistry();
+        NodeRegistry CreateNodeRegistry();
     }
 }

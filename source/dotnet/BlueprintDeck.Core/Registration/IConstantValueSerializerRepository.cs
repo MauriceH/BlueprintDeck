@@ -5,6 +5,6 @@ namespace BlueprintDeck.Registration
 {
     public interface IConstantValueSerializerRepository
     {
-        IRawConstantValueSerializer LoadSerializer(Type type);
+        IRawConstantValueSerializer? LoadSerializer(Type type);
     }
 }

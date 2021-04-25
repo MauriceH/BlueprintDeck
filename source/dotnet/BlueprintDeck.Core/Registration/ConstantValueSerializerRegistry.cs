@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using BlueprintDeck.ConstantValue.Serializer;
-using BlueprintDeck.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BlueprintDeck.Registration
 {
     public class ConstantValueSerializerRegistry : IConstantValueSerializerRepository
     {
-        private readonly IDependencyRegistry _dependencyRegistry;
+        private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<Type, IRawConstantValueSerializer> _serializers = new Dictionary<Type, IRawConstantValueSerializer>();
 
-        public ConstantValueSerializerRegistry(IDependencyRegistry dependencyRegistry)
+        public ConstantValueSerializerRegistry(IServiceProvider serviceProvider)
         {
-            _dependencyRegistry = dependencyRegistry;
+            _serviceProvider = serviceProvider;
         }
 
         public IRawConstantValueSerializer LoadSerializer(Type type)
@@ -21,7 +21,7 @@ namespace BlueprintDeck.Registration
             {
                 if (_serializers.TryGetValue(type, out var serializer)) return serializer;
                 var serializerType = typeof(IConstantValueSerializer<>).MakeGenericType(type);
-                serializer = (IRawConstantValueSerializer) _dependencyRegistry.ResolveOptional(serializerType);
+                serializer = (IRawConstantValueSerializer) _serviceProvider.GetRequiredService(serializerType);
                 _serializers[type] = serializer ?? throw new ConstantValueSerializerNotFoundException(type);
                 return serializer;
             }
