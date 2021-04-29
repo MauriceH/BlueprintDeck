@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.Node.Default;
+using BlueprintDeck.Design;
 using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ConstantValueNode = BlueprintDeck.Node.Default.ConstantValueNode;
 
 namespace BlueprintDeck.Instance.Factory
 {
@@ -33,20 +34,27 @@ namespace BlueprintDeck.Instance.Factory
             var values = new List<ConstantValueInstance>();
 
 
-            if ((design?.Nodes?.Count ?? 0) == 0)
+            if ((design.Nodes?.Count ?? 0) == 0)
             {
-                throw new InvalidBluePrintException("Blueprint nodes cannot be empty");
+                //throw new InvalidBluePrintException("Blueprint nodes cannot be empty");
+                design.Nodes = new List<Design.Node>();
             }
-
-            if ((design?.Connections?.Count ?? 0) == 0)
+            
+            if ((design.Connections?.Count ?? 0) == 0)
             {
-                throw new InvalidBluePrintException("Blueprint has no connections");
+                design.Connections = new List<Connection>();
+                //throw new InvalidBluePrintException("Blueprint has no connections");
             }
-
+            
+            if ((design.ConstantValues?.Count ?? 0) == 0)
+            {
+                //throw new InvalidBluePrintException("Blueprint nodes cannot be empty");
+                design.ConstantValues = new List<Design.ConstantValueNode>();
+            }
 
             // Load all nodes, lookup input or output type of ports for constant value connections and initialize constant values
 
-            foreach (var designNode in design!.Nodes!)
+            foreach (var designNode in design.Nodes!)
             {
                 if (designNode == null) throw new InvalidBluePrintException("Blueprint node is null");
                 if (string.IsNullOrWhiteSpace(designNode.Key)) throw new InvalidBluePrintException("Blueprint node key is null or empty");
@@ -69,7 +77,7 @@ namespace BlueprintDeck.Instance.Factory
                 nodes.Add(nodeInstance);
             }
             
-            foreach (var designValueNode in design!.ConstantValues!)
+            foreach (var designValueNode in design.ConstantValues!)
             {
                 if (designValueNode == null) throw new InvalidBluePrintException("Blueprint node is null");
                 if (string.IsNullOrWhiteSpace(designValueNode.Key)) throw new InvalidBluePrintException("Blueprint node key is null or empty");

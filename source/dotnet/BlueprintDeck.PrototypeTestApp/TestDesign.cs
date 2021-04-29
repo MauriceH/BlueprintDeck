@@ -13,23 +13,27 @@ namespace BlueprintDeck.PrototypeTestApp
                 {
                     new Design.Node
                     {
+                        Location = new NodeLocation(500,100),
                         NodeTypeKey = "TestNode",
                         Key = "TestNode1",
                         Title = "TestNode1"
                     },
                     new Design.Node
                     {
+                        Location = new NodeLocation(500,300),
                         NodeTypeKey = "TestNode",
                         Key = "TestNode2",
                         Title = "TestNode2"
                     },
                     new Design.Node
                     {
+                        Location = new NodeLocation(100,200),
                         NodeTypeKey = "Activate",
                         Key = "Activate1",
                     },
                     new Design.Node
                     {
+                        Location = new NodeLocation(250,200),
                         NodeTypeKey = "Delay",
                         Key = "Delay1",
                     }

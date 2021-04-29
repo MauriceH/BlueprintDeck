@@ -1,12 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Autofac;
 using BlueprintDeck.DependencyInjection;
 using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
 using Serilog.Events;
@@ -27,6 +25,7 @@ namespace BlueprintDeck.PrototypeTestApp
             {
                 var thisAssembly = Assembly.GetExecutingAssembly();
                 c.RegisterAssemblyNodes(thisAssembly);
+                //c.RegisterNode<TestNode>();
                 
             });
             
@@ -51,6 +50,7 @@ namespace BlueprintDeck.PrototypeTestApp
             
             
             var factory = container.GetRequiredService<IBluePrintFactory>();
+            
             var design = TestDesign.CreateDesign();
             
             json = JsonConvert.SerializeObject(design, Formatting.Indented, new JsonSerializerSettings()

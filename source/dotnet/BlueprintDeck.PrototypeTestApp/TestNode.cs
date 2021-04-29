@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlueprintDeck.Node;
@@ -28,6 +29,7 @@ namespace BlueprintDeck.PrototypeTestApp
                 _logger.LogInformation("TestNode {ShortTitle} trigger event received", DesignValues.Title);
                 return Task.CompletedTask;
             });
+
             return Task.CompletedTask;
         }
 
