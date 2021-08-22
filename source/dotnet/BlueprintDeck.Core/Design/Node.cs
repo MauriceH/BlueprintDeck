@@ -1,4 +1,3 @@
-using System.Drawing;
 using Newtonsoft.Json.Linq;
 
 namespace BlueprintDeck.Design

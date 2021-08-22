@@ -29,7 +29,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
         {
             services.AddBlueprintDeck(builder =>
             {
-                
+
             });
             services.AddSingleton<BluePrintInstance>();
             services.AddControllers();

@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using BlueprintDeck.ConstantValue.Serializer;
 using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Node;
+using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
@@ -99,6 +100,7 @@ namespace BlueprintDeck.DependencyInjection
                     var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);
                     output?.Emit((TDataType)valueReceiver());
                 });
+                var nodeRegistration = new NodeRegistration(key, title, typeof(ConstantValueNode), new List<NodePortDefinition>() {nodePortDefinition});
                 _services.AddSingleton(constantValueRegistration);
             }
 
