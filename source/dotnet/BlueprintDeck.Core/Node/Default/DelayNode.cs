@@ -13,6 +13,7 @@ namespace BlueprintDeck.Node.Default
         private IInput? _triggerInput;
         private IInput<TimeSpan>? _durationInput;
         private IOutput? _output;
+        private DelayNodeData? _data;
 
         public Design.Node DesignValues { get; set; }
         
@@ -29,6 +30,13 @@ namespace BlueprintDeck.Node.Default
             _durationInput = nodeContext.GetPort<IInput<TimeSpan>>(DelayNodeDescriptor.DelayDuration);
             _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
             _triggerInput?.Register(OnInput);
+
+            _data = DesignValues.Data.ToObject<DelayNodeData>();
+            if (_data?.DefaultMilliseconds == null)
+            {
+                throw new Exception("Invalid Configuration");
+            }
+            
             return Task.CompletedTask;
         }
        
@@ -40,13 +48,24 @@ namespace BlueprintDeck.Node.Default
         
         private async Task OnInput()
         {
-            var valueTimeSpan = _durationInput?.Value;
-            if (valueTimeSpan == null)
+            TimeSpan? valueTimeSpan = null;
+  
+            if (_durationInput != null)
             {
-                throw new PortNotInitializedException(DelayNodeDescriptor.NodeKey,DelayNodeDescriptor.DelayDuration.Key);
+                valueTimeSpan = _durationInput?.Value;
+                if (valueTimeSpan == null)
+                {
+                    valueTimeSpan = TimeSpan.FromMilliseconds(_data.DefaultMilliseconds.GetValueOrDefault());
+                }
             }
-            await Task.Delay(valueTimeSpan.Value);
+            await Task.Delay(valueTimeSpan.Value);          
             _output?.Emit();
         }
+
+        public class DelayNodeData
+        {
+            public long? DefaultMilliseconds { get; set; }
+        }
+        
     }
 }

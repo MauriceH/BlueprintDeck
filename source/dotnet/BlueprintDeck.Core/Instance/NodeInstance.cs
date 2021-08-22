@@ -35,7 +35,10 @@ namespace BlueprintDeck.Instance
         {
             var port = Ports.FirstOrDefault(x => x.Definition.Key == definition.Key);
             if (port == null) throw new Exception("Port not found");
-            if (port.InputOutput == null) throw new Exception("Port not found");
+            if (port.Definition.Mandatory)
+            {
+                if (port.InputOutput == null) throw new Exception("Port not connected");    
+            }
             return (T?)port?.InputOutput;
         }
 
