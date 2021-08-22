@@ -29,6 +29,5 @@
       <PackageReference Include="System.Reactive.Linq" Version="4.1.6" />
     </ItemGroup>
 
-    <Import Project="..\SolutionInfo.Settings.targets" />
 
 </Project>
