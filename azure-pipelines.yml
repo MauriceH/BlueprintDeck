@@ -1,22 +1,30 @@
 # Starter pipeline
+
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
 trigger:
-- master
+- develop
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-- task: DotNetCoreCLI@2
+- script: echo Running buildsystem!
+  displayName: ''
+- task: Npm@1
   inputs:
-    command: 'build'
-    projects: 'BlueprintDeck/source/dotnet/BlueprintDeck.Core/BlueprintDeck.Core.csproj'
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    command: 'install'
+    
+- task: Gulp@1
+  inputs:
+    gulpFile: 'gulpfile.js'
+    targets: 'default'
+    enableCodeCoverage: false
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'build/pck'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'

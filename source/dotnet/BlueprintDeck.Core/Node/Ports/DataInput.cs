@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.Node.Ports.Definitions.DataTypes;
 
 namespace BlueprintDeck.Node.Ports
 {
-    public class DataInput<T> : IInput<T> where T : IPortData
+    public class DataInput<T> : IInput<T>
     {
         private readonly IDisposable _subscription;
         private readonly List<Action<T>> _actions = new List<Action<T>>();
-        private T _lastValue;
-        
+
         public DataInput(IObservable<T> observable)
         {
             _subscription = observable.Subscribe(OnValue);
@@ -17,7 +15,7 @@ namespace BlueprintDeck.Node.Ports
 
         private void OnValue(T value)
         {
-            _lastValue = value;
+            Value = value;
             foreach (var action in _actions)
             {
                 action(value);
@@ -26,12 +24,12 @@ namespace BlueprintDeck.Node.Ports
         
         public void Dispose()
         {
-            _subscription?.Dispose();
+            _subscription.Dispose();
         }
 
-        public T Value => _lastValue;
-        
-        public void Register(Action<T> onValue)
+        public T? Value { get; private set; }
+
+        public void OnData(Action<T> onValue)
         {
             _actions.Add(onValue);
         }
