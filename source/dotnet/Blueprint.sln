@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlueprintDeck.PrototypeTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintDeck.AspNetCoreTestApp", "BlueprintDeck.AspNetCoreTestApp\BlueprintDeck.AspNetCoreTestApp.csproj", "{EA471288-9671-4EB2-9412-9E3DBE2336F1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7140AE3-CD0A-46B1-A44A-56EC44785C89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluePrintDeck.Core.Tests", "BluePrintDeck.Core.Tests\BluePrintDeck.Core.Tests.csproj", "{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,11 +31,18 @@ Global
 		{EA471288-9671-4EB2-9412-9E3DBE2336F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA471288-9671-4EB2-9412-9E3DBE2336F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA471288-9671-4EB2-9412-9E3DBE2336F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BA55991A-1122-4D92-B31E-2B96EA904B27}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F28990F-0D10-48A6-A1FF-B6B109CD85CC} = {A7140AE3-CD0A-46B1-A44A-56EC44785C89}
 	EndGlobalSection
 EndGlobal

@@ -8,32 +8,32 @@ using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Registration
 {
-    public class NodeRegistrationResolver
+    internal class NodeRegistrationFactory
     {
-        private SHA1? _sha1;
+        private readonly SHA1 _sha1;
 
-        public NodeRegistrationResolver()
+        public NodeRegistrationFactory()
         {
             _sha1 = SHA1.Create();
         }
 
-        internal IList<NodeRegistration> ResolveNodeRegistrations(Assembly assembly)
+        internal IEnumerable<NodeRegistration> CreateNodeRegistrationsByAssembly(Assembly assembly)
         {
-            
             var registrations = new List<NodeRegistration>();
-            
-            Type[] types;
+            Type?[] types;
             try
             {
                 types = assembly.GetTypes();
             }
             catch (ReflectionTypeLoadException e)
             {
+                if (e.Types.Length == 0) return registrations;
                 types = e.Types;
             }
 
             foreach (var type in types)
             {
+                if (type == null) continue;
                 try
                 {
                     var nodeRegistration = CreateNodeRegistration(type);
@@ -45,30 +45,31 @@ namespace BlueprintDeck.Registration
                     //ignored
                 }
             }
-            
+
             return registrations;
         }
 
 
-        public NodeRegistration? CreateNodeRegistration<T>()
+        internal NodeRegistration? CreateNodeRegistration<T>()
         {
             return CreateNodeRegistration(typeof(T));
         }
-        
-        
-        public NodeRegistration? CreateNodeRegistration(Type? type)
+
+
+        internal NodeRegistration? CreateNodeRegistration(Type type)
         {
+            if (type == null) throw new ArgumentNullException(nameof(type));
             var attribute = type.GetCustomAttribute<NodeDescriptorAttribute>(true);
             if (attribute == null) return null;
 
             if (!typeof(INode).IsAssignableFrom(type)) return null;
 
-
+            // ReSharper disable once ConstantNullCoalescingCondition
             var id = attribute.Id ?? Encoding.UTF8.GetString(_sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
 
-            var controller = (INodeDescriptor) Activator.CreateInstance(attribute.PortDescriptor);
-
-            return new NodeRegistration(id, attribute.Title, type, controller.PortDefinitions);
+            var descriptor = (INodeDescriptor)Activator.CreateInstance(attribute.NodeDescriptor)!;
+            if (descriptor == null) throw new Exception($"Cannot create node descriptor instance for node type {type.Name}");
+            return new NodeRegistration(id, attribute.Title, type, descriptor.PortDefinitions);
         }
     }
 }

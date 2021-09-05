@@ -1,4 +1,3 @@
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace BlueprintDeck.Design.Registry
 {
     public class DataType

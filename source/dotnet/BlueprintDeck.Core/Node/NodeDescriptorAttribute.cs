@@ -8,16 +8,16 @@ namespace BlueprintDeck.Node
     {
         public string Title { get; }
         public string Id { get; }
-        public Type PortDescriptor { get; }
+        public Type NodeDescriptor { get; }
 
-        public NodeDescriptorAttribute(string id, string title, Type portDescriptor)
+        public NodeDescriptorAttribute(string id, string title, Type nodeDescriptor)
         {
             Id = id;
             Title = title;
-            PortDescriptor = portDescriptor;
-            if (!typeof(INodeDescriptor).IsAssignableFrom(portDescriptor))
+            NodeDescriptor = nodeDescriptor;
+            if (!typeof(INodeDescriptor).IsAssignableFrom(nodeDescriptor))
             {
-                throw new ArgumentException("portDescriptor does not implement INodeDescriptor", nameof(portDescriptor));
+                throw new ArgumentException("portDescriptor does not implement INodeDescriptor", nameof(nodeDescriptor));
             }
         }
     }

@@ -1,5 +1,6 @@
 namespace BlueprintDeck.Design.Registry
 {
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public class ConstantValueNodeType
     {
         public string? Key { get; set; }

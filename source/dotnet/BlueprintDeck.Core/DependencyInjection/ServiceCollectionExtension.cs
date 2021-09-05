@@ -19,8 +19,8 @@ namespace BlueprintDeck.DependencyInjection
         public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistryBuilder> config)
         {
             
-            services.AddSingleton<ConstantValueSerializerRegistry>();
-            services.AddSingleton<IConstantValueSerializerRepository>(provider => provider.GetRequiredService<ConstantValueSerializerRegistry>());
+            services.AddSingleton<ConstantValueSerializerRepository>();
+            services.AddSingleton<IConstantValueSerializerRepository>(provider => provider.GetRequiredService<ConstantValueSerializerRepository>());
 
             services.AddSingleton<RegistryFactory>();
             services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
@@ -46,25 +46,25 @@ namespace BlueprintDeck.DependencyInjection
         private class RegistryBuilder : IBlueprintDeckRegistryBuilder
         {
             private readonly IServiceCollection _services;
-            private readonly NodeRegistrationResolver _resolver;
+            private readonly NodeRegistrationFactory _factory;
             private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new Dictionary<Type, DataTypeRegistration>();
             private readonly SHA1 _sha1 = SHA1.Create();
 
             public RegistryBuilder(IServiceCollection services)
             {
                 _services = services;
-                _resolver = new NodeRegistrationResolver();
+                _factory = new NodeRegistrationFactory();
             }
 
             public void RegisterNode<T>() where T : INode
             {
-                var nodeRegistration = _resolver.CreateNodeRegistration<T>() ?? throw new ArgumentException("Type not configured");
+                var nodeRegistration = _factory.CreateNodeRegistration<T>() ?? throw new ArgumentException("Type not configured");
                 RegisterRegistration(nodeRegistration);
             }
 
             public void RegisterAssemblyNodes(Assembly assembly)
             {
-                var registrations = _resolver.ResolveNodeRegistrations(assembly);
+                var registrations = _factory.CreateNodeRegistrationsByAssembly(assembly);
                 foreach (var registration in registrations)
                 {
                     RegisterRegistration(registration);

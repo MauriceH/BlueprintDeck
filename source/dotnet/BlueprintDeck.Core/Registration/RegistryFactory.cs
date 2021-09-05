@@ -17,10 +17,13 @@ namespace BlueprintDeck.Registration
 
         public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations, IEnumerable<ConstantValueRegistration> constantValueRegistrations, IConstantValueSerializerRepository constantValueSerializerRepository)
         {
+            if (nodeRegistrations == null) throw new ArgumentNullException(nameof(nodeRegistrations));
+            if (dataTypeRegistrations == null) throw new ArgumentNullException(nameof(dataTypeRegistrations));
+            if (constantValueRegistrations == null) throw new ArgumentNullException(nameof(constantValueRegistrations));
             _nodeRegistrations = nodeRegistrations.ToList();
             _dataTypeRegistrations = dataTypeRegistrations.ToList();
             _constantValueRegistrations = constantValueRegistrations.ToList();
-            _constantValueSerializerRepository = constantValueSerializerRepository;
+            _constantValueSerializerRepository = constantValueSerializerRepository ?? throw new ArgumentNullException(nameof(constantValueSerializerRepository));
         }
 
         public NodeRegistry CreateNodeRegistry()
@@ -91,7 +94,6 @@ namespace BlueprintDeck.Registration
             {
                 var dataType = _dataTypeRegistrations.FirstOrDefault(dt => dt.DataType == x.DataType);
                 if (dataType == null) throw new Exception("Node without registered type");
-                
                 return new ConstantValueNodeType
                 {
                     Key = x.Key,
