@@ -9,14 +9,24 @@ namespace BlueprintDeck.AspNetCoreTestApp
     {
         private readonly IBluePrintFactory _factory;
         private Instance.BluePrint _bluePrint;
+        private string ActiveBluePrintFileName;
 
         public BluePrint DesignBluePrint { get; private set; }
         
         public BluePrintInstance(IBluePrintFactory factory)
         {
             _factory = factory;
-            var json = File.ReadAllText(@"C:\temp\BluePrint\active.json",Encoding.UTF8);
-            DesignBluePrint = System.Text.Json.JsonSerializer.Deserialize<BluePrint>(json)!;
+            ActiveBluePrintFileName = @"C:\temp\BluePrint\active.json";
+            if (File.Exists(ActiveBluePrintFileName))
+            {
+                var json = File.ReadAllText(ActiveBluePrintFileName,Encoding.UTF8);
+                DesignBluePrint = System.Text.Json.JsonSerializer.Deserialize<BluePrint>(json)!;    
+            }
+            else
+            {
+                DesignBluePrint = new BluePrint();
+            }
+            
         }
 
         public void Start()
