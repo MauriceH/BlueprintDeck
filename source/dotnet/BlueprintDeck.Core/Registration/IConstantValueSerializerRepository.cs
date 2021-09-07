@@ -3,7 +3,7 @@ using BlueprintDeck.ConstantValue.Serializer;
 
 namespace BlueprintDeck.Registration
 {
-    public interface IConstantValueSerializerRepository
+    internal interface IConstantValueSerializerRepository
     {
         IRawConstantValueSerializer? LoadSerializer(Type type);
     }

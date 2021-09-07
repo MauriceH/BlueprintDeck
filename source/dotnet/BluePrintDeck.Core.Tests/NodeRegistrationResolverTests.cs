@@ -24,7 +24,7 @@ namespace BluePrintDeck.Core
             var registrations = _sut.CreateNodeRegistrationsByAssembly(_sut.GetType().Assembly);
             Assert.NotNull(registrations);
             var nodeRegistrations = registrations.ToList();
-            Assert.True(nodeRegistrations.Any(registration => registration.NodeType == typeof(ActivateNode)));
+            Assert.Contains(nodeRegistrations, registration => registration.NodeType == typeof(ActivateNode));
         }
         
         [Fact]

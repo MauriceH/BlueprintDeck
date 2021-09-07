@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace BlueprintDeck
+namespace BlueprintDeck.Misc
 {
     internal static class SHA1Extensions
     {

@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 
 namespace BlueprintDeck.Instance
 {
-    public class ConstantValueInstance
+    internal class ConstantValueInstance
     {
         private readonly Subject<object> _subject;
         public IObservable<object> Observable => _subject;

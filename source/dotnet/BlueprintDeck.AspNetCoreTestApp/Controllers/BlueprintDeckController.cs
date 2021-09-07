@@ -25,7 +25,7 @@ namespace BlueprintDeck.AspNetCoreTestApp.Controllers
         }
 
         [HttpGet("Registry")]
-        public NodeRegistry GetRegistry()
+        public BlueprintRegistry GetRegistry()
         {
             return _registryFactory.CreateNodeRegistry();
         }

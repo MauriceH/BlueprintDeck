@@ -13,12 +13,13 @@ namespace BlueprintDeck.PrototypeTestApp
     {
         private readonly ILogger<TestNode> _logger;
 
-        public TestNode(ILogger<TestNode> logger)
+        public TestNode(ILogger<TestNode> logger, Design.Node designValues)
         {
             _logger = logger;
+            DesignValues = designValues;
         }
 
-        public Design.Node DesignValues { get; set; }
+        public Design.Node DesignValues { get; }
 
         public Task Activate(INodeContext nodeContext)
         {

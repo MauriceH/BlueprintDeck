@@ -7,7 +7,7 @@ using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Instance
 {
-    public class PortInstance
+    internal class PortInstance
     {
         public PortInstance(NodePortDefinition definition)
         {
@@ -79,7 +79,7 @@ namespace BlueprintDeck.Instance
             var method = methodInfo.MakeGenericMethod(constantValue.DataType);
             if (method == null) throw new Exception("Invalid Observable state");
             var observable = method.Invoke(null, new object[] {constantValue.Observable});
-            InputOutput = (IPortInputOutput)Activator.CreateInstance(inputType, new[] {observable});
+            InputOutput = (IPortInputOutput)Activator.CreateInstance(inputType, observable);
         }
     }
 }

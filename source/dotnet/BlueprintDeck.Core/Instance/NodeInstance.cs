@@ -8,7 +8,7 @@ using BlueprintDeck.Registration;
 
 namespace BlueprintDeck.Instance
 {
-    public class NodeInstance : INodeContext
+    internal class NodeInstance : INodeContext
     {
         public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeRegistration registration)
         {

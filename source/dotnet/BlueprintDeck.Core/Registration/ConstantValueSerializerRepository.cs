@@ -4,7 +4,7 @@ using BlueprintDeck.ConstantValue.Serializer;
 
 namespace BlueprintDeck.Registration
 {
-    public class ConstantValueSerializerRepository : IConstantValueSerializerRepository
+    internal class ConstantValueSerializerRepository : IConstantValueSerializerRepository
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly Dictionary<Type, IRawConstantValueSerializer> _serializers = new();

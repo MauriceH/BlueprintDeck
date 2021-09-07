@@ -1,6 +1,4 @@
-using BlueprintDeck.Design.Registry;
-
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Design.Registry
 {
     public interface IRegistryFactory
     {

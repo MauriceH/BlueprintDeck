@@ -8,7 +8,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
     public class BluePrintInstance
     {
         private readonly IBluePrintFactory _factory;
-        private Instance.BluePrint _bluePrint;
+        private Instance.IBluePrintInstance _bluePrint;
         private string ActiveBluePrintFileName;
 
         public BluePrint DesignBluePrint { get; private set; }

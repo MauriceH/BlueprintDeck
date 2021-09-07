@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Registration;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Design.Registry
 {
     internal class RegistryFactory : IRegistryFactory
     {

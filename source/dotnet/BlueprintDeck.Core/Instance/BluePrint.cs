@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Instance
 {
-    public class BluePrint : IDisposable
+    internal class BluePrint : IDisposable, IBluePrintInstance
     {
         private readonly ILogger<BluePrint> _logger;
 
