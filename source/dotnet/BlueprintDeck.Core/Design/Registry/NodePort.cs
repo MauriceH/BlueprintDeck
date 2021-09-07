@@ -22,6 +22,8 @@ namespace BlueprintDeck.Design.Registry
         
         [JsonConverter(typeof(StringEnumConverter))]
         public DataMode? DataMode { get; set;}
+        
+        public string? GenericTypeParameter { get; set; }
     }
 
     public class ConstantValueNodePortType : NodePortTypeBase

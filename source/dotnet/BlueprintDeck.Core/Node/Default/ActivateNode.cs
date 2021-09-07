@@ -10,12 +10,13 @@ namespace BlueprintDeck.Node.Default
     {
         private readonly ILogger<ActivateNode> _logger;
 
-        public ActivateNode(ILogger<ActivateNode> logger)
+        public ActivateNode(ILogger<ActivateNode> logger, Design.Node designValues)
         {
             _logger = logger;
+            DesignValues = designValues;
         }
         
-        public Design.Node DesignValues { get; set; }
+        public Design.Node DesignValues { get;}
 
         public Task Activate(INodeContext nodeContext)
         {

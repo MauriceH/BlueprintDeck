@@ -2,7 +2,10 @@
 using System.IO;
 using System.Reflection;
 using BlueprintDeck.DependencyInjection;
+using BlueprintDeck.Design;
+using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
+using BlueprintDeck.Node.Default;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -19,6 +22,20 @@ namespace BlueprintDeck.PrototypeTestApp
         // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
+            var type = typeof(ToStringNode<>);
+            if (type.IsGenericType)
+            {
+                var typeInfo = type.GetTypeInfo();
+                foreach (var argument in typeInfo.GenericTypeParameters)
+                {
+                    Console.WriteLine(argument.Name);
+                }
+            }
+
+            var genericType = type.MakeGenericType(typeof(int));
+            var instance = Activator.CreateInstance(genericType);
+
+
             var services = new ServiceCollection();
             
             services.AddBlueprintDeck(c =>
@@ -50,7 +67,8 @@ namespace BlueprintDeck.PrototypeTestApp
             
             
             var factory = container.GetRequiredService<IBluePrintFactory>();
-            
+
+
             var design = TestDesign.CreateDesign();
             
             json = JsonConvert.SerializeObject(design, Formatting.Indented, new JsonSerializerSettings()
@@ -62,13 +80,16 @@ namespace BlueprintDeck.PrototypeTestApp
             var bluePrint = factory.CreateBluePrint(design);
             bluePrint.Activate();
             
-            while (true)
-            {
-                var line = Console.ReadLine();
-                if (line == "exit") return;
-            }
-        }
+            // while (true)
+            // {
+            //     var line = Console.ReadLine();
+            //     if (line == "exit") return;
+            // }
 
-        
+            var bluePrint2 = factory.CreateBluePrint(new BluePrint());
+
+            
+            
+        }
     }
 }

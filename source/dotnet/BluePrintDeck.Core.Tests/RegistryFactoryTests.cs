@@ -21,7 +21,7 @@ namespace BluePrintDeck.Core
         {
             var testPort = new NodePortDefinition("Delay", "Delay", InputOutputType.Input, 2d, true);
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
-                new List<NodePortDefinition> { testPort });
+                new List<NodePortDefinition> { testPort },new List<string>());
             var testDataType = new DataTypeRegistration("double", typeof(double), "Double");
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
@@ -83,7 +83,7 @@ namespace BluePrintDeck.Core
         {
             var testPort = new NodePortDefinition("Delay", "Delay", InputOutputType.Input, 2d, true);
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
-                new List<NodePortDefinition> { testPort });
+                new List<NodePortDefinition> { testPort },new List<string>());
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
                 new NodePortDefinition("out", "out", InputOutputType.Output, 45d, true),(context, func) => {});

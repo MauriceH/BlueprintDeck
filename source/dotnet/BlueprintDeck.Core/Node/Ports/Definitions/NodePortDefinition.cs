@@ -39,10 +39,23 @@ namespace BlueprintDeck.Node.Ports.Definitions
             Mandatory = isMandatory;
         }
         
+        public NodePortDefinition(string key, string title, string genericTypeParameterName, InputOutputType inputOutputType, bool isMandatory)
+        {
+            Key = key;
+            Title = title;
+            InputOutputType = inputOutputType;
+            DataMode = DataMode.WithData;
+            PortDataType = null;
+            DefaultValue = null;
+            GenericTypeParameterName = genericTypeParameterName;
+            Mandatory = isMandatory;
+        }
+        
 
         public string Key { get; }
         public string Title { get;}
         public bool Mandatory { get;}
+        public string? GenericTypeParameterName { get; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         public InputOutputType InputOutputType { get; }

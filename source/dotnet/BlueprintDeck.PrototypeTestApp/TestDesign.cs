@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BlueprintDeck.Design;
+using Newtonsoft.Json.Linq;
 
 namespace BlueprintDeck.PrototypeTestApp
 {
@@ -36,6 +37,7 @@ namespace BlueprintDeck.PrototypeTestApp
                         Location = new NodeLocation(250,200),
                         NodeTypeKey = "Delay",
                         Key = "Delay1",
+                        Data = JToken.Parse("{\"DefaultMilliseconds\":10000}")
                     }
                 },
                 ConstantValues = new List<ConstantValueNode>()

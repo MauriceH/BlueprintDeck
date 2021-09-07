@@ -4,7 +4,9 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
+using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports;
@@ -71,10 +73,11 @@ namespace BlueprintDeck.DependencyInjection
                 }
             }
 
-            private void RegisterRegistration(NodeRegistration? registration)
+            private void RegisterRegistration(NodeRegistration registration)
             {
                 foreach (var portDef in registration.PortDefinitions.Where(x => x.DataMode == DataMode.WithData))
                 {
+                    if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameterName)) continue;
                     var type = portDef.PortDataType ??
                                throw new Exception($"Port {portDef.Key} of node type {registration.Key} registered as WithData without datatype");
                     if (_dataTypes.ContainsKey(type)) continue;
@@ -100,7 +103,6 @@ namespace BlueprintDeck.DependencyInjection
                     var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);
                     output?.Emit((TDataType)valueReceiver());
                 });
-                var nodeRegistration = new NodeRegistration(key, title, typeof(ConstantValueNode), new List<NodePortDefinition>() {nodePortDefinition});
                 _services.AddSingleton(constantValueRegistration);
             }
 

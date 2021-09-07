@@ -24,5 +24,10 @@ namespace BlueprintDeck.Node.Ports.Definitions
             return new NodePortDefinition(key, title, InputOutputType.Input,  defaultValue, isMandatory);
         }
         
+        public static NodePortDefinition CreateGenericDataInput(string key, string title, string genericParameterName, bool isMandatory = true)
+        {
+            return new NodePortDefinition(key, title,genericParameterName, InputOutputType.Input,  isMandatory);
+        }
+        
     }
 }

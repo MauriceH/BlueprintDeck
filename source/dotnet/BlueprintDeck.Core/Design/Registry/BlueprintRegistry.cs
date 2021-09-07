@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BlueprintDeck.Design.Registry
 {
-    public class NodeRegistry
+    public class BlueprintRegistry
     {
         
         public IEnumerable<NodeType>? NodeTypes { get; set; }

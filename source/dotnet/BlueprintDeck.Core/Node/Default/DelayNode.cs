@@ -15,11 +15,12 @@ namespace BlueprintDeck.Node.Default
         private IOutput? _output;
         private DelayNodeData? _data;
 
-        public Design.Node DesignValues { get; set; }
+        public Design.Node DesignValues { get;}
         
-        public DelayNode(ILogger<DelayNode> logger)
+        public DelayNode(ILogger<DelayNode> logger, Design.Node designValues)
         {
             _logger = logger;
+            DesignValues = designValues;
         }
        
 
@@ -31,7 +32,7 @@ namespace BlueprintDeck.Node.Default
             _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
             _triggerInput?.Register(OnInput);
 
-            _data = DesignValues.Data.ToObject<DelayNodeData>();
+            _data = DesignValues.Data?.ToObject<DelayNodeData>();
             if (_data?.DefaultMilliseconds == null)
             {
                 throw new Exception("Invalid Configuration");
@@ -48,16 +49,8 @@ namespace BlueprintDeck.Node.Default
         
         private async Task OnInput()
         {
-            TimeSpan? valueTimeSpan = null;
-  
-            if (_durationInput != null)
-            {
-                valueTimeSpan = _durationInput?.Value;
-                if (valueTimeSpan == null)
-                {
-                    valueTimeSpan = TimeSpan.FromMilliseconds(_data.DefaultMilliseconds.GetValueOrDefault());
-                }
-            }
+            var valueTimeSpan = _durationInput?.Value;
+            valueTimeSpan ??= TimeSpan.FromMilliseconds(_data!.DefaultMilliseconds.GetValueOrDefault());
             await Task.Delay(valueTimeSpan.Value);          
             _output?.Emit();
         }

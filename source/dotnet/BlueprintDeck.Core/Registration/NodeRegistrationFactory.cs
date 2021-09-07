@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
@@ -64,12 +65,22 @@ namespace BlueprintDeck.Registration
 
             if (!typeof(INode).IsAssignableFrom(type)) return null;
 
+            
+            
             // ReSharper disable once ConstantNullCoalescingCondition
             var id = attribute.Id ?? Encoding.UTF8.GetString(_sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
 
             var descriptor = (INodeDescriptor)Activator.CreateInstance(attribute.NodeDescriptor)!;
             if (descriptor == null) throw new Exception($"Cannot create node descriptor instance for node type {type.Name}");
-            return new NodeRegistration(id, attribute.Title, type, descriptor.PortDefinitions);
+            var genericTypes = new List<string>();
+
+            if (type.IsGenericType)
+            {
+                var typeInfo = type.GetTypeInfo();
+                genericTypes.AddRange(typeInfo.GenericTypeParameters.Select(x=>x.Name));
+            }
+            
+            return new NodeRegistration(id, attribute.Title, type, descriptor.PortDefinitions,genericTypes);
         }
     }
 }

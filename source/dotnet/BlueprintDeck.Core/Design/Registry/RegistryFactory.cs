@@ -26,9 +26,9 @@ namespace BlueprintDeck.Registration
             _constantValueSerializerRepository = constantValueSerializerRepository ?? throw new ArgumentNullException(nameof(constantValueSerializerRepository));
         }
 
-        public NodeRegistry CreateNodeRegistry()
+        public BlueprintRegistry CreateNodeRegistry()
         {
-            return new NodeRegistry
+            return new BlueprintRegistry
             {
                 NodeTypes = CreateNodeTypes(),
                 DataTypes = CreateDataTypes(),
@@ -54,17 +54,26 @@ namespace BlueprintDeck.Registration
                     };
                     if (d.DataMode == DataMode.WithData)
                     {
-                        var portDataType = d.PortDataType!;
-                        var dataTypeRegistration = _dataTypeRegistrations.FirstOrDefault(t => t.DataType == portDataType);
-                        if (dataTypeRegistration == null) throw new Exception("Node without registered type");
-
-                        if (d.DefaultValue != null)
+                        if (!string.IsNullOrWhiteSpace(d.GenericTypeParameterName))
                         {
-                            var serializer = _constantValueSerializerRepository.LoadSerializer(portDataType);
-                            nodePort.DefaultValue = serializer?.Serialize(d.DefaultValue);
-                        }
+                            nodePort.GenericTypeParameter = d.GenericTypeParameterName;
                             
-                        nodePort.TypeId = dataTypeRegistration.Key;
+                        }
+                        else
+                        {
+                            var portDataType = d.PortDataType!;
+                            var dataTypeRegistration = _dataTypeRegistrations.FirstOrDefault(t => t.DataType == portDataType);
+                            if (dataTypeRegistration == null) throw new Exception("Node without registered type");
+
+                            if (d.DefaultValue != null)
+                            {
+                                var serializer = _constantValueSerializerRepository.LoadSerializer(portDataType);
+                                nodePort.DefaultValue = serializer?.Serialize(d.DefaultValue);
+                            }
+
+                        
+                            nodePort.TypeId = dataTypeRegistration.Key;
+                        }
                     }
                     listPortDefinition.Add(nodePort);
                 }
@@ -73,7 +82,8 @@ namespace BlueprintDeck.Registration
                 {
                     Key = x.Key,
                     Title = x.Title,
-                    Ports = listPortDefinition
+                    Ports = listPortDefinition,
+                    GenericTypes = x.GenericTypes.Count <= 0 ? null : x.GenericTypes.ToList()
                 };
             }).ToList();
         }
