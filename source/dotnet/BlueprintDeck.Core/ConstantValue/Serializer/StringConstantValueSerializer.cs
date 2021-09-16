@@ -1,3 +1,5 @@
+using System;
+
 namespace BlueprintDeck.ConstantValue.Serializer
 {
     // ReSharper disable once ClassNeverInstantiated.Global
@@ -5,7 +7,12 @@ namespace BlueprintDeck.ConstantValue.Serializer
     {
         public string? Serialize(object? value)
         {
-            return value == null ? null : $"{value}";
+            return value switch
+            {
+                null => null,
+                string str => str,
+                _ => throw new ArgumentException($"Invalid value type {value.GetType().Name}")
+            };
         }
         
 

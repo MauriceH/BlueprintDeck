@@ -57,7 +57,6 @@ namespace BlueprintDeck.Design.Registry
                         if (!string.IsNullOrWhiteSpace(d.GenericTypeParameterName))
                         {
                             nodePort.GenericTypeParameter = d.GenericTypeParameterName;
-                            
                         }
                         else
                         {

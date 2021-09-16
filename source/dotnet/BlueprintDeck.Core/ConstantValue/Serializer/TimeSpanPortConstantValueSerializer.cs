@@ -10,19 +10,19 @@ namespace BlueprintDeck.ConstantValue.Serializer
             return value switch
             {
                 null => null,
-                TimeSpan ts => ((long) ts.TotalMilliseconds).ToString(),
-                _ => throw new Exception("Cannot convert timespan to long")
+                TimeSpan ts => (ts.TotalMilliseconds).ToString(),
+                _ => throw new ArgumentException($"Invalid value type {value.GetType().Name}")
             };
         }
 
         public object? Deserialize(string? serializedValue)
         {
             if (serializedValue == null) return null;
-            if (long.TryParse(serializedValue, out var result))
+            if (double.TryParse(serializedValue, out var result))
             {
                 return TimeSpan.FromMilliseconds(result);
             }
-            throw new Exception($"Cannot parse \"{result}\" to TimeSpan");
+            throw new ArgumentException($"Cannot parse \"{result}\" to TimeSpan");
         }
     }
 }

@@ -7,7 +7,9 @@ namespace BlueprintDeck.ConstantValue.Serializer
     {
         public string? Serialize(object? value)
         {
-            return value == null ? null : $"{value}";
+            if (value == null) return null;
+            if (value is not double dbl) throw new ArgumentException($"Invalid type {value.GetType().Name}");
+            return $"{dbl}";
         }
         
         public object? Deserialize(string? serializedValue)
