@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace BlueprintDeck.Design
 {
-    public class BluePrint
+    public class Blueprint
     {
         
         public List<Node>? Nodes { get; set; }

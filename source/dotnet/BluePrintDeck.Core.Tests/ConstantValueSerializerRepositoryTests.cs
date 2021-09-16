@@ -4,7 +4,7 @@ using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace BluePrintDeck.Core
+namespace BlueprintDeck
 {
     [ExcludeFromCodeCoverage]
     public class ConstantValueSerializerRepositoryTests

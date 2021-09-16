@@ -66,7 +66,7 @@ namespace BlueprintDeck.PrototypeTestApp
             File.WriteAllText(@"C:\temp\BluePrint\NodeRegistration.json",json);
             
             
-            var factory = container.GetRequiredService<IBluePrintFactory>();
+            var factory = container.GetRequiredService<IBlueprintFactory>();
 
 
             var design = TestDesign.CreateDesign();
@@ -77,7 +77,7 @@ namespace BlueprintDeck.PrototypeTestApp
             });
             File.WriteAllText(@"C:\temp\BluePrint\Design.json",json);
             
-            var bluePrint = factory.CreateBluePrint(design);
+            var bluePrint = factory.CreateBlueprint(design);
             bluePrint.Activate();
             
             // while (true)
@@ -86,7 +86,7 @@ namespace BlueprintDeck.PrototypeTestApp
             //     if (line == "exit") return;
             // }
 
-            var bluePrint2 = factory.CreateBluePrint(new BluePrint());
+            var bluePrint2 = factory.CreateBlueprint(new Blueprint());
 
             
             

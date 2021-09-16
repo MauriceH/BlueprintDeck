@@ -27,8 +27,8 @@ namespace BlueprintDeck.DependencyInjection
             services.AddSingleton<RegistryFactory>();
             services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
             
-            services.AddSingleton<BluePrintFactory>();
-            services.AddSingleton<IBluePrintFactory>(provider => provider.GetRequiredService<BluePrintFactory>());
+            services.AddSingleton<BlueprintFactory>();
+            services.AddSingleton<IBlueprintFactory>(provider => provider.GetRequiredService<BlueprintFactory>());
 
             services.AddSingleton<NodeFactory>();
             services.AddSingleton<INodeFactory>(provider => provider.GetRequiredService<NodeFactory>());

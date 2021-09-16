@@ -6,9 +6,9 @@ namespace BlueprintDeck.PrototypeTestApp
 {
     public class TestDesign
     {
-        public static BluePrint CreateDesign()
+        public static Blueprint CreateDesign()
         {
-            return new BluePrint
+            return new Blueprint
             {
                 Nodes = new List<Design.Node>()
                 {

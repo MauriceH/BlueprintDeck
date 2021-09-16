@@ -31,7 +31,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
             {
 
             });
-            services.AddSingleton<BluePrintInstance>();
+            services.AddSingleton<BlueprintInstance>();
             services.AddControllers();
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "BlueprintDeck.AspNetCoreTestApp", Version = "v1"}); });
         }

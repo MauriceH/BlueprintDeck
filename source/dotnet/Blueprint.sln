@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintDeck.AspNetCoreTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7140AE3-CD0A-46B1-A44A-56EC44785C89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluePrintDeck.Core.Tests", "BluePrintDeck.Core.Tests\BluePrintDeck.Core.Tests.csproj", "{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintDeck.Core.Tests", "BlueprintDeck.Core.Tests\BlueprintDeck.Core.Tests.csproj", "{5F28990F-0D10-48A6-A1FF-B6B109CD85CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,7 +15,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
         public static void Main(string[] args)
         {
             var build = CreateHostBuilder(args).Build();
-            var bluePrintInstance = build.Services.GetRequiredService<BluePrintInstance>();
+            var bluePrintInstance = build.Services.GetRequiredService<BlueprintInstance>();
             build.Run();
         }
 

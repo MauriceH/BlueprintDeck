@@ -9,9 +9,8 @@ using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 using NSubstitute;
 using Xunit;
-using Xunit.Sdk;
 
-namespace BluePrintDeck.Core
+namespace BlueprintDeck
 {
     [ExcludeFromCodeCoverage]
     public class RegistryFactoryTests

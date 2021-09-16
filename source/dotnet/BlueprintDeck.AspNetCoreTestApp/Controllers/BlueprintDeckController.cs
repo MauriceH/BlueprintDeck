@@ -15,9 +15,9 @@ namespace BlueprintDeck.AspNetCoreTestApp.Controllers
 
         private readonly ILogger<BlueprintDeckController> _logger;
         private readonly IRegistryFactory _registryFactory;
-        private readonly BluePrintInstance _instance;
+        private readonly BlueprintInstance _instance;
 
-        public BlueprintDeckController(ILogger<BlueprintDeckController> logger, IRegistryFactory registryFactory, BluePrintInstance instance)
+        public BlueprintDeckController(ILogger<BlueprintDeckController> logger, IRegistryFactory registryFactory, BlueprintInstance instance)
         {
             _logger = logger;
             _registryFactory = registryFactory;
@@ -31,13 +31,13 @@ namespace BlueprintDeck.AspNetCoreTestApp.Controllers
         }
 
         [HttpGet("Design")]
-        public BluePrint GetBluePrint()
+        public Blueprint GetBlueprint()
         {
-            return _instance.DesignBluePrint;
+            return _instance.DesignBlueprint;
         }
 
         [HttpPut("Design")]
-        public IActionResult SetBluePrint([FromBody,Required] BluePrint design)
+        public IActionResult SetBluePrint([FromBody,Required] Blueprint design)
         {
             _instance.Start(design);
             return Ok();

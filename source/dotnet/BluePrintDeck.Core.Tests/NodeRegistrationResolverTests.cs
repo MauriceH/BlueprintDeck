@@ -2,16 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using BlueprintDeck.Design;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 using Xunit;
 
-namespace BluePrintDeck.Core
+namespace BlueprintDeck
 {
     [ExcludeFromCodeCoverage]
     public class NodeRegistrationResolverTests
@@ -73,7 +71,7 @@ namespace BluePrintDeck.Core
         [NodeDescriptor(null!, "title", null!)]
         private class MissingDescriptorNode : INode
         {
-            public Node DesignValues { get; set; }
+            public Design.Node DesignValues { get; set; }
             public Task Activate(INodeContext nodeContext)
             {
                 throw new NotImplementedException();
@@ -88,7 +86,7 @@ namespace BluePrintDeck.Core
         [NodeDescriptor(null!, "title", typeof(Descriptor))]
         private class MissingIdNode : INode
         {
-            public Node DesignValues { get; set; }
+            public Design.Node DesignValues { get; set; }
             public Task Activate(INodeContext nodeContext)
             {
                 throw new NotImplementedException();

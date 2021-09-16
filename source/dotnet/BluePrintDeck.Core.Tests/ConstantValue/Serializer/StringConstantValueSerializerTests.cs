@@ -1,8 +1,7 @@
 using System;
-using BlueprintDeck.ConstantValue.Serializer;
 using Xunit;
 
-namespace BluePrintDeck.ConstantValue.Serializer
+namespace BlueprintDeck.ConstantValue.Serializer
 {
     public class StringConstantValueSerializerTests
     {

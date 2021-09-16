@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>BluePrintDeck</RootNamespace>
+        <RootNamespace>BlueprintDeck</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
