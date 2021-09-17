@@ -22,19 +22,6 @@ namespace BlueprintDeck.PrototypeTestApp
         // ReSharper disable once UnusedParameter.Local
         static void Main(string[] args)
         {
-            var type = typeof(ToStringNode<>);
-            if (type.IsGenericType)
-            {
-                var typeInfo = type.GetTypeInfo();
-                foreach (var argument in typeInfo.GenericTypeParameters)
-                {
-                    Console.WriteLine(argument.Name);
-                }
-            }
-
-            var genericType = type.MakeGenericType(typeof(int));
-            var instance = Activator.CreateInstance(genericType);
-
 
             var services = new ServiceCollection();
             
@@ -43,7 +30,6 @@ namespace BlueprintDeck.PrototypeTestApp
                 var thisAssembly = Assembly.GetExecutingAssembly();
                 c.RegisterAssemblyNodes(thisAssembly);
                 //c.RegisterNode<TestNode>();
-                
             });
             
             Log.Logger = new LoggerConfiguration()

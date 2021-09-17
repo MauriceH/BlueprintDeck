@@ -52,7 +52,7 @@ namespace BlueprintDeck.Design.Registry
                         InputOutputType = d.InputOutputType,
                             
                     };
-                    if (d.DataMode == DataMode.WithData)
+                    if (d.PortDataType != null || d.GenericTypeParameterName != null)
                     {
                         if (!string.IsNullOrWhiteSpace(d.GenericTypeParameterName))
                         {

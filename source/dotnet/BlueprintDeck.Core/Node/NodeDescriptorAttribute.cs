@@ -10,12 +10,12 @@ namespace BlueprintDeck.Node
         public string Id { get; }
         public Type NodeDescriptor { get; }
 
-        public NodeDescriptorAttribute(string id, string title, Type nodeDescriptor)
+        public NodeDescriptorAttribute(string id, string title, Type nodeDescriptor = null)
         {
             Id = id;
             Title = title;
             NodeDescriptor = nodeDescriptor;
-            if (!typeof(INodeDescriptor).IsAssignableFrom(nodeDescriptor))
+            if (nodeDescriptor != null && !typeof(INodeDescriptor).IsAssignableFrom(nodeDescriptor))
             {
                 throw new ArgumentException("portDescriptor does not implement INodeDescriptor", nameof(nodeDescriptor));
             }

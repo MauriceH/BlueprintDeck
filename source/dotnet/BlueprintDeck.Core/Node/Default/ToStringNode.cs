@@ -1,23 +1,20 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("ToString", "ToString", typeof(ToStringNodeDescriptor))]
-    public class ToStringNode<TInput> : INode
+    [NodeDescriptor("ToString", "ToString")]
+    public class ToStringNode<TInput> : INode<ToStringNodePorts<TInput>>
     {
-        public Task Activate(INodeContext nodeContext)
+
+        
+        public Task Activate(INodeContext nodeContext, ToStringNodePorts<TInput> ports)
         {
-            var input = nodeContext.GetPort<IInput<TInput>>(ToStringNodeDescriptor.Input);
-            var output = nodeContext.GetPort<IOutput<string>>(ToStringNodeDescriptor.Output);
-            input?.OnData(action: value =>
+            ports.Input.OnData((value) =>
             {
-                if (value == null || output == null) return;
-                var stringData = value.ToString();
-                if (stringData == null) return;
-                output.Emit(stringData);
+                if (value == null) throw new Exception("value cannot be null");
+                ports.Output.Emit(value.ToString()!);
             });
             return Task.CompletedTask;
         }
@@ -28,11 +25,21 @@ namespace BlueprintDeck.Node.Default
         }
     }
 
-    public class ToStringNodeDescriptor : INodeDescriptor
+    public class ToStringNodePorts<TInput>
     {
-        public static NodePortDefinition Input => NodePortDefinitionFactory.CreateGenericDataInput("input", "Input", "TInput");
-        public static NodePortDefinition Output => NodePortDefinitionFactory.CreateDataOutput<string>("output", "String");
+        [PortTitle("Value")]
+        [PortOptional]
+        public IInput<TInput> Input { get; set; }
+        
+        [PortTitle("Value")]
+        [PortOptional]
+        public IInput<double> InputDouble { get; set; }
 
-        public IList<NodePortDefinition> PortDefinitions => new List<NodePortDefinition>() { Input, Output };
+        [PortTitle("Value")]
+        [PortOptional]
+        public IInput InputSimple { get; set; }
+        
+        [PortTitle("Raus damit")]
+        public IOutput<string> Output { get; set; }
     }
 }

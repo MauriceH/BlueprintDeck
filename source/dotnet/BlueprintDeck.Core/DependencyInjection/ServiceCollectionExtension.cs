@@ -60,7 +60,17 @@ namespace BlueprintDeck.DependencyInjection
 
             public void RegisterNode<T>() where T : INode
             {
-                var nodeRegistration = _factory.CreateNodeRegistration<T>() ?? throw new ArgumentException("Type not configured");
+                RegisterNode(typeof(T));
+            }
+
+            public void RegisterNode<T, TPort>() where T : INode<TPort>
+            {
+                RegisterNode(typeof(T));
+            }
+
+            public void RegisterNode(Type type)
+            {
+                var nodeRegistration = _factory.CreateNodeRegistration(type) ?? throw new ArgumentException("Type not configured");
                 RegisterRegistration(nodeRegistration);
             }
 
