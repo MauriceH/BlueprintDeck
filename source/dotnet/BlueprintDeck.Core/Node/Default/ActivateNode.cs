@@ -5,25 +5,24 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("Activate", "Activate Node", typeof(ActivateNodeDescriptor))]
+    [NodeDescriptor("Activate", "Activate Node")]
     public class ActivateNode : INode
     {
         private readonly ILogger<ActivateNode> _logger;
 
-        public ActivateNode(ILogger<ActivateNode> logger, Design.Node designValues)
+        [PortTitle("OnActivate")]
+        public IOutput? Event { get; set; }
+        
+        public ActivateNode(ILogger<ActivateNode> logger)
         {
             _logger = logger;
-            DesignValues = designValues;
         }
-        
-        public Design.Node DesignValues { get;}
 
         public Task Activate(INodeContext nodeContext)
         {
             _logger.LogDebug("Start initializing activate node");
-            var output = nodeContext.GetPort<IOutput>(ActivateNodeDescriptor.Definition);
-            if(output == null) throw new Exception("output port not initialized");
-            output.Emit();
+            if (Event == null) throw new Exception("output port not initialized");
+            Event.Emit();
             _logger.LogInformation("activate node emitted and initialized");
             return Task.CompletedTask;
         }

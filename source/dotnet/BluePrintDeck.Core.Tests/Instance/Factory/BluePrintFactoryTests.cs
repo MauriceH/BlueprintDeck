@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlueprintDeck.Design;
+using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,7 +32,7 @@ namespace BlueprintDeck.Instance.Factory
             
             var node = new TestableNode<double>(testableNodeAccessor);
             
-            var nodeRegistration = new NodeRegistration("TestableNode","TestableNode",typeof(TestableNode<>),new TestableNodeDescriptor().PortDefinitions,new List<string> {"TTestData"});
+            var nodeRegistration = new NodeRegistration("TestableNode","TestableNode",typeof(TestableNode<>),new List<NodePortDefinition>(),new List<string> {"TTestData"});
             var createResult = new CreateNodeResult<NodeRegistration>(nodeRegistration,node);
             nodeFactory.CreateNode(Arg.Any<IServiceScope>(), Arg.Any<string>(), Arg.Any<Design.Node>())
                 .Returns(createResult);
@@ -44,7 +45,7 @@ namespace BlueprintDeck.Instance.Factory
                 {
                     new Design.Node
                     {
-                        Key = "001",
+                        Id = "001",
                         Title = "Test",
                         GenericTypes = new List<NodeGenericType>() {new() {GenericParameter = "TTestData", TypeId = "T1"}},
                         NodeTypeKey = "TestableNode"

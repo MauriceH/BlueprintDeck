@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.Node.Ports.Definitions;
 using BlueprintDeck.Registration;
 
 namespace BlueprintDeck.Design.Registry
@@ -12,10 +11,8 @@ namespace BlueprintDeck.Design.Registry
         private readonly List<DataTypeRegistration> _dataTypeRegistrations;
         private readonly List<ConstantValueRegistration> _constantValueRegistrations;
         
-        private readonly IConstantValueSerializerRepository _constantValueSerializerRepository;
-        
 
-        public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations, IEnumerable<ConstantValueRegistration> constantValueRegistrations, IConstantValueSerializerRepository constantValueSerializerRepository)
+        public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations, IEnumerable<ConstantValueRegistration> constantValueRegistrations)
         {
             if (nodeRegistrations == null) throw new ArgumentNullException(nameof(nodeRegistrations));
             if (dataTypeRegistrations == null) throw new ArgumentNullException(nameof(dataTypeRegistrations));
@@ -23,7 +20,6 @@ namespace BlueprintDeck.Design.Registry
             _nodeRegistrations = nodeRegistrations.ToList();
             _dataTypeRegistrations = dataTypeRegistrations.ToList();
             _constantValueRegistrations = constantValueRegistrations.ToList();
-            _constantValueSerializerRepository = constantValueSerializerRepository ?? throw new ArgumentNullException(nameof(constantValueSerializerRepository));
         }
 
         public BlueprintRegistry CreateNodeRegistry()
@@ -48,9 +44,7 @@ namespace BlueprintDeck.Design.Registry
                         Key = d.Key,
                         Title = d.Title,
                         Mandatory = d.Mandatory,
-                        DataMode = d.DataMode,
-                        InputOutputType = d.InputOutputType,
-                            
+                        Direction = d.Direction,
                     };
                     if (d.PortDataType != null || d.GenericTypeParameterName != null)
                     {
@@ -64,13 +58,6 @@ namespace BlueprintDeck.Design.Registry
                             var dataTypeRegistration = _dataTypeRegistrations.FirstOrDefault(t => t.DataType == portDataType);
                             if (dataTypeRegistration == null) throw new Exception("Node without registered type");
 
-                            if (d.DefaultValue != null)
-                            {
-                                var serializer = _constantValueSerializerRepository.LoadSerializer(portDataType);
-                                nodePort.DefaultValue = serializer?.Serialize(d.DefaultValue);
-                            }
-
-                        
                             nodePort.TypeId = dataTypeRegistration.Key;
                         }
                     }
@@ -79,7 +66,7 @@ namespace BlueprintDeck.Design.Registry
 
                 return new NodeType
                 {
-                    Key = x.Key,
+                    Id = x.Id,
                     Title = x.Title,
                     Ports = listPortDefinition,
                     GenericTypes = x.GenericTypes.Count <= 0 ? null : x.GenericTypes.ToList()
@@ -105,7 +92,7 @@ namespace BlueprintDeck.Design.Registry
                 if (dataType == null) throw new Exception("Node without registered type");
                 return new ConstantValueNodeType
                 {
-                    Key = x.Key,
+                    Id = x.Key,
                     Title = x.Title,
                     Port = new ConstantValueNodePortType
                     {

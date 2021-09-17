@@ -63,11 +63,6 @@ namespace BlueprintDeck.DependencyInjection
                 RegisterNode(typeof(T));
             }
 
-            public void RegisterNode<T, TPort>() where T : INode<TPort>
-            {
-                RegisterNode(typeof(T));
-            }
-
             public void RegisterNode(Type type)
             {
                 var nodeRegistration = _factory.CreateNodeRegistration(type) ?? throw new ArgumentException("Type not configured");
@@ -85,11 +80,11 @@ namespace BlueprintDeck.DependencyInjection
 
             private void RegisterRegistration(NodeRegistration registration)
             {
-                foreach (var portDef in registration.PortDefinitions.Where(x => x.DataMode == DataMode.WithData))
+                foreach (var portDef in registration.PortDefinitions.Where(x => x.PortDataType != null))
                 {
                     if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameterName)) continue;
                     var type = portDef.PortDataType ??
-                               throw new Exception($"Port {portDef.Key} of node type {registration.Key} registered as WithData without datatype");
+                               throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
                     if (_dataTypes.ContainsKey(type)) continue;
                     RegisterDataType(type);
                 }
@@ -107,7 +102,7 @@ namespace BlueprintDeck.DependencyInjection
 
                 RegisterDataType<TDataType>();
 
-                var nodePortDefinition = new NodePortDefinition("value",title,InputOutputType.Output,typeof(TDataType),false);
+                var nodePortDefinition = new NodePortDefinition("value",Direction.Output,typeof(TDataType),null) {Title = title, Mandatory = false};
                 var constantValueRegistration = new ConstantValueRegistration(key, title, typeof(TDataType), nodePortDefinition, (context,valueReceiver) =>
                 {
                     var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);

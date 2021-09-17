@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using BlueprintDeck.Node;
-using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions;
 
@@ -65,19 +64,9 @@ namespace BlueprintDeck.Registration
             var attribute = type.GetCustomAttribute<NodeDescriptorAttribute>(true);
             if (attribute == null) return null;
 
-            if (typeof(INode).IsAssignableFrom(type))
-            {
-                return NodeRegistrationOld(type, attribute);
-            }
+            if (!typeof(INode).IsAssignableFrom(type)) return null;
 
-            var interfaceType = type.GetInterfaces().FirstOrDefault(t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(INode<>));
-            if (interfaceType == null) return null;
-
-            var portDescriptorType = interfaceType.GenericTypeArguments.First();
-
-
-            var portDefinitions = CreatePortDefinitions(portDescriptorType);
-
+            var portDefinitions = CreatePortDefinitions(type);
 
             // ReSharper disable once ConstantNullCoalescingCondition
             var id = attribute.Id ?? Encoding.UTF8.GetString(_sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
@@ -107,7 +96,7 @@ namespace BlueprintDeck.Registration
 
                 if (!isInput && !isOutput) continue;
 
-                var inputOutputType = isInput ? InputOutputType.Input : InputOutputType.Output;
+                var inputOutputType = isInput ? Direction.Input : Direction.Output;
 
 
                 string? portGenericType = null;
@@ -133,29 +122,12 @@ namespace BlueprintDeck.Registration
                     if (portAttribute is not PortAttribute pa) continue;
                     pa.Setup(definition);
                 }
+
                 result.Add(definition);
                 //yield return definition;
             }
 
             return result;
-        }
-
-        private NodeRegistration? NodeRegistrationOld(Type type, NodeDescriptorAttribute? attribute)
-        {
-            // ReSharper disable once ConstantNullCoalescingCondition
-            var id = attribute.Id ?? Encoding.UTF8.GetString(_sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
-
-            var descriptor = (INodeDescriptor)Activator.CreateInstance(attribute.NodeDescriptor)!;
-            if (descriptor == null) throw new Exception($"Cannot create node descriptor instance for node type {type.Name}");
-            var genericTypes = new List<string>();
-
-            if (type.IsGenericType)
-            {
-                var typeInfo = type.GetTypeInfo();
-                genericTypes.AddRange(typeInfo.GenericTypeParameters.Select(x => x.Name));
-            }
-
-            return new NodeRegistration(id, attribute.Title, type, descriptor.PortDefinitions, genericTypes);
         }
     }
 }

@@ -1,7 +1,6 @@
-using System;
 using BlueprintDeck.Node.Ports.Definitions;
 
-namespace BlueprintDeck.Node.Default
+namespace BlueprintDeck.Node
 {
     public class PortOptionalAttribute : PortAttribute
     {
@@ -9,10 +8,5 @@ namespace BlueprintDeck.Node.Default
         {
             definition.Mandatory = false;
         }
-    }
-
-    public abstract class PortAttribute : Attribute
-    {
-        public abstract void Setup(NodePortDefinition definition);
     }
 }

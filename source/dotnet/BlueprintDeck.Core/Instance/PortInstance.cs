@@ -21,7 +21,7 @@ namespace BlueprintDeck.Instance
 
         public void InitializeAsOutput()
         {
-            if (Definition.DataMode == DataMode.Simple)
+            if (!Definition.WithData)
             {
                 InputOutput = new SimpleOutput();
                 return;
@@ -37,7 +37,7 @@ namespace BlueprintDeck.Instance
         {
             if (connectedOutput is SimpleOutput output)
             {
-                if (Definition.DataMode == DataMode.Simple)
+                if (!Definition.WithData)
                 {
                     InputOutput = new SimpleInput(output.Observable);
                     return;
@@ -66,7 +66,7 @@ namespace BlueprintDeck.Instance
 
         public override string ToString()
         {
-            return $"Key {Definition.Key} Type {Definition.InputOutputType} Mode {Definition.DataMode} DataType {Definition.PortDataType}";
+            return $"Key {Definition.Key} Type {Definition.Direction} DataType {Definition.PortDataType}";
         }
 
         public void InitializeAsInputToConstantValue(ConstantValueInstance constantValue)

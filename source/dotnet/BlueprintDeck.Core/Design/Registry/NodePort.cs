@@ -10,7 +10,6 @@ namespace BlueprintDeck.Design.Registry
         public string? Key { get; set; }
         public string? Title { get; set;}
         public string? TypeId  { get;  set;}
-        public string? DefaultValue { get;  set;}
     }
     
     public class NodePort : NodePortTypeBase
@@ -18,10 +17,7 @@ namespace BlueprintDeck.Design.Registry
         public bool Mandatory { get; set;}
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public InputOutputType? InputOutputType { get;  set;}
-        
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DataMode? DataMode { get; set;}
+        public Direction? Direction { get;  set;}
         
         public string? GenericTypeParameter { get; set; }
     }

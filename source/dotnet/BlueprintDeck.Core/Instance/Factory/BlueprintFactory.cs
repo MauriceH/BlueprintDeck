@@ -43,10 +43,10 @@ namespace BlueprintDeck.Instance.Factory
             foreach (var designNode in design.Nodes)
             {
                 if (designNode == null) throw new InvalidBlueprintException("Blueprint node is null");
-                if (string.IsNullOrWhiteSpace(designNode.Key)) throw new InvalidBlueprintException("Blueprint node key is null or empty");
+                if (string.IsNullOrWhiteSpace(designNode.Id)) throw new InvalidBlueprintException("Blueprint node key is null or empty");
 
                 if (string.IsNullOrWhiteSpace(designNode.NodeTypeKey))
-                    throw new InvalidBlueprintException($"Blueprint type-key is null or empty for node \"{designNode.Key!}\"");
+                    throw new InvalidBlueprintException($"Blueprint type-key is null or empty for node \"{designNode.Id!}\"");
 
                 var nodeCreateResult = _nodeFactory.CreateNode(scope, designNode.NodeTypeKey!, designNode);
                 var nodeLifeTimeId = Guid.NewGuid().ToString();
@@ -65,10 +65,10 @@ namespace BlueprintDeck.Instance.Factory
             foreach (var designValueNode in design.ConstantValues)
             {
                 if (designValueNode == null) throw new InvalidBlueprintException("Blueprint node is null");
-                if (string.IsNullOrWhiteSpace(designValueNode.Key)) throw new InvalidBlueprintException("Blueprint node key is null or empty");
+                if (string.IsNullOrWhiteSpace(designValueNode.Id)) throw new InvalidBlueprintException("Blueprint node key is null or empty");
 
                 if (string.IsNullOrWhiteSpace(designValueNode.NodeTypeKey))
-                    throw new InvalidBlueprintException($"Blueprint type-key is null or empty for constant value node \"{designValueNode.Key!}\"");
+                    throw new InvalidBlueprintException($"Blueprint type-key is null or empty for constant value node \"{designValueNode.Id!}\"");
 
                 var nodeCreateResult = _nodeFactory.CreateConstantValueNode(scope, designValueNode.NodeTypeKey!);
                 var nodeLifeTimeId = Guid.NewGuid().ToString();
@@ -108,7 +108,7 @@ namespace BlueprintDeck.Instance.Factory
                     toConnectNodes.Remove(node);
                     nodeOrder.Add(node);
 
-                    var outputPorts = node.Ports.Where(x => x.Definition.InputOutputType == InputOutputType.Output);
+                    var outputPorts = node.Ports.Where(x => x.Definition.Direction == Direction.Output);
                     foreach (var outputPort in outputPorts)
                     {
                         outputPort.InitializeAsOutput();
@@ -117,13 +117,13 @@ namespace BlueprintDeck.Instance.Factory
                             throw new Exception("output not initialized");
                         }
 
-                        var portConnections = openConnections.Where(x => x.NodeFrom == node.Design.Key && x.NodePortFrom == outputPort.Definition.Key)
+                        var portConnections = openConnections.Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Definition.Key)
                             .ToList();
 
                         foreach (var connection in portConnections)
                         {
                             openConnections.Remove(connection);
-                            var toNode = nodes.FirstOrDefault(x => x.Design.Key == connection.NodeTo);
+                            var toNode = nodes.FirstOrDefault(x => x.Design.Id == connection.NodeTo);
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Definition.Key == connection.NodePortTo);
                             toPort?.InitializeAsInput(outputPort.InputOutput!);
                         }

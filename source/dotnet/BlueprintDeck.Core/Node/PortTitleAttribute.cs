@@ -1,7 +1,6 @@
-using System;
 using BlueprintDeck.Node.Ports.Definitions;
 
-namespace BlueprintDeck.Node.Default
+namespace BlueprintDeck.Node
 {
     public class PortTitleAttribute : PortAttribute
     {
