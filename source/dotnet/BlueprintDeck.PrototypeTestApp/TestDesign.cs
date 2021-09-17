@@ -54,7 +54,7 @@ namespace BlueprintDeck.PrototypeTestApp
                 {
                     new Connection
                     {
-                        Key = "ActivateToDelay",
+                        Id = "ActivateToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Input",
                         NodeFrom = "Activate1",
@@ -62,7 +62,7 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new Connection
                     {
-                        Key = "DelayToTest1",
+                        Id = "DelayToTest1",
                         NodeTo = "TestNode1",
                         NodePortTo = "Trigger",
                         NodeFrom = "Delay1",
@@ -70,7 +70,7 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new Connection
                     {
-                        Key = "DelayToTest2",
+                        Id = "DelayToTest2",
                         NodeTo = "TestNode2",
                         NodePortTo = "Trigger",
                         NodeFrom = "Activate1",
@@ -78,7 +78,7 @@ namespace BlueprintDeck.PrototypeTestApp
                     },
                     new Connection
                     {
-                        Key = "DurationToDelay",
+                        Id = "DurationToDelay",
                         NodeTo = "Delay1",
                         NodePortTo = "Duration",
                         NodeFrom = "Duration1",
