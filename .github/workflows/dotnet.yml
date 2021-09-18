@@ -11,23 +11,28 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-        working-directory: ./source/dotnet/
+        working-directory: ./source/
         
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
+
     - name: Restore dependencies
       working-directory: ${{env.working-directory}}
       run: dotnet restore
+
     - name: Build
       working-directory: ${{env.working-directory}}
       run: dotnet build --no-restore
+
     - name: Test
       working-directory: ${{env.working-directory}}
       run: dotnet test --no-build --verbosity normal
+
     - name: Upload coverage
       uses: codecov/codecov-action@v1.0.5
       with:
