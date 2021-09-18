@@ -6,66 +6,30 @@ namespace BlueprintDeck.Node.Ports.Definitions
 {
     public class NodePortDefinition 
     {
-        public NodePortDefinition(string key, string title, InputOutputType inputOutputType,  Type dataType,  bool isMandatory)
-        {
-            Key = key;
-            Title = title;
-            InputOutputType = inputOutputType;
-            DataMode = DataMode.WithData;
-            PortDataType = dataType;
-            DefaultValue = null;
-            Mandatory = isMandatory;
-        }
         
-        public NodePortDefinition(string key, string title, InputOutputType inputOutputType,  object defaultValue, bool isMandatory)
+       public NodePortDefinition(string key, Direction direction, Type? portDataType = null, string? genericTypeParameterName = null)
         {
             Key = key;
-            Title = title;
-            InputOutputType = inputOutputType;
-            DataMode = DataMode.WithData;
-            PortDataType = defaultValue.GetType();
-            DefaultValue = defaultValue;
-            Mandatory = isMandatory;
+            Direction = direction;
+            PortDataType = portDataType;
+            GenericTypeParameterName = genericTypeParameterName;
         }
 
-        public NodePortDefinition(string key, string title,  InputOutputType inputOutputType, bool isMandatory)
-        {
-            Key = key;
-            Title = title;
-            InputOutputType = inputOutputType;
-            DataMode = DataMode.Simple;
-            PortDataType = null;
-            DefaultValue = null;
-            Mandatory = isMandatory;
-        }
-        
-        public NodePortDefinition(string key, string title, string genericTypeParameterName, InputOutputType inputOutputType, bool isMandatory)
-        {
-            Key = key;
-            Title = title;
-            InputOutputType = inputOutputType;
-            DataMode = DataMode.WithData;
-            PortDataType = null;
-            DefaultValue = null;
-            GenericTypeParameterName = genericTypeParameterName;
-            Mandatory = isMandatory;
-        }
-        
 
         public string Key { get; }
-        public string Title { get;}
-        public bool Mandatory { get;}
-        public string? GenericTypeParameterName { get; }
 
         [JsonConverter(typeof(StringEnumConverter))]
-        public InputOutputType InputOutputType { get; }
-        
-        [JsonConverter(typeof(StringEnumConverter))]
-        public DataMode DataMode { get;}
-        
+        public Direction Direction { get; }
+
         [JsonIgnore]
         public Type? PortDataType { get; }
+
+        public string? GenericTypeParameterName { get; }
         
-        public object? DefaultValue { get; }
+        public string? Title { get; set; }
+        public bool Mandatory { get; set; } = true;
+
+        public bool WithData => PortDataType != null || GenericTypeParameterName != null;
+
     }
 }

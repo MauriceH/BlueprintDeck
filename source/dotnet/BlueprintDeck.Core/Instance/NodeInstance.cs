@@ -24,7 +24,7 @@ namespace BlueprintDeck.Instance
         public INode Node { get; }
 
         public bool AllRequiredInputsConnected => Ports
-            .Where(x => x.Definition.InputOutputType == InputOutputType.Input
+            .Where(x => x.Definition.Direction == Direction.Input
                         && x.Definition.Mandatory)
             .All(x => x.InputOutput != null);
 
@@ -49,7 +49,7 @@ namespace BlueprintDeck.Instance
 
         public override string ToString()
         {
-            return $"Type {Registration.Key}";
+            return $"Type {Registration.Id}";
         }
     }
 }

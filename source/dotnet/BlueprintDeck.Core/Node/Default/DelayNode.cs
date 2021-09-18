@@ -5,60 +5,43 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node.Default
 {
-    
-    [NodeDescriptor(DelayNodeDescriptor.NodeKey,"Delay", typeof(DelayNodeDescriptor) )]
+    [NodeDescriptor("Delay", "Delay")]
     public class DelayNode : INode
     {
         private readonly ILogger<DelayNode> _logger;
-        private IInput? _triggerInput;
-        private IInput<TimeSpan>? _durationInput;
-        private IOutput? _output;
-        private DelayNodeData? _data;
 
-        public Design.Node DesignValues { get;}
+        public IInput? Input { get; set; }
         
-        public DelayNode(ILogger<DelayNode> logger, Design.Node designValues)
+        [PortOptional]
+        public IInput<TimeSpan>? DelayDuration { get; set; }
+        
+        public IOutput? Output { get; set; }
+
+        [PropertyTitle("Default Delay")]
+        public TimeSpan? DefaultDelay { get; set; }
+
+        public DelayNode(ILogger<DelayNode> logger)
         {
             _logger = logger;
-            DesignValues = designValues;
         }
-       
 
         public Task Activate(INodeContext nodeContext)
         {
             _logger.LogDebug("Start initializing delay node");
-            _triggerInput = nodeContext.GetPort<IInput>(DelayNodeDescriptor.Input);
-            _durationInput = nodeContext.GetPort<IInput<TimeSpan>>(DelayNodeDescriptor.DelayDuration);
-            _output = nodeContext.GetPort<IOutput>(DelayNodeDescriptor.Output);
-            _triggerInput?.Register(OnInput);
-
-            _data = DesignValues.Data?.ToObject<DelayNodeData>();
-            if (_data?.DefaultMilliseconds == null)
+            Input?.Register(async () =>
             {
-                throw new Exception("Invalid Configuration");
-            }
-            
+                var valueTimeSpan = DelayDuration?.Value;
+                valueTimeSpan ??= DefaultDelay;
+                if (valueTimeSpan == null) return;
+                await Task.Delay(valueTimeSpan.Value);
+                Output?.Emit();
+            });
             return Task.CompletedTask;
         }
-       
 
         public Task Deactivate()
         {
             return Task.CompletedTask;
         }
-        
-        private async Task OnInput()
-        {
-            var valueTimeSpan = _durationInput?.Value;
-            valueTimeSpan ??= TimeSpan.FromMilliseconds(_data!.DefaultMilliseconds.GetValueOrDefault());
-            await Task.Delay(valueTimeSpan.Value);          
-            _output?.Emit();
-        }
-
-        public class DelayNodeData
-        {
-            public long? DefaultMilliseconds { get; set; }
-        }
-        
     }
 }

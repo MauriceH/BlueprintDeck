@@ -1,12 +1,10 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck
 {
-    [NodeDescriptor("TestableNode", "TestableNode", typeof(TestableNodeDescriptor))]
+    [NodeDescriptor("TestableNode", "TestableNode")]
     public class TestableNode<TTestData> : INode
     {
         private readonly TaskCompletionSource _tcsActivationDone = new();
@@ -14,15 +12,36 @@ namespace BlueprintDeck
         private readonly TaskCompletionSource _tcsSimpleInput = new();
         private readonly TaskCompletionSource<TTestData> _tcsComplexInput = new();
         
+        [ExcludeFromProperties]
         public bool SimpleInputTriggered { get; private set; }
+        
+        [ExcludeFromProperties]
         public TTestData ComplexInputValue { get; private set; }
+        
+        [ExcludeFromProperties]
         public bool Activated { get; private set; }
+        
+        [ExcludeFromProperties]
         public bool Deactivated { get; private set; }
 
+        [ExcludeFromProperties]
         public Task ActivationDoneTask => _tcsActivationDone.Task;
+        
+        [ExcludeFromProperties]
         public Task DeactivationDoneTask => _tcsDeactivationDone.Task;
+        
+        [ExcludeFromProperties]
         public Task SimpleInputReceiveTask => _tcsSimpleInput.Task;
+        
+        [ExcludeFromProperties]
         public Task ComplexInputReceiveTask => _tcsComplexInput.Task;
+        
+        [PortOptional]
+        public IInput SimpleInput { get; set; }
+        
+        [PortOptional]
+        public IInput<TTestData> ComplexInput { get; set; }
+        
         
         public TestableNode(TestableNodeAccessor<TTestData> nodeAccessor)
         {
@@ -32,15 +51,13 @@ namespace BlueprintDeck
 
         public Task Activate(INodeContext nodeContext)
         {
-            var simpleInput = nodeContext.GetPort<IInput>(TestableNodeDescriptor.SimpleInput);
-            simpleInput?.Register(() =>
+            SimpleInput?.Register(() =>
             {
                 SimpleInputTriggered = true;
                 _tcsSimpleInput.SetResult();
                 return Task.CompletedTask;
             });
-            var complexInput = nodeContext.GetPort<IInput<TTestData>>(TestableNodeDescriptor.ComplexInput);
-            complexInput?.OnData(data =>
+            ComplexInput?.OnData(data =>
             {
                 _tcsComplexInput.SetResult(data);
                 ComplexInputValue = data;
@@ -63,13 +80,4 @@ namespace BlueprintDeck
         public TestableNode<T> Node { get; set; }
     }
 
-    public class TestableNodeDescriptor : INodeDescriptor
-    {
-        public static readonly NodePortDefinition SimpleInput = NodePortDefinitionFactory.CreateInput("simple", "SimpleInput", false);
-
-        public static readonly NodePortDefinition ComplexInput =
-            NodePortDefinitionFactory.CreateGenericDataInput("simple", "SimpleInput", "TTestData",false);
-
-        public IList<NodePortDefinition> PortDefinitions => new List<NodePortDefinition> { SimpleInput, ComplexInput };
-    }
 }

@@ -1,23 +1,22 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("ToString", "ToString", typeof(ToStringNodeDescriptor))]
+    [NodeDescriptor("ToString", "ToString")]
     public class ToStringNode<TInput> : INode
     {
+        public IInput<TInput>? Input { get; set; }
+        
+        public IOutput<string>? Output { get; set; }
+
         public Task Activate(INodeContext nodeContext)
         {
-            var input = nodeContext.GetPort<IInput<TInput>>(ToStringNodeDescriptor.Input);
-            var output = nodeContext.GetPort<IOutput<string>>(ToStringNodeDescriptor.Output);
-            input?.OnData(action: value =>
+            Input?.OnData(value =>
             {
-                if (value == null || output == null) return;
-                var stringData = value.ToString();
-                if (stringData == null) return;
-                output.Emit(stringData);
+                if (value == null) throw new Exception("value cannot be null");
+                Output?.Emit(value.ToString()!);
             });
             return Task.CompletedTask;
         }
@@ -26,13 +25,5 @@ namespace BlueprintDeck.Node.Default
         {
             return Task.CompletedTask;
         }
-    }
-
-    public class ToStringNodeDescriptor : INodeDescriptor
-    {
-        public static NodePortDefinition Input => NodePortDefinitionFactory.CreateGenericDataInput("input", "Input", "TInput");
-        public static NodePortDefinition Output => NodePortDefinitionFactory.CreateDataOutput<string>("output", "String");
-
-        public IList<NodePortDefinition> PortDefinitions => new List<NodePortDefinition>() { Input, Output };
     }
 }

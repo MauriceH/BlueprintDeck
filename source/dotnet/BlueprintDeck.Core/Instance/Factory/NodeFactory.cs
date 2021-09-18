@@ -16,7 +16,7 @@ namespace BlueprintDeck.Instance.Factory
 
         public NodeFactory(IServiceProvider serviceProvider)
         {
-            _nodeRegistrations = serviceProvider.GetServices<NodeRegistration>().ToDictionary(x => x.Key, _ => _);
+            _nodeRegistrations = serviceProvider.GetServices<NodeRegistration>().ToDictionary(x => x.Id, _ => _);
             _constantValueRegistrations = serviceProvider.GetServices<ConstantValueRegistration>().ToDictionary(x => x.Key, _ => _);
         }
 

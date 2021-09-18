@@ -38,7 +38,6 @@ namespace BlueprintDeck
         public void TestCreate_WhenInvalidTypes_ReturnNullOrThrowsException()
         {
             Assert.Throws<ArgumentNullException>(() => _sut.CreateNodeRegistration(null!));
-            Assert.Throws<ArgumentException>(() => _sut.CreateNodeRegistration(typeof(MissingDescriptorNode)!));
             Assert.Null(_sut.CreateNodeRegistration(typeof(int)));
             Assert.Null(_sut.CreateNodeRegistration(typeof(MissingInterfaceNode)));
         }
@@ -47,7 +46,7 @@ namespace BlueprintDeck
         public void TestCreate_WhenNodeWithoutIdAttribute_GeneratesHashId()
         {
             var registration = _sut.CreateNodeRegistration(typeof(MissingIdNode));
-            Assert.NotNull(registration.Key);
+            Assert.NotNull(registration.Id);
         }
         
         [Fact]
@@ -63,30 +62,15 @@ namespace BlueprintDeck
             
         }
 
-        [NodeDescriptor("id", "title", typeof(Descriptor))]
+        [NodeDescriptor("id", "title")]
         private class MissingInterfaceNode
         {
         }
-
-        [NodeDescriptor(null!, "title", null!)]
-        private class MissingDescriptorNode : INode
-        {
-            public Design.Node DesignValues { get; set; }
-            public Task Activate(INodeContext nodeContext)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task Deactivate()
-            {
-                throw new NotImplementedException();
-            }
-        }
         
-        [NodeDescriptor(null!, "title", typeof(Descriptor))]
+        
+        [NodeDescriptor(null!, "title")]
         private class MissingIdNode : INode
         {
-            public Design.Node DesignValues { get; set; }
             public Task Activate(INodeContext nodeContext)
             {
                 throw new NotImplementedException();
@@ -97,12 +81,5 @@ namespace BlueprintDeck
                 throw new NotImplementedException();
             }
         }
-        
-        
-        public class Descriptor : INodeDescriptor
-        {
-            public IList<NodePortDefinition> PortDefinitions => new List<NodePortDefinition>();
-        }
-      
     }
 }

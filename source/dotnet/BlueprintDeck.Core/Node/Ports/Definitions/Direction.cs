@@ -1,6 +1,6 @@
 namespace BlueprintDeck.Node.Ports.Definitions
 {
-    public enum InputOutputType
+    public enum Direction
     {
         Input,
         Output

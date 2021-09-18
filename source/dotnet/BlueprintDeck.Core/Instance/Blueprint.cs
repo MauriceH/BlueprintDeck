@@ -63,7 +63,7 @@ namespace BlueprintDeck.Instance
             foreach (var nodeInstance in nodes)
             {
                 sb.Append(" - (");
-                sb.Append(nodeInstance.Registration.Key);
+                sb.Append(nodeInstance.Registration.Id);
                 sb.Append(") ");
                 sb.AppendLine(nodeInstance.Registration.Title);
             }

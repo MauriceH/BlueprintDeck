@@ -8,6 +8,7 @@ namespace BlueprintDeck.DependencyInjection
     public interface IBlueprintDeckRegistryBuilder
     {
         void RegisterNode<T>() where T : INode; 
+        void RegisterNode(Type type); 
         void RegisterAssemblyNodes(Assembly assembly);
         void RegisterConstantValue<TSerializer, TDataType>(string key, string title) where TSerializer : class, IConstantValueSerializer<TDataType>;
         void RegisterDataType<TDataType>();

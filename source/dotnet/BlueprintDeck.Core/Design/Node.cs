@@ -7,7 +7,7 @@ namespace BlueprintDeck.Design
     {
         public NodeLocation? Location { get; set; }
         public string? Title { get; set; }
-        public string? Key { get; set; }
+        public string? Id { get; set; }
         
         public string? NodeTypeKey { get; set; }
         
