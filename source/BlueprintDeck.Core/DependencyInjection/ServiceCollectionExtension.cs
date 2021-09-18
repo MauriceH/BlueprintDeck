@@ -33,6 +33,8 @@ namespace BlueprintDeck.DependencyInjection
             services.AddSingleton<NodeFactory>();
             services.AddSingleton<INodeFactory>(provider => provider.GetRequiredService<NodeFactory>());
 
+            services.AddTransient<IPortInstanceFactory, PortInstanceFactory>();
+
             var blueprintDeckBuilder = new RegistryBuilder(services);
 
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());

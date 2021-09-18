@@ -24,8 +24,8 @@ namespace BlueprintDeck.Instance
         public INode Node { get; }
 
         public bool AllRequiredInputsConnected => Ports
-            .Where(x => x.Definition.Direction == Direction.Input
-                        && x.Definition.Mandatory)
+            .Where(x => x.Registration.Direction == Direction.Input
+                        && x.Registration.Mandatory)
             .All(x => x.InputOutput != null);
 
         public List<PortInstance> Ports { get; }
@@ -33,9 +33,9 @@ namespace BlueprintDeck.Instance
 
         public T? GetPort<T>(PortRegistration definition) where T: class, IPortInputOutput 
         {
-            var port = Ports.FirstOrDefault(x => x.Definition.Key == definition.Key);
+            var port = Ports.FirstOrDefault(x => x.Registration.Key == definition.Key);
             if (port == null) throw new Exception("Port not found");
-            if (port.Definition.Mandatory)
+            if (port.Registration.Mandatory)
             {
                 if (port.InputOutput == null) throw new Exception("Port not connected");    
             }

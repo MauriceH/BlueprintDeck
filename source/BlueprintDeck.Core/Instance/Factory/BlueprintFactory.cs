@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
@@ -14,13 +13,13 @@ namespace BlueprintDeck.Instance.Factory
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly INodeFactory _nodeFactory;
-        private readonly IValueSerializerRepository _serializerRepository;
+        private readonly IPortInstanceFactory _portInstanceFactory;
 
-        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IValueSerializerRepository serializerRepository)
+        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IPortInstanceFactory portInstanceFactory)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _nodeFactory = nodeFactory ?? throw new ArgumentNullException(nameof(nodeFactory));
-            _serializerRepository = serializerRepository ?? throw new ArgumentNullException(nameof(serializerRepository));
+            _portInstanceFactory = portInstanceFactory ?? throw new ArgumentNullException(nameof(portInstanceFactory));
         }
 
 
@@ -54,7 +53,8 @@ namespace BlueprintDeck.Instance.Factory
 
                 foreach (var portRegistration in nodeCreateResult.Registration.Ports)
                 {
-                    nodeInstance.Ports.Add(new PortInstance(portRegistration));
+                    var portInstance = _portInstanceFactory.Create(portRegistration);
+                    nodeInstance.Ports.Add(portInstance);
                 }
 
                 nodes.Add(nodeInstance);
@@ -75,24 +75,28 @@ namespace BlueprintDeck.Instance.Factory
                     toConnectNodes.Remove(node);
                     nodeOrder.Add(node);
 
-                    var outputPorts = node.Ports.Where(x => x.Definition.Direction == Direction.Output);
+                    var outputPorts = node.Ports.Where(x => x.Registration.Direction == Direction.Output);
                     foreach (var outputPort in outputPorts)
                     {
-                        outputPort.InitializeAsOutput();
+                        _portInstanceFactory.InitializeAsOutput(outputPort);
+                        outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
+                        
                         if (outputPort == null)
                         {
                             throw new Exception("output not initialized");
                         }
 
-                        var portConnections = openConnections.Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Definition.Key)
+                        var portConnections = openConnections.Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Registration.Key)
                             .ToList();
 
                         foreach (var connection in portConnections)
                         {
                             openConnections.Remove(connection);
                             var toNode = nodes.FirstOrDefault(x => x.Design.Id == connection.NodeTo);
-                            var toPort = toNode?.Ports.FirstOrDefault(x => x.Definition.Key == connection.NodePortTo);
-                            toPort?.InitializeAsInput(outputPort.InputOutput!);
+                            var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
+                            if(toPort == null) throw new Exception("invalid connection");
+                            _portInstanceFactory.InitializeAsInput(toPort, outputPort.InputOutput!);
+                            toPort.Registration.Property.SetValue(toNode!.Node,toPort.InputOutput);
                         }
                     }
                 }

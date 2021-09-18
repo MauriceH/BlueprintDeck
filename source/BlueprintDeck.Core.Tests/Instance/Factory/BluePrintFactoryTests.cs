@@ -40,7 +40,7 @@ namespace BlueprintDeck.Instance.Factory
             nodeFactory.CreateNode(Arg.Any<IServiceScope>(), Arg.Any<string>(), Arg.Any<Design.Node>())
                 .Returns(createResult);
             
-            var sut = new BlueprintFactory(provider,nodeFactory,cvSerializerRepository);
+            var sut = new BlueprintFactory(provider,nodeFactory, new PortInstanceFactory());
 
             var blueprint = new Design.Blueprint
             {
