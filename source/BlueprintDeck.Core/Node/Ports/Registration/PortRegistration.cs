@@ -1,8 +1,6 @@
 using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
-namespace BlueprintDeck.Node.Ports.Definitions
+namespace BlueprintDeck.Node.Ports.Registration
 {
     public class PortRegistration 
     {

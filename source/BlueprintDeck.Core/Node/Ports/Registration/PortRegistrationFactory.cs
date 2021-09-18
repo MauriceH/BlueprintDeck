@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BlueprintDeck.Misc;
-using BlueprintDeck.Node;
-using BlueprintDeck.Node.Ports.Definitions;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Ports.Registration
 {
     internal class PortRegistrationFactory : IPortRegistrationFactory
     {

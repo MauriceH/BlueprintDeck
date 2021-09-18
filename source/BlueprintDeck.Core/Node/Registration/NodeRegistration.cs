@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties.Registration;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Registration
 {
     internal record NodeRegistration(
         string Id, 

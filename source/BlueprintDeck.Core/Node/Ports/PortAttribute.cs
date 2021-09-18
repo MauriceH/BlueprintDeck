@@ -1,7 +1,7 @@
 using System;
-using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Node.Ports.Registration;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Ports
 {
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class PortAttribute : Attribute

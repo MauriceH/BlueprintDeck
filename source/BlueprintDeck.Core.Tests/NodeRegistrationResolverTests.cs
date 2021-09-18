@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
-using BlueprintDeck.Node.Ports.Definitions;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties.Registration;
+using BlueprintDeck.Node.Registration;
 using Xunit;
 
 namespace BlueprintDeck
@@ -72,7 +74,7 @@ namespace BlueprintDeck
         [Node(null!, "title")]
         private class MissingIdNode : INode
         {
-            public Task Activate(INodeContext nodeContext)
+            public Task Activate()
             {
                 throw new NotImplementedException();
             }

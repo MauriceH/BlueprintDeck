@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Registration;
 
 namespace BlueprintDeck.Instance
 {
-    internal class NodeInstance : INodeContext
+    internal class NodeInstance
     {
         public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeRegistration registration)
         {
@@ -44,7 +44,7 @@ namespace BlueprintDeck.Instance
 
         public void Activate()
         {
-            Node.Activate(this);
+            Node.Activate();
         }
 
         public override string ToString()

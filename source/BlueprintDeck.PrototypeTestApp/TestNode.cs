@@ -20,7 +20,7 @@ namespace BlueprintDeck.PrototypeTestApp
 
         public Design.Node DesignValues { get; }
 
-        public Task Activate(INodeContext nodeContext)
+        public Task Activate()
         {
             _logger.LogDebug("Start initializing test node");
             Trigger?.Register(() =>

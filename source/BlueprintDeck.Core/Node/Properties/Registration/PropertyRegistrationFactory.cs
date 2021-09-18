@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using BlueprintDeck.Misc;
-using BlueprintDeck.Node;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Properties.Registration
 {
     internal class PropertyRegistrationFactory : IPropertyRegistrationFactory
     {

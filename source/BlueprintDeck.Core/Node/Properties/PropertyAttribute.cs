@@ -1,7 +1,7 @@
 using System;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Properties.Registration;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Properties
 {
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class PropertyAttribute : Attribute

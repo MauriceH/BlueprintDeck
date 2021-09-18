@@ -1,5 +1,4 @@
 using System;
-using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Node
 {

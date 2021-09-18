@@ -1,6 +1,6 @@
 using System;
 
-namespace BlueprintDeck
+namespace BlueprintDeck.Misc
 {
     public class InvalidBlueprintException : Exception
     {

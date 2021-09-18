@@ -11,7 +11,7 @@ namespace BlueprintDeck.Node.Default
         
         public IOutput<string>? Output { get; set; }
 
-        public Task Activate(INodeContext nodeContext)
+        public Task Activate()
         {
             Input?.OnData(value =>
             {

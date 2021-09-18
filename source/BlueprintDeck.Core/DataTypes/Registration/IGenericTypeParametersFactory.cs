@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.DataTypes.Registration
 {
     internal interface IGenericTypeParametersFactory
     {

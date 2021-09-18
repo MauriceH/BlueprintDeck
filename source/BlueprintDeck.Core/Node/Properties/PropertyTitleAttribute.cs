@@ -1,6 +1,6 @@
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Properties.Registration;
 
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Properties
 {
     public class PropertyTitleAttribute : PropertyAttribute
     {

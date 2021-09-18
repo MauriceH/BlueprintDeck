@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Definitions;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties.Registration;
+using BlueprintDeck.Node.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlueprintDeck.DependencyInjection
@@ -103,7 +106,7 @@ namespace BlueprintDeck.DependencyInjection
                 RegisterDataType<TDataType>();
 
                 var nodePortDefinition = new PortRegistration("value",Direction.Output,typeof(TDataType)) {Title = title, Mandatory = false};
-                var constantValueRegistration = new ConstantValueRegistration(key, title, typeof(TDataType), nodePortDefinition, (context,valueReceiver) =>
+                var constantValueRegistration = new ConstantValueRegistration(key, title, typeof(TDataType), nodePortDefinition, (valueReceiver) =>
                 {
                     //TODO
                     // var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);

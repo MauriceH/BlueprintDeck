@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using BlueprintDeck.ConstantValue.Serializer;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.ConstantValue.Registration
 {
     internal class ConstantValueSerializerRepository : IConstantValueSerializerRepository
     {

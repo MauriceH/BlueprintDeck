@@ -1,4 +1,4 @@
-namespace BlueprintDeck.Node
+namespace BlueprintDeck.Node.Ports
 {
     public class PortNotInitializedException : InvalidNodeStateException
     {

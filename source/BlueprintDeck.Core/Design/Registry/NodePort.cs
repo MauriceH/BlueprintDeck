@@ -1,4 +1,4 @@
-using BlueprintDeck.Node.Ports.Definitions;
+using BlueprintDeck.Node.Ports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 // ReSharper disable UnusedAutoPropertyAccessor.Global

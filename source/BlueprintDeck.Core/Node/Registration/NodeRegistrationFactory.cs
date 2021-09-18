@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Misc;
-using BlueprintDeck.Node;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties.Registration;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Registration
 {
     internal class NodeRegistrationFactory
     {

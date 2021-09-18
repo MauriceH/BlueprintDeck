@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
-using BlueprintDeck.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 

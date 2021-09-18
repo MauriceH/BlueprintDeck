@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlueprintDeck.Instance.Factory

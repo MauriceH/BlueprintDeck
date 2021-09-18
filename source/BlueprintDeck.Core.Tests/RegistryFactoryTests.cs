@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Node.Default;
-using BlueprintDeck.Node.Ports.Definitions;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Ports;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties;
+using BlueprintDeck.Node.Properties.Registration;
+using BlueprintDeck.Node.Registration;
 using NSubstitute;
 using Xunit;
 
@@ -24,7 +29,7 @@ namespace BlueprintDeck
             var testDataType = new DataTypeRegistration("double", typeof(double), "Double");
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new PortRegistration("out", Direction.Output, typeof(double)) {Title="out", Mandatory = true}, (context, func) => { });
+                new PortRegistration("out", Direction.Output, typeof(double)) {Title="out", Mandatory = true}, (func) => { });
 
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new[] { testDataType };
@@ -97,7 +102,7 @@ namespace BlueprintDeck
                 new List<PortRegistration> { testPort }, new List<string>(), new List<PropertyRegistration>());
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new PortRegistration("out", Direction.Output, typeof(double)){ Title = "out", Mandatory = true}, (context, func) => { });
+                new PortRegistration("out", Direction.Output, typeof(double)){ Title = "out", Mandatory = true}, (func) => { });
 
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new List<DataTypeRegistration>();

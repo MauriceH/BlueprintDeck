@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
+using BlueprintDeck.Node.Properties;
 
 namespace BlueprintDeck
 {
@@ -49,7 +50,7 @@ namespace BlueprintDeck
         }
 
 
-        public Task Activate(INodeContext nodeContext)
+        public Task Activate()
         {
             SimpleInput?.Register(() =>
             {

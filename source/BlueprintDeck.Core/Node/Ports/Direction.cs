@@ -1,4 +1,4 @@
-namespace BlueprintDeck.Node.Ports.Definitions
+namespace BlueprintDeck.Node.Ports
 {
     public enum Direction
     {

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.Registration;
+using BlueprintDeck.ConstantValue.Registration;
+using BlueprintDeck.DataTypes.Registration;
+using BlueprintDeck.Node.Registration;
 
 namespace BlueprintDeck.Design.Registry
 {
@@ -80,7 +82,7 @@ namespace BlueprintDeck.Design.Registry
                         if (dataTypeRegistration == null)
                             throw new Exception($"Node property {property.Name} type {property.Type.Name} not registered");
                         nodeProperty.TypeId = dataTypeRegistration.Id;
-
+                        properties.Add(nodeProperty);
                     }
                 }
                 

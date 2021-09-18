@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
-using BlueprintDeck.Node.Ports.Definitions;
-using BlueprintDeck.Registration;
+using BlueprintDeck.Node.Ports.Registration;
+using BlueprintDeck.Node.Properties;
+using BlueprintDeck.Node.Properties.Registration;
+using BlueprintDeck.Node.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Properties.Registration
 {
     public class PropertyRegistration
     {
@@ -10,7 +10,6 @@ namespace BlueprintDeck.Registration
         public string Name => PropertyInfo.Name;
 
         public Type Type => PropertyInfo.PropertyType;
-        
         
         public string? Title { get; set; }
 

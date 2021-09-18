@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
+using BlueprintDeck.Node.Properties;
 using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node.Default
@@ -25,7 +26,7 @@ namespace BlueprintDeck.Node.Default
             _logger = logger;
         }
 
-        public Task Activate(INodeContext nodeContext)
+        public Task Activate()
         {
             _logger.LogDebug("Start initializing delay node");
             Input?.Register(async () =>

@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.Node.Ports.Definitions;
 
-namespace BlueprintDeck.Registration
+namespace BlueprintDeck.Node.Ports.Registration
 {
     internal interface IPortRegistrationFactory
     {

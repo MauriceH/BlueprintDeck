@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using BlueprintDeck.Design;
 using BlueprintDeck.Design.Registry;
-using BlueprintDeck.Registration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
