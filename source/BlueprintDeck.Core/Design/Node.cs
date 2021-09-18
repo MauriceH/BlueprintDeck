@@ -11,8 +11,8 @@ namespace BlueprintDeck.Design
         
         public string? NodeTypeKey { get; set; }
         
-        public JToken? Data { get; set; }
-        
+        public Dictionary<string, string>? Properties { get; set; }
+
         public List<NodeGenericType>? GenericTypes { get; set; } 
 
     }

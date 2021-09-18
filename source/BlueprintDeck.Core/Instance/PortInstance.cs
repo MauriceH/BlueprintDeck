@@ -69,17 +69,17 @@ namespace BlueprintDeck.Instance
             return $"Key {Definition.Key} Type {Definition.Direction} DataType {Definition.DataType}";
         }
 
-        public void InitializeAsInputToConstantValue(ConstantValueInstance constantValue)
-        {
-            var d1 = typeof(DataInput<>);
-            Type[] typeArgs = {constantValue.DataType};
-            var inputType = d1.MakeGenericType(typeArgs);
-            var methodInfo = typeof(Observable).GetMethod("OfType", BindingFlags.Public | BindingFlags.Static);
-            if (methodInfo == null) throw new Exception("Internal Method not valid");
-            var method = methodInfo.MakeGenericMethod(constantValue.DataType);
-            if (method == null) throw new Exception("Invalid Observable state");
-            var observable = method.Invoke(null, new object[] {constantValue.Observable});
-            InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, observable);
-        }
+        // public void InitializeAsInputToConstantValue(ConstantValueInstance constantValue)
+        // {
+        //     var d1 = typeof(DataInput<>);
+        //     Type[] typeArgs = {constantValue.DataType};
+        //     var inputType = d1.MakeGenericType(typeArgs);
+        //     var methodInfo = typeof(Observable).GetMethod("OfType", BindingFlags.Public | BindingFlags.Static);
+        //     if (methodInfo == null) throw new Exception("Internal Method not valid");
+        //     var method = methodInfo.MakeGenericMethod(constantValue.DataType);
+        //     if (method == null) throw new Exception("Invalid Observable state");
+        //     var observable = method.Invoke(null, new object[] {constantValue.Observable});
+        //     InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, observable);
+        // }
     }
 }

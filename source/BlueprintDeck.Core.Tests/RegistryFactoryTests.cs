@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
 using BlueprintDeck.DataTypes.Registration;
@@ -20,27 +21,27 @@ namespace BlueprintDeck
     [ExcludeFromCodeCoverage]
     public class RegistryFactoryTests
     {
+        public IInput<TimeSpan> Delay { get; set; }
+
+        public PropertyInfo Property => this.GetType().GetProperties().First();
+
         [Fact]
         public void TestCreate_WhenCreate_ReturnsCorrectRegistry()
         {
-            var testPort = new PortRegistration("Delay", Direction.Input,typeof(double)) {Mandatory = true};
+            var testPort = new PortRegistration(Property, Direction.Input,typeof(double)) {Mandatory = true};
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
                 new List<PortRegistration> { testPort }, new List<string>(), new List<PropertyRegistration>());
             var testDataType = new DataTypeRegistration("double", typeof(double), "Double");
 
-            var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new PortRegistration("out", Direction.Output, typeof(double)) {Title="out", Mandatory = true}, (func) => { });
-
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new[] { testDataType };
-            var constantValueRegistrations = new[] { testConstantValue };
 
 
-            var constantValueSerializerRepository = Substitute.For<IConstantValueSerializerRepository>();
+            var constantValueSerializerRepository = Substitute.For<IValueSerializerRepository>();
 
             constantValueSerializerRepository.LoadSerializer(typeof(double)).Returns(new DoubleConstantValueSerializer());
 
-            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations, constantValueRegistrations);
+            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
             var registry = sut.CreateNodeRegistry();
 
             Assert.NotNull(registry.DataTypes);
@@ -63,18 +64,6 @@ namespace BlueprintDeck
             Assert.Equal(testPort.Title, actualPort.Title);
             Assert.Equal(testPort.Mandatory, actualPort.Mandatory);
             Assert.Equal(testPort.Direction, actualPort.Direction);
-
-
-            Assert.NotNull(registry.ConstantValueNodeTypes);
-            Assert.Single(registry.ConstantValueNodeTypes);
-            var actualValue = registry.ConstantValueNodeTypes.First();
-            Assert.Equal(testConstantValue.Key, actualValue.Id);
-            Assert.Equal(testConstantValue.Title, actualValue.Title);
-
-            Assert.NotNull(actualValue.Port);
-            var actualValuePort = actualValue.Port;
-            Assert.Equal("value", actualValuePort.Key);
-            Assert.Equal("Value", actualValuePort.Title);
         }
 
         [Fact]
@@ -83,7 +72,7 @@ namespace BlueprintDeck
             var expectedTypeName = "TType";
             var nodeRegistration = new NodeRegistration("id", "title", typeof(ToStringNode<>), new List<PortRegistration>(),
                 new List<string> { expectedTypeName }, new List<PropertyRegistration>());
-            var sut = new RegistryFactory(new[] { nodeRegistration }, new List<DataTypeRegistration>(), new List<ConstantValueRegistration>());
+            var sut = new RegistryFactory(new[] { nodeRegistration }, new List<DataTypeRegistration>());
 
             var actual = sut.CreateNodeRegistry();
             Assert.NotNull(actual.NodeTypes);
@@ -97,36 +86,27 @@ namespace BlueprintDeck
         [Fact]
         public void TestCreateRegistry_WhenInvalidTypes_ThrowsException()
         {
-            var testPort = new PortRegistration("Delay", Direction.Input, typeof(double)) { Title = "Delay", Mandatory = true};
+            
+            var testPort = new PortRegistration(Property , Direction.Input, typeof(double)) { Title = "Delay", Mandatory = true};
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
                 new List<PortRegistration> { testPort }, new List<string>(), new List<PropertyRegistration>());
 
-            var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new PortRegistration("out", Direction.Output, typeof(double)){ Title = "out", Mandatory = true}, (func) => { });
-
+         
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new List<DataTypeRegistration>();
-            var constantValueRegistrations = new[] { testConstantValue };
 
-            var constantValueSerializerRepository = Substitute.For<IConstantValueSerializerRepository>();
-
-            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations, constantValueRegistrations);
+            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
 
             Assert.Throws<Exception>(() => { sut.CreateNodeRegistry(); });
             nodeRegistrations = new NodeRegistration[] { };
-            sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations, constantValueRegistrations);
-            Assert.Throws<Exception>(() => { sut.CreateNodeRegistry(); });
+            sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
         }
 
         [Fact]
         public void TestConstructor()
         {
-            Assert.Throws<ArgumentNullException>(() =>
-            {
-                new RegistryFactory(new NodeRegistration[] { }, new DataTypeRegistration[] { }, null);
-            });
-            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(new NodeRegistration[] { }, null, null); });
-            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(null, null, null); });
+            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(new NodeRegistration[] { }, null); });
+            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(null, null); });
         }
     }
 }

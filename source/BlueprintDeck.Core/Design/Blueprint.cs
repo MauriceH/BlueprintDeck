@@ -9,7 +9,5 @@ namespace BlueprintDeck.Design
 
         public List<Connection>? Connections { get; set; }
         
-        public List<ConstantValueNode>? ConstantValues { get; set; }
-        
     }
 }

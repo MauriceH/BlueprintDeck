@@ -5,13 +5,8 @@ using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Registration;
-using BlueprintDeck.Node.Properties;
-using BlueprintDeck.Node.Properties.Registration;
-using BlueprintDeck.Node.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ConstantValueNode = BlueprintDeck.Node.Default.ConstantValueNode;
 
 namespace BlueprintDeck.Instance.Factory
 {
@@ -19,9 +14,9 @@ namespace BlueprintDeck.Instance.Factory
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly INodeFactory _nodeFactory;
-        private readonly IConstantValueSerializerRepository _serializerRepository;
+        private readonly IValueSerializerRepository _serializerRepository;
 
-        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IConstantValueSerializerRepository serializerRepository)
+        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IValueSerializerRepository serializerRepository)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _nodeFactory = nodeFactory ?? throw new ArgumentNullException(nameof(nodeFactory));
@@ -36,12 +31,10 @@ namespace BlueprintDeck.Instance.Factory
             var scope = _serviceProvider.CreateScope();
             var nodeOrder = new List<NodeInstance>();
             var nodes = new List<NodeInstance>();
-            var values = new List<ConstantValueInstance>();
 
 
             design.Nodes ??= new List<Design.Node>();
             design.Connections ??= new List<Connection>();
-            design.ConstantValues ??= new List<Design.ConstantValueNode>();
 
             // Load all nodes, lookup input or output type of ports for constant value connections and initialize constant values
 
@@ -59,46 +52,15 @@ namespace BlueprintDeck.Instance.Factory
 
                 var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration);
 
-                foreach (var definition in nodeCreateResult.Registration.Ports)
+                foreach (var portRegistration in nodeCreateResult.Registration.Ports)
                 {
-                    nodeInstance.Ports.Add(new PortInstance(definition));
+                    nodeInstance.Ports.Add(new PortInstance(portRegistration));
                 }
 
                 nodes.Add(nodeInstance);
             }
 
-            foreach (var designValueNode in design.ConstantValues)
-            {
-                if (designValueNode == null) throw new InvalidBlueprintException("Blueprint node is null");
-                if (string.IsNullOrWhiteSpace(designValueNode.Id)) throw new InvalidBlueprintException("Blueprint node key is null or empty");
-
-                if (string.IsNullOrWhiteSpace(designValueNode.NodeTypeKey))
-                    throw new InvalidBlueprintException($"Blueprint type-key is null or empty for constant value node \"{designValueNode.Id!}\"");
-
-                var nodeCreateResult = _nodeFactory.CreateConstantValueNode(scope, designValueNode.NodeTypeKey!);
-                var nodeLifeTimeId = Guid.NewGuid().ToString();
-                var registration = nodeCreateResult.Registration;
-                var nodeRegistration = new NodeRegistration(registration.Key, registration.Title, typeof(ConstantValueNode),
-                    new List<PortRegistration> { registration.Port }, new List<string>(), new List<PropertyRegistration>());
-
-
-                var nodeInstance = new NodeInstance(nodeLifeTimeId, designValueNode, nodeCreateResult.Node, nodeRegistration);
-
-                //Ugly implementation
-                var constantValueNode = (ConstantValueNode)nodeCreateResult.Node;
-
-
-                nodeInstance.Ports.Add(new PortInstance(registration.Port));
-
-                var serializer = _serializerRepository.LoadSerializer(registration.DataType);
-                if (serializer == null) throw new Exception("No serializer found");
-
-                constantValueNode.Value = serializer.Deserialize(designValueNode.Value);
-
-                nodes.Add(nodeInstance);
-            }
-
-
+            
             var openConnections = design.Connections?.ToList() ?? new List<Connection>();
 
             var toConnectNodes = nodes.ToList();
@@ -136,7 +98,7 @@ namespace BlueprintDeck.Instance.Factory
                 }
             }
 
-            return new Blueprint(scope.ServiceProvider.GetRequiredService<ILogger<Blueprint>>(), scope, nodeOrder, values);
+            return new Blueprint(scope.ServiceProvider.GetRequiredService<ILogger<Blueprint>>(), scope, nodeOrder);
         }
     }
 }

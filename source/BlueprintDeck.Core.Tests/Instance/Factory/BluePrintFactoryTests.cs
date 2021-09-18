@@ -28,7 +28,7 @@ namespace BlueprintDeck.Instance.Factory
             
             var provider = services.BuildServiceProvider();
             
-            var cvSerializerRepository = Substitute.For<IConstantValueSerializerRepository>();
+            var cvSerializerRepository = Substitute.For<IValueSerializerRepository>();
             var nodeFactory = Substitute.For<INodeFactory>();
 
             var testableNodeAccessor = new TestableNodeAccessor<double>();

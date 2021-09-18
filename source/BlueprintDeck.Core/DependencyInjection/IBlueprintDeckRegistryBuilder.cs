@@ -10,7 +10,6 @@ namespace BlueprintDeck.DependencyInjection
         void RegisterNode<T>() where T : INode; 
         void RegisterNode(Type type); 
         void RegisterAssemblyNodes(Assembly assembly);
-        void RegisterConstantValue<TSerializer, TDataType>(string key, string title) where TSerializer : class, IConstantValueSerializer<TDataType>;
         void RegisterDataType<TDataType>();
         void RegisterDataType<TDataType>(string title);
         void RegisterDataType(Type type);

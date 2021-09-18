@@ -36,7 +36,7 @@ namespace BlueprintDeck.Node.Ports.Registration
                     }
                 }
 
-                var definition = new PortRegistration(property.Name, inputOutputType, portDataType, portGenericType);
+                var definition = new PortRegistration(property, inputOutputType, portDataType, portGenericType);
 
                 var portAttributes = property.GetCustomAttributes();
                 foreach (var portAttribute in portAttributes)

@@ -37,17 +37,16 @@ namespace BlueprintDeck.PrototypeTestApp
                         Location = new NodeLocation(250,200),
                         NodeTypeKey = "Delay",
                         Id = "Delay1",
-                        Data = JToken.Parse("{\"DefaultMilliseconds\":10000}")
-                    }
-                },
-                ConstantValues = new List<ConstantValueNode>()
-                {
-                    new ConstantValueNode()
+                    },
+                    new Design.Node
                     {
+                        Location = new NodeLocation(250,300),
+                        NodeTypeKey = "TimeSpan",
                         Id = "Duration1",
-                        Title = "RainDuration",
-                        Value = "15000",
-                        NodeTypeKey = "timespan"
+                        Properties = new Dictionary<string, string>
+                        {
+                            ["Value"] = "00:00:10.000"
+                        }
                     }
                 },
                 Connections = new List<Connection>()
@@ -82,7 +81,7 @@ namespace BlueprintDeck.PrototypeTestApp
                         NodeTo = "Delay1",
                         NodePortTo = "Duration",
                         NodeFrom = "Duration1",
-                        NodePortFrom = "value"
+                        NodePortFrom = "Value"
                     }
                 }
             };

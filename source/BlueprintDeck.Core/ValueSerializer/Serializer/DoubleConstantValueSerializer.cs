@@ -3,7 +3,7 @@ using System;
 namespace BlueprintDeck.ConstantValue.Serializer
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class DoubleConstantValueSerializer : IConstantValueSerializer<double>
+    public class DoubleConstantValueSerializer : IValueSerializer<double>
     {
         public string? Serialize(object? value)
         {

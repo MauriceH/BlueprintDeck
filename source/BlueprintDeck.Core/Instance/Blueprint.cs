@@ -11,15 +11,13 @@ namespace BlueprintDeck.Instance
     {
         private readonly ILogger<Blueprint> _logger;
 
-        private readonly List<ConstantValueInstance> _values;
         private readonly List<NodeInstance> _nodes;
         private readonly IServiceScope _scope;
 
-        public Blueprint(ILogger<Blueprint> logger, IServiceScope scope, List<NodeInstance> nodes, List<ConstantValueInstance> values)
+        public Blueprint(ILogger<Blueprint> logger, IServiceScope scope, List<NodeInstance> nodes)
         {
             _nodes = nodes;
             _logger = logger;
-            _values = values;
             _scope = scope;
         }
 
@@ -30,19 +28,13 @@ namespace BlueprintDeck.Instance
                 nodeInstance.Node.Deactivate();
             }
 
-            _scope?.Dispose();
+            _scope.Dispose();
         }
 
         public void Activate()
         {
-            
             var reverseNodes = _nodes.Reverse<NodeInstance>().ToList();
 
-            foreach (var valueInstance in _values)
-            {
-                valueInstance.Activate();
-            }
-            
             LogActivationOrder(reverseNodes);
             foreach (var nodeInstance in reverseNodes)
             {
@@ -51,8 +43,6 @@ namespace BlueprintDeck.Instance
                     nodeInstance.Activate();
                 }
             }
-            
-            
         }
 
         private void LogActivationOrder(IEnumerable<NodeInstance> nodes)

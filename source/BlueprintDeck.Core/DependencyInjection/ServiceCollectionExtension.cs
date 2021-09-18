@@ -4,14 +4,11 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using BlueprintDeck.ConstantValue.Registration;
-using BlueprintDeck.ConstantValue.Serializer;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
-using BlueprintDeck.Node.Default;
-using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Registration;
 using BlueprintDeck.Node.Properties.Registration;
 using BlueprintDeck.Node.Registration;
@@ -24,8 +21,8 @@ namespace BlueprintDeck.DependencyInjection
         public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistryBuilder> config)
         {
             
-            services.AddSingleton<ConstantValueSerializerRepository>();
-            services.AddSingleton<IConstantValueSerializerRepository>(provider => provider.GetRequiredService<ConstantValueSerializerRepository>());
+            services.AddSingleton<ValueSerializerRepository>();
+            services.AddSingleton<IValueSerializerRepository>(provider => provider.GetRequiredService<ValueSerializerRepository>());
 
             services.AddSingleton<RegistryFactory>();
             services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
@@ -37,10 +34,6 @@ namespace BlueprintDeck.DependencyInjection
             services.AddSingleton<INodeFactory>(provider => provider.GetRequiredService<NodeFactory>());
 
             var blueprintDeckBuilder = new RegistryBuilder(services);
-            blueprintDeckBuilder.RegisterConstantValue<DoubleConstantValueSerializer, double>("double", "Double value");
-            blueprintDeckBuilder.RegisterConstantValue<Int32ConstantValueSerializer, int>("int32", "Int32 value");
-            blueprintDeckBuilder.RegisterConstantValue<TimeSpanConstantValueSerializer, TimeSpan>("timespan", "TimeSpan value");
-            blueprintDeckBuilder.RegisterConstantValue<StringConstantValueSerializer, string>("string", "String value");
 
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
 
@@ -96,23 +89,6 @@ namespace BlueprintDeck.DependencyInjection
                 _services.AddTransient(registration.NodeType);
                 _services.AddTransient(provider => (INode) provider.GetRequiredService(registration.NodeType));
                 //_services.AddSingleton(registration.NodeDescriptorType);
-            }
-
-            public void RegisterConstantValue<TSerializer, TDataType>(string key, string title) where TSerializer : class, IConstantValueSerializer<TDataType>
-            {
-                _services.AddSingleton<TSerializer>();
-                _services.AddSingleton<IConstantValueSerializer<TDataType>>(provider => provider.GetRequiredService<TSerializer>());
-
-                RegisterDataType<TDataType>();
-
-                var nodePortDefinition = new PortRegistration("value",Direction.Output,typeof(TDataType)) {Title = title, Mandatory = false};
-                var constantValueRegistration = new ConstantValueRegistration(key, title, typeof(TDataType), nodePortDefinition, (valueReceiver) =>
-                {
-                    //TODO
-                    // var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);
-                    // output?.Emit((TDataType)valueReceiver());
-                });
-                _services.AddSingleton(constantValueRegistration);
             }
 
             public void RegisterDataType<TDataType>()

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Node.Registration;
 
@@ -11,17 +10,14 @@ namespace BlueprintDeck.Design.Registry
     {
         private readonly List<NodeRegistration> _nodeRegistrations;
         private readonly List<DataTypeRegistration> _dataTypeRegistrations;
-        private readonly List<ConstantValueRegistration> _constantValueRegistrations;
         
 
-        public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations, IEnumerable<ConstantValueRegistration> constantValueRegistrations)
+        public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations)
         {
             if (nodeRegistrations == null) throw new ArgumentNullException(nameof(nodeRegistrations));
             if (dataTypeRegistrations == null) throw new ArgumentNullException(nameof(dataTypeRegistrations));
-            if (constantValueRegistrations == null) throw new ArgumentNullException(nameof(constantValueRegistrations));
             _nodeRegistrations = nodeRegistrations.ToList();
             _dataTypeRegistrations = dataTypeRegistrations.ToList();
-            _constantValueRegistrations = constantValueRegistrations.ToList();
         }
 
         public BlueprintRegistry CreateNodeRegistry()
@@ -29,8 +25,7 @@ namespace BlueprintDeck.Design.Registry
             return new BlueprintRegistry
             {
                 NodeTypes = CreateNodeTypes(),
-                DataTypes = CreateDataTypes(),
-                ConstantValueNodeTypes = CreateConstantValueNodeTypes()
+                DataTypes = CreateDataTypes()
             };
         }
 
@@ -107,27 +102,6 @@ namespace BlueprintDeck.Design.Registry
                 TypeName = x.DataType.FullName
             }).ToList();
         }
-
-        private List<ConstantValueNodeType> CreateConstantValueNodeTypes()
-        {
-            return _constantValueRegistrations.Select(x =>
-            {
-                var dataType = _dataTypeRegistrations.FirstOrDefault(dt => dt.DataType == x.DataType);
-                if (dataType == null) throw new Exception("Node without registered type");
-                return new ConstantValueNodeType
-                {
-                    Id = x.Key,
-                    Title = x.Title,
-                    Port = new ConstantValueNodePortType
-                    {
-                        Key = "value",
-                        Title = "Value",
-                        TypeId = dataType.Id
-                    }
-                };
-            }).ToList();
-        }
-        
         
     }
 }

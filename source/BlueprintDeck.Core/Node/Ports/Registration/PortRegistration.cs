@@ -1,20 +1,23 @@
 using System;
+using System.Reflection;
 
 namespace BlueprintDeck.Node.Ports.Registration
 {
     public class PortRegistration 
     {
         
-        internal PortRegistration(string key, Direction direction, Type? dataType = null, string? genericTypeParameterName = null)
+        internal PropertyInfo Property { get; }
+
+        public string Key => Property.Name;
+        
+        internal PortRegistration(PropertyInfo property, Direction direction, Type? dataType = null, string? genericTypeParameterName = null)
         {
-            Key = key;
+            Property = property;
             Direction = direction;
             DataType = dataType;
             GenericTypeParameterName = genericTypeParameterName;
         }
 
-
-        public string Key { get; }
 
         public Direction Direction { get; }
 

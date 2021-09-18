@@ -9,15 +9,15 @@ namespace BlueprintDeck
     [ExcludeFromCodeCoverage]
     public class ConstantValueSerializerRepositoryTests
     {
-        private readonly IConstantValueSerializerRepository _sut;
+        private readonly IValueSerializerRepository _sut;
         private readonly DoubleConstantValueSerializer _doubleSerializer = new();
         
         public ConstantValueSerializerRepositoryTests()
         {
             var collection = new ServiceCollection();
-            collection.AddSingleton<IConstantValueSerializer<double>>(_doubleSerializer);
+            collection.AddSingleton<IValueSerializer<double>>(_doubleSerializer);
             var provider = collection.BuildServiceProvider();
-            _sut = new ConstantValueSerializerRepository(provider);
+            _sut = new ValueSerializerRepository(provider);
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace BlueprintDeck
         [Fact]
         public void TestLoadSerializer_WhenTypeInteger_ThrowsException()
         {
-            Assert.Throws<ConstantValueSerializerNotFoundException>(() =>
+            Assert.Throws<ValueSerializerNotFoundException>(() =>
             {
                 _sut.LoadSerializer(typeof(int));
             });

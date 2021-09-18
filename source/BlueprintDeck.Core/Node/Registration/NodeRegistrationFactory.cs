@@ -16,7 +16,6 @@ namespace BlueprintDeck.Node.Registration
         private readonly IPortRegistrationFactory _portFactory;
         private readonly IGenericTypeParametersFactory _genericTypeFactory;
         private readonly IPropertyRegistrationFactory _propertyFactory;
-        private readonly SHA1 _sha1;
 
         public NodeRegistrationFactory(IAssemblyTypesResolver assemblyTypesResolver, 
             IPortRegistrationFactory portFactory,
@@ -27,7 +26,6 @@ namespace BlueprintDeck.Node.Registration
             _portFactory = portFactory;
             _genericTypeFactory = genericTypeFactory;
             _propertyFactory = propertyFactory;
-            _sha1 = SHA1.Create();
         }
 
         internal IEnumerable<NodeRegistration> CreateNodeRegistrationsByAssembly(Assembly assembly)
@@ -69,13 +67,28 @@ namespace BlueprintDeck.Node.Registration
             if (!typeof(INode).IsAssignableFrom(type)) return null;
 
             // ReSharper disable once ConstantNullCoalescingCondition
-            var id = attribute.Id ?? Encoding.UTF8.GetString(_sha1.ComputeHash(Encoding.UTF8.GetBytes(type.FullName ?? type.Name)));
+
+            var id = attribute.Id;
+            if (id == null)
+            {
+                id = type.Name;
+                if (id.EndsWith("Node", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    id = id[..^4];
+                }
+            }
+
+            var title = attribute.Title;
+            if (title == null)
+            {
+                title = id;
+            }
 
             var portDefinitions = _portFactory.CreatePortRegistrations(type);
             var genericTypes = _genericTypeFactory.CreateGenericTypeList(type);
             var properties = _propertyFactory.CreatePropertyRegistrations(type);
 
-            return new NodeRegistration(id, attribute.Title, type, portDefinitions, genericTypes, properties);
+            return new NodeRegistration(id, title, type, portDefinitions, genericTypes, properties);
         }
     }
 }

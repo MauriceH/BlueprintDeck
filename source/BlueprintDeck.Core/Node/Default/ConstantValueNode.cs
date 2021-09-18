@@ -1,24 +1,18 @@
-using System;
 using System.Threading.Tasks;
+using BlueprintDeck.Node.Ports;
 
 namespace BlueprintDeck.Node.Default
 {
-    public class ConstantValueNode : INode
+    public abstract class ConstantValueNode<TDataType> : INode
     {
-        private Action<Func<object>> ActivationCall { get; }
+        public TDataType? Value { get; set; }
         
-        public object? Value { get; set; }
-        
-        public ConstantValueNode(Action<Func<object>> activationCall)
-        {
-            ActivationCall = activationCall;
-        }
+        public IOutput<TDataType>? Output { get; set; }
 
         public Task Activate()
         {
             if (Value == null) return Task.CompletedTask;
-            var val = Value!;
-            ActivationCall(() => val);
+            Output?.Emit(Value);
             return Task.CompletedTask;
         }
 
