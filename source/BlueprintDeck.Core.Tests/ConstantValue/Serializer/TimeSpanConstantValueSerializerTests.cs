@@ -10,7 +10,7 @@ namespace BlueprintDeck.ConstantValue.Serializer
         [Fact]
         public void TestSerialization_WhenTimeSpanValue_ConvertedCorrect()
         {
-            var expected = DateTime.Now.TimeOfDay;
+            var expected = TimeSpan.FromMilliseconds(3660);
             var serializedValue = _sut.Serialize(expected);
             var actual = _sut.Deserialize(serializedValue);
             Assert.Equal(expected, actual);
