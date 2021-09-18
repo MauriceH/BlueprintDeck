@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.PrototypeTestApp
 {
-    [NodeDescriptor("TestNode","Test node")]
+    [Node("TestNode","Test node")]
     public class TestNode : INode
     {
         private readonly ILogger<TestNode> _logger;

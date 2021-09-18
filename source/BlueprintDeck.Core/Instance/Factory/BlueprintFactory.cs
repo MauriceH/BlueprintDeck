@@ -54,7 +54,7 @@ namespace BlueprintDeck.Instance.Factory
 
                 var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration);
 
-                foreach (var definition in nodeCreateResult.Registration.PortDefinitions)
+                foreach (var definition in nodeCreateResult.Registration.Ports)
                 {
                     nodeInstance.Ports.Add(new PortInstance(definition));
                 }
@@ -74,7 +74,7 @@ namespace BlueprintDeck.Instance.Factory
                 var nodeLifeTimeId = Guid.NewGuid().ToString();
                 var registration = nodeCreateResult.Registration;
                 var nodeRegistration = new NodeRegistration(registration.Key, registration.Title, typeof(ConstantValueNode),
-                    new List<NodePortDefinition> { registration.PortDefinition }, new List<string>());
+                    new List<PortRegistration> { registration.Port }, new List<string>(), new List<PropertyRegistration>());
 
 
                 var nodeInstance = new NodeInstance(nodeLifeTimeId, designValueNode, nodeCreateResult.Node, nodeRegistration);
@@ -83,7 +83,7 @@ namespace BlueprintDeck.Instance.Factory
                 var constantValueNode = (ConstantValueNode)nodeCreateResult.Node;
 
 
-                nodeInstance.Ports.Add(new PortInstance(registration.PortDefinition));
+                nodeInstance.Ports.Add(new PortInstance(registration.Port));
 
                 var serializer = _serializerRepository.LoadSerializer(registration.DataType);
                 if (serializer == null) throw new Exception("No serializer found");

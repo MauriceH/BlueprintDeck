@@ -5,18 +5,20 @@ namespace BlueprintDeck.Node.Default
 {
     public class ConstantValueNode : INode
     {
-        private Action<INodeContext, Func<object?>> ActivationCall { get; }
+        private Action<INodeContext, Func<object>> ActivationCall { get; }
         
         public object? Value { get; set; }
         
-        public ConstantValueNode(Action<INodeContext, Func<object?>> activationCall)
+        public ConstantValueNode(Action<INodeContext, Func<object>> activationCall)
         {
             ActivationCall = activationCall;
         }
 
         public Task Activate(INodeContext nodeContext)
         {
-            ActivationCall(nodeContext, () => Value);
+            if (Value == null) return Task.CompletedTask;
+            var val = Value!;
+            ActivationCall(nodeContext, () => val);
             return Task.CompletedTask;
         }
 

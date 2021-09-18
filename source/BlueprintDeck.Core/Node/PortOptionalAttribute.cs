@@ -4,7 +4,7 @@ namespace BlueprintDeck.Node
 {
     public class PortOptionalAttribute : PortAttribute
     {
-        public override void Setup(NodePortDefinition definition)
+        public override void Setup(PortRegistration definition)
         {
             definition.Mandatory = false;
         }

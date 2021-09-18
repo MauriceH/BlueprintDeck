@@ -4,32 +4,31 @@ using Newtonsoft.Json.Converters;
 
 namespace BlueprintDeck.Node.Ports.Definitions
 {
-    public class NodePortDefinition 
+    public class PortRegistration 
     {
         
-       public NodePortDefinition(string key, Direction direction, Type? portDataType = null, string? genericTypeParameterName = null)
+        internal PortRegistration(string key, Direction direction, Type? dataType = null, string? genericTypeParameterName = null)
         {
             Key = key;
             Direction = direction;
-            PortDataType = portDataType;
+            DataType = dataType;
             GenericTypeParameterName = genericTypeParameterName;
         }
 
 
         public string Key { get; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public Direction Direction { get; }
 
-        [JsonIgnore]
-        public Type? PortDataType { get; }
+        public Type? DataType { get; }
 
         public string? GenericTypeParameterName { get; }
+
+        public bool WithData => DataType != null || GenericTypeParameterName != null;
+        
         
         public string? Title { get; set; }
+
         public bool Mandatory { get; set; } = true;
-
-        public bool WithData => PortDataType != null || GenericTypeParameterName != null;
-
     }
 }

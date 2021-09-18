@@ -4,6 +4,6 @@ namespace BlueprintDeck.Node.Ports.Definitions
 {
     public interface INodeDescriptor
     {
-        IList<NodePortDefinition> PortDefinitions { get; }
+        IList<PortRegistration> PortDefinitions { get; }
     }
 }

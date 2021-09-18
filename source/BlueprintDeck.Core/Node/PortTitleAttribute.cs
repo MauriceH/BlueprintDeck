@@ -11,7 +11,7 @@ namespace BlueprintDeck.Node
             Title = title;
         }
 
-        public override void Setup(NodePortDefinition definition)
+        public override void Setup(PortRegistration definition)
         {
             definition.Title = Title;
         }

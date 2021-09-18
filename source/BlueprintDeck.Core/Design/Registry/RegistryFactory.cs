@@ -34,42 +34,64 @@ namespace BlueprintDeck.Design.Registry
 
         private List<NodeType> CreateNodeTypes()
         {
-            return _nodeRegistrations.Select(x =>
+            return _nodeRegistrations.Select(node =>
             {
-                var listPortDefinition = new List<NodePort>();
-                foreach (var d in x.PortDefinitions)
+                var ports = new List<NodePort>();
+                foreach (var port in node.Ports)
                 {
                     var nodePort = new NodePort
                     {
-                        Key = d.Key,
-                        Title = d.Title,
-                        Mandatory = d.Mandatory,
-                        Direction = d.Direction,
+                        Key = port.Key,
+                        Title = port.Title,
+                        Mandatory = port.Mandatory,
+                        Direction = port.Direction,
                     };
-                    if (d.PortDataType != null || d.GenericTypeParameterName != null)
+                    if (port.DataType != null || port.GenericTypeParameterName != null)
                     {
-                        if (!string.IsNullOrWhiteSpace(d.GenericTypeParameterName))
+                        if (!string.IsNullOrWhiteSpace(port.GenericTypeParameterName))
                         {
-                            nodePort.GenericTypeParameter = d.GenericTypeParameterName;
+                            nodePort.GenericTypeParameter = port.GenericTypeParameterName;
                         }
                         else
                         {
-                            var portDataType = d.PortDataType!;
+                            var portDataType = port.DataType!;
                             var dataTypeRegistration = _dataTypeRegistrations.FirstOrDefault(t => t.DataType == portDataType);
                             if (dataTypeRegistration == null) throw new Exception("Node without registered type");
 
-                            nodePort.TypeId = dataTypeRegistration.Key;
+                            nodePort.TypeId = dataTypeRegistration.Id;
                         }
                     }
-                    listPortDefinition.Add(nodePort);
+                    ports.Add(nodePort);
                 }
+                
+                List<NodeProperty>? properties = null;
+                if (node.Properties.Any())
+                {
+                    properties = new List<NodeProperty>();
+                    foreach (var property in node.Properties)
+                    {
+                        var nodeProperty = new NodeProperty
+                        {
+                            Name = property.Name,
+                            Title = property.Title
+                        };
+                        var dataTypeRegistration = _dataTypeRegistrations.FirstOrDefault(t =>
+                            t.DataType == property.Type || Nullable.GetUnderlyingType(property.Type) == t.DataType);
+                        if (dataTypeRegistration == null)
+                            throw new Exception($"Node property {property.Name} type {property.Type.Name} not registered");
+                        nodeProperty.TypeId = dataTypeRegistration.Id;
+
+                    }
+                }
+                
 
                 return new NodeType
                 {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Ports = listPortDefinition,
-                    GenericTypes = x.GenericTypes.Count <= 0 ? null : x.GenericTypes.ToList()
+                    Id = node.Id,
+                    Title = node.Title,
+                    Ports = ports,
+                    Properties = properties,
+                    GenericTypes = node.GenericTypes.Count <= 0 ? null : node.GenericTypes.ToList()
                 };
             }).ToList();
         }
@@ -78,7 +100,7 @@ namespace BlueprintDeck.Design.Registry
         {
             return _dataTypeRegistrations.Select(x => new DataType
             {
-                Id = x.Key,
+                Id = x.Id,
                 Title = x.Title,
                 TypeName = x.DataType.FullName
             }).ToList();
@@ -98,7 +120,7 @@ namespace BlueprintDeck.Design.Registry
                     {
                         Key = "value",
                         Title = "Value",
-                        TypeId = dataType.Key
+                        TypeId = dataType.Id
                     }
                 };
             }).ToList();

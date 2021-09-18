@@ -8,6 +8,7 @@ namespace BlueprintDeck.Design.Registry
         public string? Id { get; set; }
         public string? Title { get; set; }
         public IList<NodePort>? Ports { get; set; }
+        public IList<NodeProperty>? Properties { get; set; }
         public IList<string>? GenericTypes { get; set; }
     }
 }

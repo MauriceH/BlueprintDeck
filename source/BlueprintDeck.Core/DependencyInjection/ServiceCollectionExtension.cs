@@ -55,7 +55,7 @@ namespace BlueprintDeck.DependencyInjection
             public RegistryBuilder(IServiceCollection services)
             {
                 _services = services;
-                _factory = new NodeRegistrationFactory();
+                _factory = new NodeRegistrationFactory(new AssemblyTypesResolver(),new PortRegistrationFactory(),new GenericTypeParametersFactory(),new PropertyRegistrationFactory());
             }
 
             public void RegisterNode<T>() where T : INode
@@ -80,10 +80,10 @@ namespace BlueprintDeck.DependencyInjection
 
             private void RegisterRegistration(NodeRegistration registration)
             {
-                foreach (var portDef in registration.PortDefinitions.Where(x => x.PortDataType != null))
+                foreach (var portDef in registration.Ports.Where(x => x.DataType != null))
                 {
                     if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameterName)) continue;
-                    var type = portDef.PortDataType ??
+                    var type = portDef.DataType ??
                                throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
                     if (_dataTypes.ContainsKey(type)) continue;
                     RegisterDataType(type);
@@ -102,11 +102,12 @@ namespace BlueprintDeck.DependencyInjection
 
                 RegisterDataType<TDataType>();
 
-                var nodePortDefinition = new NodePortDefinition("value",Direction.Output,typeof(TDataType),null) {Title = title, Mandatory = false};
+                var nodePortDefinition = new PortRegistration("value",Direction.Output,typeof(TDataType)) {Title = title, Mandatory = false};
                 var constantValueRegistration = new ConstantValueRegistration(key, title, typeof(TDataType), nodePortDefinition, (context,valueReceiver) =>
                 {
-                    var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);
-                    output?.Emit((TDataType)valueReceiver());
+                    //TODO
+                    // var output = context.GetPort<IOutput<TDataType>>(nodePortDefinition);
+                    // output?.Emit((TDataType)valueReceiver());
                 });
                 _services.AddSingleton(constantValueRegistration);
             }

@@ -18,13 +18,13 @@ namespace BlueprintDeck
         [Fact]
         public void TestCreate_WhenCreate_ReturnsCorrectRegistry()
         {
-            var testPort = new NodePortDefinition("Delay", Direction.Input,typeof(double)) {Mandatory = true};
+            var testPort = new PortRegistration("Delay", Direction.Input,typeof(double)) {Mandatory = true};
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
-                new List<NodePortDefinition> { testPort }, new List<string>());
+                new List<PortRegistration> { testPort }, new List<string>(), new List<PropertyRegistration>());
             var testDataType = new DataTypeRegistration("double", typeof(double), "Double");
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new NodePortDefinition("out", Direction.Output, typeof(double)) {Title="out", Mandatory = true}, (context, func) => { });
+                new PortRegistration("out", Direction.Output, typeof(double)) {Title="out", Mandatory = true}, (context, func) => { });
 
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new[] { testDataType };
@@ -41,7 +41,7 @@ namespace BlueprintDeck
             Assert.NotNull(registry.DataTypes);
             Assert.Single(registry.DataTypes);
             var actualType = registry.DataTypes.First();
-            Assert.Equal(testDataType.Key, actualType.Id);
+            Assert.Equal(testDataType.Id, actualType.Id);
             Assert.Equal(testDataType.Title, actualType.Title);
             Assert.Equal(testDataType.DataType.FullName, actualType.TypeName);
 
@@ -76,8 +76,8 @@ namespace BlueprintDeck
         public void TestCreateRegistry_WhenGenericNode_OutputsGenericParameters()
         {
             var expectedTypeName = "TType";
-            var nodeRegistration = new NodeRegistration("id", "title", typeof(ToStringNode<>), new List<NodePortDefinition>(),
-                new List<string> { expectedTypeName });
+            var nodeRegistration = new NodeRegistration("id", "title", typeof(ToStringNode<>), new List<PortRegistration>(),
+                new List<string> { expectedTypeName }, new List<PropertyRegistration>());
             var sut = new RegistryFactory(new[] { nodeRegistration }, new List<DataTypeRegistration>(), new List<ConstantValueRegistration>());
 
             var actual = sut.CreateNodeRegistry();
@@ -92,12 +92,12 @@ namespace BlueprintDeck
         [Fact]
         public void TestCreateRegistry_WhenInvalidTypes_ThrowsException()
         {
-            var testPort = new NodePortDefinition("Delay", Direction.Input, typeof(double)) { Title = "Delay", Mandatory = true};
+            var testPort = new PortRegistration("Delay", Direction.Input, typeof(double)) { Title = "Delay", Mandatory = true};
             var testNode = new NodeRegistration("Delay", "Delay", typeof(DelayNode),
-                new List<NodePortDefinition> { testPort }, new List<string>());
+                new List<PortRegistration> { testPort }, new List<string>(), new List<PropertyRegistration>());
 
             var testConstantValue = new ConstantValueRegistration("CVR", "Value", typeof(double),
-                new NodePortDefinition("out", Direction.Output, typeof(double)){ Title = "out", Mandatory = true}, (context, func) => { });
+                new PortRegistration("out", Direction.Output, typeof(double)){ Title = "out", Mandatory = true}, (context, func) => { });
 
             var nodeRegistrations = new[] { testNode };
             var dataTypeRegistrations = new List<DataTypeRegistration>();

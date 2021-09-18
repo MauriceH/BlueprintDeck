@@ -4,7 +4,7 @@ using BlueprintDeck.Node.Ports;
 
 namespace BlueprintDeck
 {
-    [NodeDescriptor("TestableNode", "TestableNode")]
+    [Node("TestableNode", "TestableNode")]
     public class TestableNode<TTestData> : INode
     {
         private readonly TaskCompletionSource _tcsActivationDone = new();

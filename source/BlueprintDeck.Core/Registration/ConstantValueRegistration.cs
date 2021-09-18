@@ -8,6 +8,6 @@ namespace BlueprintDeck.Registration
         string Key,
         string Title,
         Type DataType,
-        NodePortDefinition PortDefinition,
+        PortRegistration Port,
         Action<INodeContext, Func<object>> ActivationCall);
 }

@@ -4,7 +4,7 @@ using BlueprintDeck.Node.Ports;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("ToString", "ToString")]
+    [Node("ToString", "ToString")]
     public class ToStringNode<TInput> : INode
     {
         public IInput<TInput>? Input { get; set; }

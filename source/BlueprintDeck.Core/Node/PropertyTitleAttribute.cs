@@ -11,7 +11,7 @@ namespace BlueprintDeck.Node
 
         public string Title { get; }
         
-        public override void Setup(PropertyDefinition definition)
+        public override void Setup(PropertyRegistration definition)
         {
             definition.Title = Title;
         }

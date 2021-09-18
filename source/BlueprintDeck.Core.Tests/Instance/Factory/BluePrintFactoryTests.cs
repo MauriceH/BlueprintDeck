@@ -32,7 +32,7 @@ namespace BlueprintDeck.Instance.Factory
             
             var node = new TestableNode<double>(testableNodeAccessor);
             
-            var nodeRegistration = new NodeRegistration("TestableNode","TestableNode",typeof(TestableNode<>),new List<NodePortDefinition>(),new List<string> {"TTestData"});
+            var nodeRegistration = new NodeRegistration("TestableNode","TestableNode",typeof(TestableNode<>),new List<PortRegistration>(),new List<string> {"TTestData"},new List<PropertyRegistration>());
             var createResult = new CreateNodeResult<NodeRegistration>(nodeRegistration,node);
             nodeFactory.CreateNode(Arg.Any<IServiceScope>(), Arg.Any<string>(), Arg.Any<Design.Node>())
                 .Returns(createResult);

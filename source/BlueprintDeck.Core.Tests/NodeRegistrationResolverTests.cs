@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports.Definitions;
@@ -14,7 +15,8 @@ namespace BlueprintDeck
     [ExcludeFromCodeCoverage]
     public class NodeRegistrationResolverTests
     {
-        private readonly NodeRegistrationFactory _sut = new();
+        private readonly NodeRegistrationFactory _sut = new(new AssemblyTypesResolver(), new PortRegistrationFactory(),
+            new GenericTypeParametersFactory(), new PropertyRegistrationFactory());
 
         [Fact]
         public void TestCreateByAssembly_WhenGivenAssembly_ResolvesRegistrations()
@@ -24,7 +26,7 @@ namespace BlueprintDeck
             var nodeRegistrations = registrations.ToList();
             Assert.Contains(nodeRegistrations, registration => registration.NodeType == typeof(ActivateNode));
         }
-        
+
         [Fact]
         public void TestCreateByAssembly_WhenAssemblyWithInvalidNodes_ResolvesRegistrations()
         {
@@ -33,7 +35,7 @@ namespace BlueprintDeck
             var nodeRegistrations = registrations.ToList();
             Assert.NotEmpty(nodeRegistrations);
         }
-        
+
         [Fact]
         public void TestCreate_WhenInvalidTypes_ReturnNullOrThrowsException()
         {
@@ -41,34 +43,33 @@ namespace BlueprintDeck
             Assert.Null(_sut.CreateNodeRegistration(typeof(int)));
             Assert.Null(_sut.CreateNodeRegistration(typeof(MissingInterfaceNode)));
         }
-        
+
         [Fact]
         public void TestCreate_WhenNodeWithoutIdAttribute_GeneratesHashId()
         {
             var registration = _sut.CreateNodeRegistration(typeof(MissingIdNode));
             Assert.NotNull(registration.Id);
         }
-        
+
         [Fact]
         public void TestCreate_WhenGenericNodeType_ReturnsCorrectNodeRegistration()
         {
             var registration = _sut.CreateNodeRegistration<ActivateNode>();
             Assert.True(registration.NodeType.Equals(typeof(ActivateNode)));
         }
-        
+
         [Fact]
         public void TestCreate_WhenInvalidType_ThrowsException()
         {
-            
         }
 
-        [NodeDescriptor("id", "title")]
+        [Node("id", "title")]
         private class MissingInterfaceNode
         {
         }
-        
-        
-        [NodeDescriptor(null!, "title")]
+
+
+        [Node(null!, "title")]
         private class MissingIdNode : INode
         {
             public Task Activate(INodeContext nodeContext)

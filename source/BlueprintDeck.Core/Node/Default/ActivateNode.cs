@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("Activate", "Activate Node")]
+    [Node("Activate", "Activate Node")]
     public class ActivateNode : INode
     {
         private readonly ILogger<ActivateNode> _logger;

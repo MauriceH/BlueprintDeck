@@ -6,6 +6,6 @@ namespace BlueprintDeck.Node
     [AttributeUsage(AttributeTargets.Property)]
     public abstract class PropertyAttribute : Attribute
     {
-        public abstract void Setup(PropertyDefinition definition);
+        public abstract void Setup(PropertyRegistration definition);
     }
 }

@@ -9,12 +9,12 @@ namespace BlueprintDeck.Instance
 {
     internal class PortInstance
     {
-        public PortInstance(NodePortDefinition definition)
+        public PortInstance(PortRegistration definition)
         {
             Definition = definition ?? throw new ArgumentNullException(nameof(definition));
         }
 
-        public NodePortDefinition Definition { get; }
+        public PortRegistration Definition { get; }
 
         public IPortInputOutput? InputOutput { get; set; }
 
@@ -28,9 +28,9 @@ namespace BlueprintDeck.Instance
             }
 
             var d1 = typeof(DataOutput<>);
-            Type[] typeArgs = {Definition.PortDataType!};
+            Type[] typeArgs = {Definition.DataType!};
             var outputType = d1.MakeGenericType(typeArgs);
-            InputOutput = (IPortInputOutput)Activator.CreateInstance(outputType);
+            InputOutput = (IPortInputOutput?)Activator.CreateInstance(outputType);
         }
 
         public void InitializeAsInput(object connectedOutput)
@@ -52,12 +52,12 @@ namespace BlueprintDeck.Instance
             if (isDataOutput)
             {
                 var d1 = typeof(DataInput<>);
-                Type[] typeArgs = {Definition.PortDataType!};
+                Type[] typeArgs = {Definition.DataType!};
                 var inputType = d1.MakeGenericType(typeArgs);
                 var propertyInfo = connectedOutput.GetType().GetProperty("Observable");
                 if (propertyInfo == null) throw new Exception("Invalid Observable state");
                 var observable = propertyInfo.GetValue(connectedOutput);
-                InputOutput = (IPortInputOutput)Activator.CreateInstance(inputType, new[] {observable});
+                InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, new[] {observable});
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace BlueprintDeck.Instance
 
         public override string ToString()
         {
-            return $"Key {Definition.Key} Type {Definition.Direction} DataType {Definition.PortDataType}";
+            return $"Key {Definition.Key} Type {Definition.Direction} DataType {Definition.DataType}";
         }
 
         public void InitializeAsInputToConstantValue(ConstantValueInstance constantValue)
@@ -79,7 +79,7 @@ namespace BlueprintDeck.Instance
             var method = methodInfo.MakeGenericMethod(constantValue.DataType);
             if (method == null) throw new Exception("Invalid Observable state");
             var observable = method.Invoke(null, new object[] {constantValue.Observable});
-            InputOutput = (IPortInputOutput)Activator.CreateInstance(inputType, observable);
+            InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, observable);
         }
     }
 }

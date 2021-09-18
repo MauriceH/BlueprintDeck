@@ -2,29 +2,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BlueprintDeck.Misc;
 using BlueprintDeck.Node;
-using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Definitions;
 
 namespace BlueprintDeck.Registration
 {
-    internal class PortDefinitionFactory
+    internal class PortRegistrationFactory : IPortRegistrationFactory
     {
-        internal static List<NodePortDefinition> CreatePortDefinitions(Type nodeType)
+        public List<PortRegistration> CreatePortRegistrations(Type nodeType)
         {
             var portProperties = nodeType.GetProperties();
-            var result = new List<NodePortDefinition>();
+            var result = new List<PortRegistration>();
             foreach (var property in portProperties)
             {
                 var propertyType = property.PropertyType;
-                var isInput = propertyType.IsAssignableFrom(typeof(IInput))
-                              || (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(IInput<>));
-                var isOutput = propertyType.IsAssignableFrom(typeof(IOutput))
-                               || (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(IOutput<>));
+               
+                if (!propertyType.IsInput() && !propertyType.IsOutput()) continue;
 
-                if (!isInput && !isOutput) continue;
-
-                var inputOutputType = isInput ? Direction.Input : Direction.Output;
+                var inputOutputType = propertyType.IsInput() ? Direction.Input : Direction.Output;
 
 
                 string? portGenericType = null;
@@ -42,7 +38,7 @@ namespace BlueprintDeck.Registration
                     }
                 }
 
-                var definition = new NodePortDefinition(property.Name, inputOutputType, portDataType, portGenericType);
+                var definition = new PortRegistration(property.Name, inputOutputType, portDataType, portGenericType);
 
                 var portAttributes = property.GetCustomAttributes();
                 foreach (var portAttribute in portAttributes)

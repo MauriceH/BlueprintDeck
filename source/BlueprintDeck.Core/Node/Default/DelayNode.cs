@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BlueprintDeck.Node.Default
 {
-    [NodeDescriptor("Delay", "Delay")]
+    [Node("Delay", "Delay")]
     public class DelayNode : INode
     {
         private readonly ILogger<DelayNode> _logger;
