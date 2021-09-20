@@ -29,9 +29,9 @@ namespace BlueprintDeck.Node.Default
         public Task Activate()
         {
             _logger.LogDebug("Start initializing delay node");
-            Input?.Register(async () =>
+            Input?.OnData(async () =>
             {
-                var valueTimeSpan = DelayDuration?.Value;
+                var valueTimeSpan = DelayDuration?.LastValue;
                 valueTimeSpan ??= DefaultDelay;
                 if (valueTimeSpan == null) return;
                 await Task.Delay(valueTimeSpan.Value);

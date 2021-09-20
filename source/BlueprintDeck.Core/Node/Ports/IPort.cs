@@ -1,6 +1,6 @@
 namespace BlueprintDeck.Node.Ports
 {
-    public interface IPortInputOutput
+    public interface IPort
     {
         
     }

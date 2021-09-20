@@ -31,7 +31,7 @@ namespace BlueprintDeck.Instance
         public List<PortInstance> Ports { get; }
         public string LifeTimeId { get; }
 
-        public T? GetPort<T>(PortRegistration definition) where T: class, IPortInputOutput 
+        public T? GetPort<T>(PortRegistration definition) where T: class, IPort 
         {
             var port = Ports.FirstOrDefault(x => x.Registration.Key == definition.Key);
             if (port == null) throw new Exception("Port not found");

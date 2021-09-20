@@ -5,18 +5,23 @@ namespace BlueprintDeck.Node.Ports
 {
     public class SimpleOutput : IOutput
     {
-        private readonly ReplaySubject<object> _replaySubject;
+        private readonly ReplaySubject<object> _subject;
 
         public SimpleOutput()
         {
-            _replaySubject = new ReplaySubject<object>(1024);
+            _subject = new ReplaySubject<object>(1024);
         }
 
-        public IObservable<object> Observable => _replaySubject;
+        public IObservable<object> Observable => _subject;
 
         public void Emit()
         {
-            _replaySubject.OnNext(new object());
+            _subject.OnNext(new object());
+        }
+
+        public void Dispose()
+        {
+            _subject.Dispose();
         }
     }
 }

@@ -16,7 +16,7 @@ namespace BlueprintDeck.Instance
 
         public PortRegistration Registration { get; }
 
-        public IPortInputOutput? InputOutput { get; set; }
+        public IPort? InputOutput { get; set; }
 
 
         
@@ -36,7 +36,7 @@ namespace BlueprintDeck.Instance
         //     var method = methodInfo.MakeGenericMethod(constantValue.DataType);
         //     if (method == null) throw new Exception("Invalid Observable state");
         //     var observable = method.Invoke(null, new object[] {constantValue.Observable});
-        //     InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, observable);
+        //     InputOutput = (IPort?)Activator.CreateInstance(inputType, observable);
         // }
     }
 }

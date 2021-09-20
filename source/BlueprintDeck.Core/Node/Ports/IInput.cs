@@ -5,14 +5,15 @@ using System.Threading.Tasks;
 namespace BlueprintDeck.Node.Ports
 {
     
-    public interface IInput  : IPortInputOutput
+    public interface IInput  : IPort
     {
-        void Register(Func<Task> action);
+        void OnData(Func<Task> action);
     }
 
-    public interface IInput<out T> : IDisposable,  IPortInputOutput
+    public interface IInput<out T> : IDisposable,  IPort
     {
-        T? Value { get; }
+        T? LastValue { get; }
         void OnData(Action<T> action);
+        void OnData(Func<T, Task> onValue);
     }
 }

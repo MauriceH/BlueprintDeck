@@ -27,7 +27,7 @@ namespace BlueprintDeck.Instance.Factory
                 var d1 = typeof(DataOutput<>);
                 Type[] typeArgs = { registration.DataType! };
                 var outputType = d1.MakeGenericType(typeArgs);
-                portInstance.InputOutput = (IPortInputOutput?)Activator.CreateInstance(outputType);
+                portInstance.InputOutput = (IPort?)Activator.CreateInstance(outputType);
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace BlueprintDeck.Instance.Factory
                 var propertyInfo = connectedOutput.GetType().GetProperty("Observable");
                 if (propertyInfo == null) throw new Exception("Invalid Observable state");
                 var observable = propertyInfo.GetValue(connectedOutput);
-                portInstance.InputOutput = (IPortInputOutput?)Activator.CreateInstance(inputType, new[] { observable });
+                portInstance.InputOutput = (IPort?)Activator.CreateInstance(inputType, new[] { observable });
                 return;
             }
 

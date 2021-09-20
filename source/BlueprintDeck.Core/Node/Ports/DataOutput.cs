@@ -5,18 +5,25 @@ namespace BlueprintDeck.Node.Ports
 {
     public class DataOutput<T> : IOutput<T>
     {
-        private readonly ReplaySubject<T> _replaySubject;
+        private readonly ReplaySubject<T> _subject;
 
         public DataOutput()
         {
-            _replaySubject = new ReplaySubject<T>(1024);
+            _subject = new ReplaySubject<T>(1024);
         }
 
-        public IObservable<T> Observable => _replaySubject;
+        // Called by reflection
+        // ReSharper disable once UnusedMember.Global
+        public IObservable<T> Observable => _subject;
         
         public void Emit(T data)
         {
-            _replaySubject.OnNext(data);
+            _subject.OnNext(data);
+        }
+
+        public void Dispose()
+        {
+            _subject.Dispose();
         }
     }
 }

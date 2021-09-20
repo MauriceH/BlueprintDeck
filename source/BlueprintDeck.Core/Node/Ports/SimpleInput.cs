@@ -9,7 +9,7 @@ namespace BlueprintDeck.Node.Ports
     public class SimpleInput : IInput, IDisposable
     {
         private readonly IDisposable _subscription;
-        private readonly List<Func<Task>> _actions = new List<Func<Task>>();
+        private readonly List<Func<Task>> _actions = new();
 
 
         public SimpleInput(IObservable<object> observable)
@@ -26,7 +26,7 @@ namespace BlueprintDeck.Node.Ports
             return new object();
         }
         
-        public void Register(Func<Task> action)
+        public void OnData(Func<Task> action)
         {
             _actions.Add(action);
         }
