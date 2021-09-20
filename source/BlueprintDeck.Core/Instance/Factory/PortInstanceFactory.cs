@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Registration;
 
@@ -13,49 +14,58 @@ namespace BlueprintDeck.Instance.Factory
         }
 
 
-        public void InitializeAsOutput(PortInstance portInstance)
+        public void InitializeAsOutput(NodeInstance nodeInstance, PortInstance portInstance)
         {
-            var registration = portInstance.Registration;
-            if (!registration.WithData)
+            var portRegistration = portInstance.Registration;
+            if (!portRegistration.WithData)
             {
                 portInstance.InputOutput = new SimpleOutput();
                 return;
             }
 
-            if (registration.DataType != null)
+            var portDataType = portRegistration.DataType;
+
+            if (portRegistration.GenericTypeParameterName != null)
             {
-                var d1 = typeof(DataOutput<>);
-                Type[] typeArgs = { registration.DataType! };
-                var outputType = d1.MakeGenericType(typeArgs);
-                portInstance.InputOutput = (IPort?)Activator.CreateInstance(outputType);
+                if (!nodeInstance.GenericTypeParameters.Any())
+                    throw new Exception(
+                        $"Invalid node instance {nodeInstance.Registration.Id}. Port {portInstance.Registration.Key} generic type {portInstance.Registration.GenericTypeParameterName} not found in node instance");
+
+                var generic = nodeInstance.GenericTypeParameters.FirstOrDefault(x => x.Key == portRegistration.GenericTypeParameterName);
+                if (generic == null)
+                    throw new Exception(
+                        $"Invalid node instance {nodeInstance.Design.Id}. Generic port {portInstance.Registration.Key} type {portInstance.Registration.GenericTypeParameterName} not found");
+            }
+
+            if (portDataType == null)
+                throw new Exception($"Invalid node instance {nodeInstance.Design.Id}. Port {portInstance.Registration.Key} type is empty");
+            Type[] typeArgs = { portDataType };
+            var outputType = typeof(DataOutput<>).MakeGenericType(typeArgs);
+            portInstance.InputOutput = (IPort?)Activator.CreateInstance(outputType);
+        }
+
+        public void InitializeAsInput(NodeInstance nodeInstance, PortInstance portInstance, IPort connectedOutput)
+        {
+            if (!portInstance.Registration.WithData)
+            {
+                if (connectedOutput is not SimpleOutput output) throw new Exception("invalid port connection");
+                portInstance.InputOutput = new SimpleInput(output.Observable);
                 return;
             }
 
-            //TODO Generic typed ports
-        }
+            var outputType = typeof(DataOutput<>).MakeGenericType(portInstance.Registration.DataType!);
 
-        public void InitializeAsInput(PortInstance portInstance, object connectedOutput)
-        {
-            if (connectedOutput is SimpleOutput output)
-            {
-                if (!portInstance.Registration.WithData)
-                {
-                    portInstance.InputOutput = new SimpleInput(output.Observable);
-                    return;
-                }
-                throw new Exception("Invalid connection");
-            }
-
-            var isDataOutput = connectedOutput.GetType().GetInterfaces()
+            var connectedIsDataOutput = connectedOutput.GetType().GetInterfaces()
                 .Where(i => i.IsGenericType)
                 .Select(i => i.GetGenericTypeDefinition())
-                .Contains(typeof(IOutput<>));
+                .Contains(outputType);
 
-            if (isDataOutput)
+            if (connectedIsDataOutput)
             {
-                var d1 = typeof(DataInput<>);
+                var genericInputType = typeof(DataInput<>);
                 Type[] typeArgs = { portInstance.Registration.DataType! };
-                var inputType = d1.MakeGenericType(typeArgs);
+                var inputType = genericInputType.MakeGenericType(typeArgs);
+
                 var propertyInfo = connectedOutput.GetType().GetProperty("Observable");
                 if (propertyInfo == null) throw new Exception("Invalid Observable state");
                 var observable = propertyInfo.GetValue(connectedOutput);

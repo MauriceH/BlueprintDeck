@@ -48,8 +48,9 @@ namespace BlueprintDeck.Instance.Factory
                 var nodeCreateResult = _nodeFactory.CreateNode(scope, designNode.NodeTypeKey!, designNode);
                 var nodeLifeTimeId = Guid.NewGuid().ToString();
 
+                
 
-                var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration);
+                var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration, nodeCreateResult.GenericTypes);
 
                 foreach (var portRegistration in nodeCreateResult.Registration.Ports)
                 {
@@ -78,7 +79,7 @@ namespace BlueprintDeck.Instance.Factory
                     var outputPorts = node.Ports.Where(x => x.Registration.Direction == Direction.Output);
                     foreach (var outputPort in outputPorts)
                     {
-                        _portInstanceFactory.InitializeAsOutput(outputPort);
+                        _portInstanceFactory.InitializeAsOutput(node, outputPort);
                         outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
                         
                         if (outputPort == null)
@@ -95,7 +96,7 @@ namespace BlueprintDeck.Instance.Factory
                             var toNode = nodes.FirstOrDefault(x => x.Design.Id == connection.NodeTo);
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
                             if(toPort == null) throw new Exception("invalid connection");
-                            _portInstanceFactory.InitializeAsInput(toPort, outputPort.InputOutput!);
+                            _portInstanceFactory.InitializeAsInput(toNode!, toPort, outputPort.InputOutput!);
                             toPort.Registration.Property.SetValue(toNode!.Node,toPort.InputOutput);
                         }
                     }

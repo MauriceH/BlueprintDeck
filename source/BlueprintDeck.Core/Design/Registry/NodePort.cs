@@ -5,15 +5,12 @@ using Newtonsoft.Json.Converters;
 
 namespace BlueprintDeck.Design.Registry
 {
-    public class NodePortTypeBase
+    public class NodePort
     {
         public string? Key { get; set; }
         public string? Title { get; set;}
         public string? TypeId  { get;  set;}
-    }
-    
-    public class NodePort : NodePortTypeBase
-    {
+        
         public bool Mandatory { get; set;}
 
         [JsonConverter(typeof(StringEnumConverter))]
@@ -22,8 +19,4 @@ namespace BlueprintDeck.Design.Registry
         public string? GenericTypeParameter { get; set; }
     }
 
-    public class ConstantValueNodePortType : NodePortTypeBase
-    {
-        
-    }
 }

@@ -10,9 +10,10 @@ namespace BlueprintDeck.Instance
 {
     internal class NodeInstance
     {
-        public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeRegistration registration)
+        public NodeInstance(string lifeTimeId, Design.Node nodeDesign, INode node, NodeRegistration registration, List<GenericTypeParameterInstance> genericTypeParameters)
         {
             Registration = registration;
+            GenericTypeParameters = genericTypeParameters;
             Node = node;
             Design = nodeDesign;
             LifeTimeId = lifeTimeId;
@@ -22,6 +23,7 @@ namespace BlueprintDeck.Instance
         public NodeRegistration Registration { get; }
         public Design.Node Design { get; }
         public INode Node { get; }
+        public List<GenericTypeParameterInstance> GenericTypeParameters { get; }
 
         public bool AllRequiredInputsConnected => Ports
             .Where(x => x.Registration.Direction == Direction.Input
@@ -31,16 +33,7 @@ namespace BlueprintDeck.Instance
         public List<PortInstance> Ports { get; }
         public string LifeTimeId { get; }
 
-        public T? GetPort<T>(PortRegistration definition) where T: class, IPort 
-        {
-            var port = Ports.FirstOrDefault(x => x.Registration.Key == definition.Key);
-            if (port == null) throw new Exception("Port not found");
-            if (port.Registration.Mandatory)
-            {
-                if (port.InputOutput == null) throw new Exception("Port not connected");    
-            }
-            return (T?)port?.InputOutput;
-        }
+        
 
         public void Activate()
         {

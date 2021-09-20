@@ -6,6 +6,6 @@ namespace BlueprintDeck.Instance.Factory
 {
     internal interface INodeFactory
     {
-        CreateNodeResult<NodeRegistration> CreateNode(IServiceScope scope, string nodeKey, Design.Node designNode);
+        CreateNodeResult CreateNode(IServiceScope scope, string nodeKey, Design.Node designNode);
     }
 }
