@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Registration;
@@ -14,10 +13,10 @@ using Xunit;
 
 namespace BlueprintDeck.Instance.Factory
 {
-    public class BluePrintFactoryTests
+    public class BluePrintIntegrationTests
     {
         [Fact]
-        public async Task TestFactory()
+        public async Task TestBlueprint()
         {
             var services = new ServiceCollection();
 
@@ -34,8 +33,8 @@ namespace BlueprintDeck.Instance.Factory
 
             var nodeRegistration = new NodeRegistration("TestableNode", "TestableNode", typeof(TestableNode<>), new List<PortRegistration>
                 {
-                    new(typeof(TestableNode<>).GetProperty("ComplexInput"), Direction.Input, null, "TTestData") {Mandatory = false},
-                    new(typeof(TestableNode<>).GetProperty("ComplexOutput"), Direction.Output, null, "TTestData") {Mandatory = false},
+                    new(typeof(TestableNode<>).GetProperty("ComplexInput"), Direction.Input, null, "TTestData") { Mandatory = false },
+                    new(typeof(TestableNode<>).GetProperty("ComplexOutput"), Direction.Output, null, "TTestData") { Mandatory = false }
                 },
                 new List<string> { "TTestData" }, new List<PropertyRegistration>());
 
@@ -46,7 +45,7 @@ namespace BlueprintDeck.Instance.Factory
                 new List<GenericTypeParameterInstance> { new("TTestData", typeof(string)) });
 
 
-            var sut = new BlueprintFactory(provider, nodeFactory, new PortInstanceFactory());
+            var sut = new BlueprintFactory(provider, nodeFactory, new PortConnectionManager());
 
             Design.Node node1 = new()
             {
@@ -54,7 +53,7 @@ namespace BlueprintDeck.Instance.Factory
                 Title = "Test1",
                 GenericTypes = new List<NodeGenericType> { new() { GenericParameter = "TTestData", TypeId = "T1" } },
                 NodeTypeKey = "TestableNode",
-                Location = new(100, 200),
+                Location = new NodeLocation(100, 200),
                 Properties = new Dictionary<string, string>
                 {
                     ["TestProperty"] = "Test1"
@@ -66,7 +65,7 @@ namespace BlueprintDeck.Instance.Factory
                 Title = "Test2",
                 GenericTypes = new List<NodeGenericType> { new() { GenericParameter = "TTestData", TypeId = "T1" } },
                 NodeTypeKey = "TestableNode",
-                Location = new(300, 500),
+                Location = new NodeLocation(300, 500),
                 Properties = new Dictionary<string, string>
                 {
                     ["TestProperty"] = "Test2"

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
@@ -12,15 +11,15 @@ namespace BlueprintDeck.Instance.Factory
 {
     internal class BlueprintFactory : IBlueprintFactory
     {
-        private readonly IServiceProvider _serviceProvider;
         private readonly INodeFactory _nodeFactory;
-        private readonly IPortInstanceFactory _portInstanceFactory;
+        private readonly IPortConnectionManager _portConnectionManager;
+        private readonly IServiceProvider _serviceProvider;
 
-        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IPortInstanceFactory portInstanceFactory)
+        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IPortConnectionManager portConnectionManager)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _nodeFactory = nodeFactory ?? throw new ArgumentNullException(nameof(nodeFactory));
-            _portInstanceFactory = portInstanceFactory ?? throw new ArgumentNullException(nameof(portInstanceFactory));
+            _portConnectionManager = portConnectionManager ?? throw new ArgumentNullException(nameof(portConnectionManager));
         }
 
 
@@ -49,20 +48,20 @@ namespace BlueprintDeck.Instance.Factory
                 var nodeCreateResult = _nodeFactory.CreateNode(scope, designNode.NodeTypeKey!, designNode);
                 var nodeLifeTimeId = Guid.NewGuid().ToString();
 
-                
 
-                var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration, nodeCreateResult.GenericTypes);
+                var nodeInstance = new NodeInstance(nodeLifeTimeId, designNode, nodeCreateResult.Node, nodeCreateResult.Registration,
+                    nodeCreateResult.GenericTypes);
 
                 foreach (var portRegistration in nodeCreateResult.Registration.Ports)
                 {
-                    var portInstance = _portInstanceFactory.Create(portRegistration);
+                    var portInstance = new PortInstance(portRegistration);
                     nodeInstance.Ports.Add(portInstance);
                 }
 
                 nodes.Add(nodeInstance);
             }
 
-            
+
             var openConnections = design.Connections?.ToList() ?? new List<Connection>();
 
             var toConnectNodes = nodes.ToList();
@@ -80,16 +79,14 @@ namespace BlueprintDeck.Instance.Factory
                     var outputPorts = node.Ports.Where(x => x.Registration.Direction == Direction.Output);
                     foreach (var outputPort in outputPorts)
                     {
-                        _portInstanceFactory.InitializeAsOutput(node, outputPort);
+                        _portConnectionManager.InitializePortAsOutput(node, outputPort);
                         //outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
-                        node.Node.GetType().GetProperty(outputPort.Registration.Property.Name)!.SetValue(node.Node,outputPort.InputOutput);
-                        
-                        if (outputPort == null)
-                        {
-                            throw new Exception("output not initialized");
-                        }
+                        node.Node.GetType().GetProperty(outputPort.Registration.Property.Name)!.SetValue(node.Node, outputPort.InputOutput);
 
-                        var portConnections = openConnections.Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Registration.Key)
+                        if (outputPort == null) throw new Exception("output not initialized");
+
+                        var portConnections = openConnections
+                            .Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Registration.Key)
                             .ToList();
 
                         foreach (var connection in portConnections)
@@ -97,9 +94,9 @@ namespace BlueprintDeck.Instance.Factory
                             openConnections.Remove(connection);
                             var toNode = nodes.FirstOrDefault(x => x.Design.Id == connection.NodeTo);
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
-                            if(toPort == null) throw new Exception("invalid connection");
-                            _portInstanceFactory.InitializeAsInput(toNode!, toPort, outputPort.InputOutput!);
-                            toNode.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node,toPort.InputOutput);
+                            if (toPort == null) throw new Exception("invalid connection");
+                            _portConnectionManager.InitializePortAsInput(toNode!, toPort, outputPort.InputOutput!);
+                            toNode.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node, toPort.InputOutput);
                         }
                     }
                 }

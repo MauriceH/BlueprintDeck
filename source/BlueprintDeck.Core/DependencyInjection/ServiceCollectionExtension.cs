@@ -20,20 +20,19 @@ namespace BlueprintDeck.DependencyInjection
     {
         public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistryBuilder> config)
         {
-            
             services.AddSingleton<ValueSerializerRepository>();
             services.AddSingleton<IValueSerializerRepository>(provider => provider.GetRequiredService<ValueSerializerRepository>());
 
             services.AddSingleton<RegistryFactory>();
             services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
-            
+
             services.AddSingleton<BlueprintFactory>();
             services.AddSingleton<IBlueprintFactory>(provider => provider.GetRequiredService<BlueprintFactory>());
 
             services.AddSingleton<NodeFactory>();
             services.AddSingleton<INodeFactory>(provider => provider.GetRequiredService<NodeFactory>());
 
-            services.AddTransient<IPortInstanceFactory, PortInstanceFactory>();
+            services.AddTransient<IPortConnectionManager, PortConnectionManager>();
 
             var blueprintDeckBuilder = new RegistryBuilder(services);
 
@@ -45,15 +44,16 @@ namespace BlueprintDeck.DependencyInjection
 
         private class RegistryBuilder : IBlueprintDeckRegistryBuilder
         {
-            private readonly IServiceCollection _services;
+            private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new();
             private readonly NodeRegistrationFactory _factory;
-            private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new Dictionary<Type, DataTypeRegistration>();
+            private readonly IServiceCollection _services;
             private readonly SHA1 _sha1 = SHA1.Create();
 
             public RegistryBuilder(IServiceCollection services)
             {
                 _services = services;
-                _factory = new NodeRegistrationFactory(new AssemblyTypesResolver(),new PortRegistrationFactory(),new GenericTypeParametersFactory(),new PropertyRegistrationFactory());
+                _factory = new NodeRegistrationFactory(new AssemblyTypesResolver(), new PortRegistrationFactory(), new GenericTypeParametersFactory(),
+                    new PropertyRegistrationFactory());
             }
 
             public void RegisterNode<T>() where T : INode
@@ -70,27 +70,7 @@ namespace BlueprintDeck.DependencyInjection
             public void RegisterAssemblyNodes(Assembly assembly)
             {
                 var registrations = _factory.CreateNodeRegistrationsByAssembly(assembly);
-                foreach (var registration in registrations)
-                {
-                    RegisterRegistration(registration);
-                }
-            }
-
-            private void RegisterRegistration(NodeRegistration registration)
-            {
-                foreach (var portDef in registration.Ports.Where(x => x.DataType != null))
-                {
-                    if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameter)) continue;
-                    var type = portDef.DataType ??
-                               throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
-                    if (_dataTypes.ContainsKey(type)) continue;
-                    RegisterDataType(type);
-                }
-
-                _services.AddSingleton(registration);
-                _services.AddTransient(registration.NodeType);
-                _services.AddTransient(provider => (INode) provider.GetRequiredService(registration.NodeType));
-                //_services.AddSingleton(registration.NodeDescriptorType);
+                foreach (var registration in registrations) RegisterRegistration(registration);
             }
 
             public void RegisterDataType<TDataType>()
@@ -116,6 +96,23 @@ namespace BlueprintDeck.DependencyInjection
                 var dataTypeRegistration = new DataTypeRegistration($"{type.Name}-{typeHash}", type, title);
                 _dataTypes[type] = dataTypeRegistration;
                 _services.AddSingleton(dataTypeRegistration);
+            }
+
+            private void RegisterRegistration(NodeRegistration registration)
+            {
+                foreach (var portDef in registration.Ports.Where(x => x.DataType != null))
+                {
+                    if (!string.IsNullOrWhiteSpace(portDef.GenericTypeParameter)) continue;
+                    var type = portDef.DataType ??
+                               throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
+                    if (_dataTypes.ContainsKey(type)) continue;
+                    RegisterDataType(type);
+                }
+
+                _services.AddSingleton(registration);
+                _services.AddTransient(registration.NodeType);
+                _services.AddTransient(provider => (INode)provider.GetRequiredService(registration.NodeType));
+                //_services.AddSingleton(registration.NodeDescriptorType);
             }
         }
     }
