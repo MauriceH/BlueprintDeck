@@ -6,7 +6,7 @@ namespace BlueprintDeck.Design
     [SuppressMessage("ReSharper", "UnusedMember.Global")]
     public class NodeGenericType
     {
-        public string? GenericParameter { get; set; }
-        public string? TypeId { get; set; }
+        public string? GenericParameter { get; init; }
+        public string? TypeId { get; init; }
     }
 }

@@ -80,7 +80,8 @@ namespace BlueprintDeck.Instance.Factory
                     foreach (var outputPort in outputPorts)
                     {
                         _portInstanceFactory.InitializeAsOutput(node, outputPort);
-                        outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
+                        //outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
+                        node.Node.GetType().GetProperty(outputPort.Registration.Property.Name)!.SetValue(node.Node,outputPort.InputOutput);
                         
                         if (outputPort == null)
                         {
@@ -98,6 +99,7 @@ namespace BlueprintDeck.Instance.Factory
                             if(toPort == null) throw new Exception("invalid connection");
                             _portInstanceFactory.InitializeAsInput(toNode!, toPort, outputPort.InputOutput!);
                             toPort.Registration.Property.SetValue(toNode!.Node,toPort.InputOutput);
+                            toNode.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node,toPort.InputOutput);
                         }
                     }
                 }

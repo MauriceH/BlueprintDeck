@@ -80,7 +80,7 @@ namespace BlueprintDeck.DependencyInjection
             {
                 foreach (var portDef in registration.Ports.Where(x => x.DataType != null))
                 {
-                    if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameterName)) continue;
+                    if(!string.IsNullOrWhiteSpace(portDef.GenericTypeParameter)) continue;
                     var type = portDef.DataType ??
                                throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
                     if (_dataTypes.ContainsKey(type)) continue;

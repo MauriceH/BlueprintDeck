@@ -10,12 +10,12 @@ namespace BlueprintDeck.Node.Ports.Registration
 
         public string Key => Property.Name;
         
-        internal PortRegistration(PropertyInfo property, Direction direction, Type? dataType = null, string? genericTypeParameterName = null)
+        internal PortRegistration(PropertyInfo property, Direction direction, Type? dataType = null, string? genericTypeParameter = null)
         {
             Property = property;
             Direction = direction;
             DataType = dataType;
-            GenericTypeParameterName = genericTypeParameterName;
+            GenericTypeParameter = genericTypeParameter;
         }
 
 
@@ -23,9 +23,9 @@ namespace BlueprintDeck.Node.Ports.Registration
 
         public Type? DataType { get; }
 
-        public string? GenericTypeParameterName { get; }
+        public string? GenericTypeParameter { get; }
 
-        public bool WithData => DataType != null || GenericTypeParameterName != null;
+        public bool WithData => DataType != null || GenericTypeParameter != null;
         
         
         public string? Title { get; set; }

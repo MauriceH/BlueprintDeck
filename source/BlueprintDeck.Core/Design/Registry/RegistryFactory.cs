@@ -43,11 +43,11 @@ namespace BlueprintDeck.Design.Registry
                         Mandatory = port.Mandatory,
                         Direction = port.Direction,
                     };
-                    if (port.DataType != null || port.GenericTypeParameterName != null)
+                    if (port.DataType != null || port.GenericTypeParameter != null)
                     {
-                        if (!string.IsNullOrWhiteSpace(port.GenericTypeParameterName))
+                        if (!string.IsNullOrWhiteSpace(port.GenericTypeParameter))
                         {
-                            nodePort.GenericTypeParameter = port.GenericTypeParameterName;
+                            nodePort.GenericTypeParameter = port.GenericTypeParameter;
                         }
                         else
                         {

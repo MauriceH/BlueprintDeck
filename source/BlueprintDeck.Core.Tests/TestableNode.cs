@@ -35,7 +35,7 @@ namespace BlueprintDeck
         public Task SimpleInputReceiveTask => _tcsSimpleInput.Task;
         
         [ExcludeFromProperties]
-        public Task ComplexInputReceiveTask => _tcsComplexInput.Task;
+        public Task<TTestData> ComplexInputReceiveTask => _tcsComplexInput.Task;
         
         [PortOptional]
         public IInput SimpleInput { get; set; }
@@ -43,6 +43,13 @@ namespace BlueprintDeck
         [PortOptional]
         public IInput<TTestData> ComplexInput { get; set; }
         
+        [PortOptional]
+        public IOutput SimpleOutput { get; set; }
+        
+        [PortOptional]
+        public IOutput<TTestData> ComplexOutput { get; set; }
+        
+        public string TestProperty { get; set; }
         
         public TestableNode(TestableNodeAccessor<TTestData> nodeAccessor)
         {

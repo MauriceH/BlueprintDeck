@@ -25,16 +25,19 @@ namespace BlueprintDeck.Instance.Factory
 
             var portDataType = portRegistration.DataType;
 
-            if (portRegistration.GenericTypeParameterName != null)
+            if (portRegistration.GenericTypeParameter != null)
             {
                 if (!nodeInstance.GenericTypeParameters.Any())
                     throw new Exception(
-                        $"Invalid node instance {nodeInstance.Registration.Id}. Port {portInstance.Registration.Key} generic type {portInstance.Registration.GenericTypeParameterName} not found in node instance");
+                        $"Invalid node instance {nodeInstance.Registration.Id}. Port {portInstance.Registration.Key} generic type {portInstance.Registration.GenericTypeParameter} not found in node instance");
 
-                var generic = nodeInstance.GenericTypeParameters.FirstOrDefault(x => x.Key == portRegistration.GenericTypeParameterName);
+                var generic = nodeInstance.GenericTypeParameters.FirstOrDefault(x => x.Key == portRegistration.GenericTypeParameter);
                 if (generic == null)
                     throw new Exception(
-                        $"Invalid node instance {nodeInstance.Design.Id}. Generic port {portInstance.Registration.Key} type {portInstance.Registration.GenericTypeParameterName} not found");
+                        $"Invalid node instance {nodeInstance.Design.Id}. Generic port {portInstance.Registration.Key} type {portInstance.Registration.GenericTypeParameter} not found");
+
+                portDataType = generic.DataType;
+
             }
 
             if (portDataType == null)
