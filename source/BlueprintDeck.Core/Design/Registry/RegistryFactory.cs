@@ -22,11 +22,9 @@ namespace BlueprintDeck.Design.Registry
 
         public BlueprintRegistry CreateNodeRegistry()
         {
-            return new BlueprintRegistry
-            {
-                NodeTypes = CreateNodeTypes(),
-                DataTypes = CreateDataTypes()
-            };
+            var nodeTypes = CreateNodeTypes();
+            var dataTypes = CreateDataTypes();
+            return new BlueprintRegistry(nodeTypes, dataTypes);
         }
 
         private List<NodeType> CreateNodeTypes()

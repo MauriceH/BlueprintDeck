@@ -1,14 +1,18 @@
 using System.Collections.Generic;
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 namespace BlueprintDeck.Design.Registry
 {
     public class BlueprintRegistry
     {
+        public BlueprintRegistry(IEnumerable<NodeType> nodeTypes, IEnumerable<DataType> dataTypes)
+        {
+            NodeTypes = nodeTypes;
+            DataTypes = dataTypes;
+        }
+
+        public IEnumerable<NodeType> NodeTypes { get; }
         
-        public IEnumerable<NodeType>? NodeTypes { get; set; }
-        
-        public IEnumerable<DataType>? DataTypes { get; set; }
+        public IEnumerable<DataType> DataTypes { get; }
         
     }
 }
