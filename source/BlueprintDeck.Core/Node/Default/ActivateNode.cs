@@ -21,7 +21,12 @@ namespace BlueprintDeck.Node.Default
         public Task Activate()
         {
             _logger.LogDebug("Start initializing activate node");
-            if (Event == null) throw new Exception("output port not initialized");
+            if (Event == null)
+            {
+                _logger.LogInformation("activate node initialized without connection");
+                return Task.CompletedTask;
+            }
+
             Event.Emit();
             _logger.LogInformation("activate node emitted and initialized");
             return Task.CompletedTask;
