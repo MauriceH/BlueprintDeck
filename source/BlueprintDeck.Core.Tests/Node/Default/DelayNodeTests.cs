@@ -24,31 +24,7 @@ namespace BlueprintDeck.Node.Default
             await TestDelayNodeInternal(sut);
         }
 
-        [Fact]
-        public async Task TestDelayNodeWithDelayDurationInput()
-        {
-            var logger = Substitute.For<ILogger<DelayNode>>();
-
-            var trigger = new Subject<TimeSpan>();
-            var delayInput = new DataInput<TimeSpan>(trigger);
-
-
-            var sut = new DelayNode(logger)
-            {
-                DefaultDelay = TimeSpan.FromSeconds(2),
-                DelayDuration = delayInput
-            };
-
-            await Assert.ThrowsAsync<Exception>(async () =>
-            {
-                var testDelayNodeInternal = TestDelayNodeInternal(sut);
-                await Task.Delay(1000);
-                trigger.OnNext(TimeSpan.FromSeconds(4));
-                await testDelayNodeInternal;
-            });
-        }
-
-
+       
         private static async Task TestDelayNodeInternal(DelayNode sut)
         {
             var trigger = new Subject<object>();
