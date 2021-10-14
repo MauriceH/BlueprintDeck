@@ -10,7 +10,6 @@ using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Registration;
-using BlueprintDeck.Node.Properties;
 using BlueprintDeck.Node.Properties.Registration;
 using BlueprintDeck.Node.Registration;
 using NSubstitute;

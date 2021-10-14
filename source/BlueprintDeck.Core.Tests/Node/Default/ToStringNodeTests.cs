@@ -1,11 +1,8 @@
 using System;
-using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
 using BlueprintDeck.Node.Ports;
-using Microsoft.Extensions.Logging;
-using NSubstitute;
 using Xunit;
 
 namespace BlueprintDeck.Node.Default

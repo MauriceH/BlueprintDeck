@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports.Registration;

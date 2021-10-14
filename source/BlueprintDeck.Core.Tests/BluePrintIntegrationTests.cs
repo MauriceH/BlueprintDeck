@@ -125,7 +125,9 @@ namespace BlueprintDeck.Instance.Factory
             var services = new ServiceCollection();
 
 
-            services.AddSingleton(Substitute.For<ILogger<Blueprint>>());
+            var logger = Substitute.For<ILogger<Blueprint>>();
+            logger.IsEnabled(Arg.Any<LogLevel>()).Returns(true);
+            services.AddSingleton(logger);
             services.AddSingleton(new TestableNodeAccessor<TimeSpan>());
             services.AddBlueprintDeck(config =>
             {

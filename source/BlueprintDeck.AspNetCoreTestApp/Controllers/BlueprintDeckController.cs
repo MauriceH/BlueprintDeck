@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using BlueprintDeck.Design;
 using BlueprintDeck.Design.Registry;
 using Microsoft.AspNetCore.Mvc;

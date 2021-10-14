@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BlueprintDeck.Design;
-using Newtonsoft.Json.Linq;
 
 namespace BlueprintDeck.PrototypeTestApp
 {

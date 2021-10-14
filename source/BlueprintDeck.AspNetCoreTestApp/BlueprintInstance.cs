@@ -1,6 +1,8 @@
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using BlueprintDeck.Design;
+using BlueprintDeck.Instance;
 using BlueprintDeck.Instance.Factory;
 
 namespace BlueprintDeck.AspNetCoreTestApp
@@ -8,7 +10,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
     public class BlueprintInstance
     {
         private readonly IBlueprintFactory _factory;
-        private Instance.IBlueprintInstance _blueprint;
+        private IBlueprintInstance _blueprint;
         private readonly string _activeBlueprintFileName;
 
         public Blueprint DesignBlueprint { get; private set; }
@@ -20,7 +22,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
             if (File.Exists(_activeBlueprintFileName))
             {
                 var json = File.ReadAllText(_activeBlueprintFileName,Encoding.UTF8);
-                DesignBlueprint = System.Text.Json.JsonSerializer.Deserialize<Blueprint>(json)!;    
+                DesignBlueprint = JsonSerializer.Deserialize<Blueprint>(json)!;    
             }
             else
             {
@@ -31,7 +33,7 @@ namespace BlueprintDeck.AspNetCoreTestApp
 
         public void Start()
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(DesignBlueprint)!;
+            var json = JsonSerializer.Serialize(DesignBlueprint)!;
             File.WriteAllText(@"C:\temp\BluePrint\active.json",json, Encoding.UTF8);
             _blueprint?.Dispose();
             _blueprint = _factory.CreateBlueprint(DesignBlueprint);

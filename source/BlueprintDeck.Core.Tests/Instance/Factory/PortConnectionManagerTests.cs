@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using BlueprintDeck.Node.Default;
 using BlueprintDeck.Node.Default.DataTypes;
 using BlueprintDeck.Node.Ports;
@@ -91,6 +93,98 @@ namespace BlueprintDeck.Instance.Factory
             var portInstance = new PortInstance(portRegistration);
 
             Assert.Throws<PortInitializationException>(() => { sut.InitializePortAsOutput(nodeInstance, portInstance); });
+        }
+        
+        
+        [Fact]
+        public void TestInitializePortAsInput_WhenDelayNodeInput_InitializedSuccessfully()
+        {
+            var sut = new PortConnectionManager();
+
+            var logger = Substitute.For<ILogger<DelayNode>>();
+            var portRegistration = new PortRegistration(typeof(DelayNode).GetProperty(nameof(DelayNode.Input)), Direction.Input);
+            var nodeRegistration = new NodeRegistration("1", "T", typeof(DelayNode), new List<PortRegistration> { portRegistration },
+                new List<string>(), new List<PropertyRegistration>());
+            var nodeInstance = new NodeInstance("123", new Design.Node(), new DelayNode(logger), nodeRegistration,
+                new List<GenericTypeParameterInstance>());
+            var portInstance = new PortInstance(portRegistration);
+
+            var outputPort = new SimpleOutput();
+            
+            sut.InitializePortAsInput(nodeInstance, portInstance, outputPort);
+        }
+        
+        
+        [Fact]
+        public void TestInitializePortAsInput_WhenDelayNodeInput_ThrowsException()
+        {
+            var sut = new PortConnectionManager();
+
+            var logger = Substitute.For<ILogger<DelayNode>>();
+            var portRegistration = new PortRegistration(typeof(DelayNode).GetProperty(nameof(DelayNode.Input)), Direction.Input);
+            var nodeRegistration = new NodeRegistration("1", "T", typeof(DelayNode), new List<PortRegistration> { portRegistration },
+                new List<string>(), new List<PropertyRegistration>());
+            var nodeInstance = new NodeInstance("123", new Design.Node(), new DelayNode(logger), nodeRegistration,
+                new List<GenericTypeParameterInstance>());
+            var portInstance = new PortInstance(portRegistration);
+
+            Assert.Throws<PortInitializationException>(() =>
+            {
+                sut.InitializePortAsInput(nodeInstance, portInstance, new SimpleInput(new Subject<object>()));
+            });
+        }      
+        
+        [Fact]
+        public void TestInitializePortAsInput_WhenDelayNodeInputWithoutDataType_ThrowsException()
+        {
+            var sut = new PortConnectionManager();
+
+            var logger = Substitute.For<ILogger<DelayNode>>();
+            var portRegistration = new PortRegistration(typeof(DelayNode).GetProperty(nameof(DelayNode.DelayDuration)), Direction.Input, typeof(TimeSpan));
+            var nodeRegistration = new NodeRegistration("1", "T", typeof(DelayNode), new List<PortRegistration> { portRegistration },
+                new List<string>(), new List<PropertyRegistration>());
+            var nodeInstance = new NodeInstance("123", new Design.Node(), new DelayNode(logger), nodeRegistration,
+                new List<GenericTypeParameterInstance>());
+            var portInstance = new PortInstance(portRegistration);
+
+            Assert.Throws<PortInitializationException>(() =>
+            {
+                sut.InitializePortAsInput(nodeInstance, portInstance, new SimpleInput(new Subject<string>()));
+            });
+        }
+
+        [Fact]
+        public void TestInitializePortAsInput_WhenGenericToStringNodeInput_ThrowsException()
+        {
+            var sut = new PortConnectionManager();
+
+            var portRegistration = new PortRegistration(typeof(ToStringNode<>).GetProperty(nameof(ToStringNode<string>.Input)), Direction.Input, null,
+                "TInput");
+            var nodeRegistration = new NodeRegistration("1", "T", typeof(ToStringNode<>), new List<PortRegistration> { portRegistration },
+                new List<string>() { "TInput" }, new List<PropertyRegistration>());
+            var nodeInstance = new NodeInstance("123", new Design.Node(), new ToStringNode<string>(), nodeRegistration,
+                new List<GenericTypeParameterInstance>() { new GenericTypeParameterInstance("TInvalid", typeof(string)) });
+            var portInstance = new PortInstance(portRegistration);
+
+            Assert.Throws<PortInitializationException>(() => { sut.InitializePortAsInput(nodeInstance, portInstance, new DataOutput<string>()); });
+        }
+
+        [Fact]
+        public void TestInitializePortAsInput_WhenNullPort_ThrowsException()
+        {
+            var sut = new PortConnectionManager();
+            
+            var portRegistration = new PortRegistration(typeof(ToStringNode<>).GetProperty(nameof(ToStringNode<string>.Input)), Direction.Input,null,"TInput");
+            var nodeRegistration = new NodeRegistration("1", "T", typeof(ToStringNode<>), new List<PortRegistration> { portRegistration },
+                new List<string>() {"TInput"}, new List<PropertyRegistration>());
+            var nodeInstance = new NodeInstance("123", new Design.Node(), new ToStringNode<string>(), nodeRegistration,
+                new List<GenericTypeParameterInstance>() {new GenericTypeParameterInstance("TInvalid",typeof(string))});
+            var portInstance = new PortInstance(portRegistration);
+
+            Assert.Throws<PortInitializationException>(() =>
+            {
+                sut.InitializePortAsInput(nodeInstance, portInstance, null);
+            });
         }
     }
 }

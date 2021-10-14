@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
-using BlueprintDeck.Node.Ports.Registration;
 using BlueprintDeck.Node.Registration;
 
 namespace BlueprintDeck.Instance
@@ -32,7 +30,6 @@ namespace BlueprintDeck.Instance
 
         public List<PortInstance> Ports { get; }
         public string LifeTimeId { get; }
-
         
 
         public void Activate()
@@ -42,7 +39,7 @@ namespace BlueprintDeck.Instance
 
         public override string ToString()
         {
-            return $"Type {Registration.Id}";
+            return $"Node {Registration.NodeType} id {LifeTimeId}";
         }
     }
 }

@@ -41,9 +41,13 @@ namespace BlueprintDeck.Instance.Factory
 
         public void InitializePortAsInput(NodeInstance nodeInstance, PortInstance portInstance, IPort connectedOutput)
         {
+            if(connectedOutput == null) throw new PortInitializationException(nodeInstance.Registration.Id, portInstance.Registration.Key,
+                $"Connected port is null");
+            
             if (!portInstance.Registration.WithData)
             {
-                if (connectedOutput is not SimpleOutput output) throw new Exception("invalid port connection");
+                if (connectedOutput is not SimpleOutput output)
+                    throw new PortInitializationException(nodeInstance.Registration.Id, portInstance.Registration.Key, "invalid port connection");
                 portInstance.InputOutput = new SimpleInput(output.Observable);
                 return;
             }
@@ -67,6 +71,8 @@ namespace BlueprintDeck.Instance.Factory
                         $"Node with id {nodeInstance.Registration.Id} has an invalid definition for port {portInstance.Registration.Key}");
                 portDataType = portInstance.Registration.DataType!;
             }
+            
+       
 
             var connectedIsDataOutput = connectedOutput.GetType().GetInterfaces()
                 .Where(i => i.IsGenericType)
