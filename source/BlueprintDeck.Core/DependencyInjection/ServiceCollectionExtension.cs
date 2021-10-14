@@ -18,6 +18,11 @@ namespace BlueprintDeck.DependencyInjection
 {
     public static class ServiceCollectionExtension
     {
+        public static void AddBlueprintDeck(this IServiceCollection services)
+        {
+                services.AddBlueprintDeck(_ => { });
+        }
+
         public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistryBuilder> config)
         {
             services.AddSingleton<ValueSerializerRepository>();
@@ -76,7 +81,7 @@ namespace BlueprintDeck.DependencyInjection
             public void RegisterDataType<TDataType>()
             {
                 var type = typeof(TDataType);
-                RegisterDataType(type, type.Name);
+                RegisterDataType<TDataType>(type.Name);
             }
 
             public void RegisterDataType<TDataType>(string title)
@@ -102,7 +107,6 @@ namespace BlueprintDeck.DependencyInjection
             {
                 foreach (var portDef in registration.Ports.Where(x => x.DataType != null))
                 {
-                    if (!string.IsNullOrWhiteSpace(portDef.GenericTypeParameter)) continue;
                     var type = portDef.DataType ??
                                throw new Exception($"Port {portDef.Key} of node type {registration.Id} registered as WithData without datatype");
                     if (_dataTypes.ContainsKey(type)) continue;
@@ -111,8 +115,6 @@ namespace BlueprintDeck.DependencyInjection
 
                 _services.AddSingleton(registration);
                 _services.AddTransient(registration.NodeType);
-                _services.AddTransient(provider => (INode)provider.GetRequiredService(registration.NodeType));
-                //_services.AddSingleton(registration.NodeDescriptorType);
             }
         }
     }

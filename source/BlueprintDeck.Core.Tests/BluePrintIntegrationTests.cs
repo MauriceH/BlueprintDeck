@@ -127,7 +127,10 @@ namespace BlueprintDeck.Instance.Factory
 
             services.AddSingleton(Substitute.For<ILogger<Blueprint>>());
             services.AddSingleton(new TestableNodeAccessor<TimeSpan>());
-            services.AddBlueprintDeck(config => { config.RegisterAssemblyNodes(GetType().Assembly); });
+            services.AddBlueprintDeck(config =>
+            {
+                config.RegisterNode(typeof(TestableNode<>));
+            });
 
             var provider = services.BuildServiceProvider();
 
