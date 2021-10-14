@@ -22,7 +22,7 @@ jobs:
           versionSpec: '5.x'
     - name: Use GitVersion
       id: gitversion # step id used as reference for output values
-      uses: gittools/actions/gitversion/execute@v0.9
+      uses: gittools/actions/gitversion/execute@v0.9.6
     - run: |
         echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
         echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
