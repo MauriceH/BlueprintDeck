@@ -36,7 +36,6 @@ namespace BlueprintDeck.Node.Default
         [Fact]
         public async Task TestActivation_IfOutputNotSet()
         {
-
             var logger = Substitute.For<ILogger<ActivateNode>>();
             var sut = new ActivateNode(logger);
             await sut.Activate();
