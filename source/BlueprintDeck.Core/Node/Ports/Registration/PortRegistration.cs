@@ -25,6 +25,8 @@ namespace BlueprintDeck.Node.Ports.Registration
 
         public string? GenericTypeParameter { get; }
 
+        public bool IsGeneric => GenericTypeParameter != null;
+        
         public bool WithData => DataType != null || GenericTypeParameter != null;
         
         

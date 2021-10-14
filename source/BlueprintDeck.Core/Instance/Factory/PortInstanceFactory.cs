@@ -56,27 +56,42 @@ namespace BlueprintDeck.Instance.Factory
                 return;
             }
 
-            var outputType = typeof(DataOutput<>).MakeGenericType(portInstance.Registration.DataType!);
+            Type portDataType;
 
+            if (portInstance.Registration.IsGeneric)
+            {
+                var genericTypeKey = portInstance.Registration.GenericTypeParameter;
+                var genericType = nodeInstance.GenericTypeParameters.FirstOrDefault(x => x.Key == genericTypeKey);
+                if(genericType == null) throw new Exception($"Missing generic type for port {portInstance.Registration.Key} on node {nodeInstance.Registration.Id}");
+
+                portDataType = genericType.DataType;
+
+            }
+            else
+            {
+                if (portInstance.Registration.DataType == null) throw new Exception($"Node with id {nodeInstance.Registration.Id} has an invalid definition for port {portInstance.Registration.Key}");
+                portDataType = portInstance.Registration.DataType!;
+            }
+            
             var connectedIsDataOutput = connectedOutput.GetType().GetInterfaces()
                 .Where(i => i.IsGenericType)
-                .Select(i => i.GetGenericTypeDefinition())
-                .Contains(outputType);
+                .SelectMany(i => i.GetGenericArguments())
+                .Contains(portDataType);
 
-            if (connectedIsDataOutput)
+            if (!connectedIsDataOutput)
             {
-                var genericInputType = typeof(DataInput<>);
-                Type[] typeArgs = { portInstance.Registration.DataType! };
-                var inputType = genericInputType.MakeGenericType(typeArgs);
-
-                var propertyInfo = connectedOutput.GetType().GetProperty("Observable");
-                if (propertyInfo == null) throw new Exception("Invalid Observable state");
-                var observable = propertyInfo.GetValue(connectedOutput);
-                portInstance.InputOutput = (IPort?)Activator.CreateInstance(inputType, new[] { observable });
-                return;
+                throw new Exception($"Data type conflict for Node with id {nodeInstance.Registration.Id} and port {portInstance.Registration.Key}");
             }
+           
 
-            throw new Exception("Invalid port connection");
+            var genericInputType = typeof(DataInput<>);
+            Type[] typeArgs = { portDataType };
+            var inputType = genericInputType.MakeGenericType(typeArgs);
+            var propertyInfo = connectedOutput.GetType().GetProperty(nameof(DataOutput<object>.Observable));
+            if (propertyInfo == null) throw new Exception($"Port connected to node with id {nodeInstance.Registration.Id} has an invalid port-instance");
+            var observable = propertyInfo.GetValue(connectedOutput);
+            portInstance.InputOutput = (IPort?)Activator.CreateInstance(inputType, new[] { observable });
+            
         }
     }
 }

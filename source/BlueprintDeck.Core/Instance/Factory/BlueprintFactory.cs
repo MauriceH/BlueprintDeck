@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
@@ -98,7 +99,6 @@ namespace BlueprintDeck.Instance.Factory
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
                             if(toPort == null) throw new Exception("invalid connection");
                             _portInstanceFactory.InitializeAsInput(toNode!, toPort, outputPort.InputOutput!);
-                            toPort.Registration.Property.SetValue(toNode!.Node,toPort.InputOutput);
                             toNode.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node,toPort.InputOutput);
                         }
                     }
