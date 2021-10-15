@@ -29,8 +29,8 @@ namespace BlueprintDeck.DependencyInjection
             services.AddSingleton<ValueSerializerRepository>();
             services.AddSingleton<IValueSerializerRepository>(provider => provider.GetRequiredService<ValueSerializerRepository>());
 
-            services.AddSingleton<RegistryFactory>();
-            services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
+            services.AddSingleton<BlueprintDeckRegistryFactory>();
+            services.AddSingleton<IBlueprintDeckRegistryFactory>(provider => provider.GetRequiredService<BlueprintDeckRegistryFactory>());
 
             services.AddSingleton<BlueprintFactory>();
             services.AddSingleton<IBlueprintFactory>(provider => provider.GetRequiredService<BlueprintFactory>());
@@ -43,7 +43,7 @@ namespace BlueprintDeck.DependencyInjection
 
             services.AddTransient<IPortConnectionManager, PortConnectionManager>();
 
-            var blueprintDeckBuilder = new RegistryBuilder(services);
+            var blueprintDeckBuilder = new RegistrationBuilder(services);
 
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
 
@@ -58,7 +58,7 @@ namespace BlueprintDeck.DependencyInjection
             private readonly IServiceCollection _services;
             private readonly SHA1 _sha1 = SHA1.Create();
 
-            public RegistryBuilder(IServiceCollection services)
+            public RegistrationBuilder(IServiceCollection services)
             {
                 _services = services;
                 _factory = new NodeRegistrationFactory(new AssemblyTypesResolver(), new PortRegistrationFactory(), new GenericTypeParametersFactory(),

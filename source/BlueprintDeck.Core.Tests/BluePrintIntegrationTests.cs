@@ -136,7 +136,7 @@ namespace BlueprintDeck.Instance.Factory
 
             var provider = services.BuildServiceProvider();
 
-            var registry = provider.GetRequiredService<IRegistryFactory>().CreateNodeRegistry();
+            var registry = provider.GetRequiredService<IBlueprintDeckRegistryFactory>().CreateNodeRegistry();
             var typeId = registry.DataTypes.FirstOrDefault()!.Id;
             
             Design.Node node1 = new()

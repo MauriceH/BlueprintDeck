@@ -6,13 +6,13 @@ using BlueprintDeck.Node.Registration;
 
 namespace BlueprintDeck.Design.Registry
 {
-    internal class RegistryFactory : IRegistryFactory
+    internal class BlueprintDeckRegistryFactory : IBlueprintDeckRegistryFactory
     {
         private readonly List<NodeRegistration> _nodeRegistrations;
         private readonly List<DataTypeRegistration> _dataTypeRegistrations;
         
 
-        public RegistryFactory(List<NodeRegistration> nodeRegistrations, List<DataTypeRegistration> dataTypeRegistrations)
+        public BlueprintDeckRegistryFactory(List<NodeRegistration> nodeRegistrations, List<DataTypeRegistration> dataTypeRegistrations)
         {
             if (nodeRegistrations == null) throw new ArgumentNullException(nameof(nodeRegistrations));
             if (dataTypeRegistrations == null) throw new ArgumentNullException(nameof(dataTypeRegistrations));

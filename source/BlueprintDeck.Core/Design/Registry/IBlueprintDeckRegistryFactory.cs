@@ -1,6 +1,6 @@
 namespace BlueprintDeck.Design.Registry
 {
-    public interface IRegistryFactory
+    public interface IBlueprintDeckRegistryFactory
     {
         BlueprintRegistry CreateNodeRegistry();
     }

@@ -12,20 +12,20 @@ namespace BlueprintDeck.AspNetCoreTestApp.Controllers
     {
 
         private readonly ILogger<BlueprintDeckController> _logger;
-        private readonly IRegistryFactory _registryFactory;
+        private readonly IBlueprintDeckRegistryFactory _blueprintDeckRegistryFactory;
         private readonly BlueprintInstance _instance;
 
-        public BlueprintDeckController(ILogger<BlueprintDeckController> logger, IRegistryFactory registryFactory, BlueprintInstance instance)
+        public BlueprintDeckController(ILogger<BlueprintDeckController> logger, IBlueprintDeckRegistryFactory blueprintDeckRegistryFactory, BlueprintInstance instance)
         {
             _logger = logger;
-            _registryFactory = registryFactory;
+            _blueprintDeckRegistryFactory = blueprintDeckRegistryFactory;
             _instance = instance;
         }
 
         [HttpGet("Registry")]
         public BlueprintRegistry GetRegistry()
         {
-            return _registryFactory.CreateNodeRegistry();
+            return _blueprintDeckRegistryFactory.CreateNodeRegistry();
         }
 
         [HttpGet("Design")]

@@ -45,7 +45,7 @@ namespace BlueprintDeck
 
             constantValueSerializerRepository.LoadSerializer(typeof(double)).Returns(new DoubleConstantValueSerializer());
 
-            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
+            var sut = new BlueprintDeckRegistryFactory(nodeRegistrations, dataTypeRegistrations);
             var registry = sut.CreateNodeRegistry();
 
             Assert.NotNull(registry.DataTypes);
@@ -93,7 +93,7 @@ namespace BlueprintDeck
             var expectedTypeName = "TType";
             var nodeRegistration = new NodeRegistration("id", "title", typeof(ToStringNode<>), new List<PortRegistration>(),
                 new List<string> { expectedTypeName }, new List<PropertyRegistration>());
-            var sut = new RegistryFactory(new List<NodeRegistration> { nodeRegistration }, new List<DataTypeRegistration>());
+            var sut = new BlueprintDeckRegistryFactory(new List<NodeRegistration> { nodeRegistration }, new List<DataTypeRegistration>());
 
             var actual = sut.CreateNodeRegistry();
             Assert.NotNull(actual.NodeTypes);
@@ -115,18 +115,18 @@ namespace BlueprintDeck
             var nodeRegistrations = new List<NodeRegistration> { testNode };
             var dataTypeRegistrations = new List<DataTypeRegistration>();
 
-            var sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
+            var sut = new BlueprintDeckRegistryFactory(nodeRegistrations, dataTypeRegistrations);
 
             Assert.Throws<Exception>(() => { sut.CreateNodeRegistry(); });
             nodeRegistrations = new List<NodeRegistration> { };
-            sut = new RegistryFactory(nodeRegistrations, dataTypeRegistrations);
+            sut = new BlueprintDeckRegistryFactory(nodeRegistrations, dataTypeRegistrations);
         }
 
         [Fact]
         public void TestConstructor()
         {
-            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(new List<NodeRegistration>(), null); });
-            Assert.Throws<ArgumentNullException>(() => { new RegistryFactory(null, null); });
+            Assert.Throws<ArgumentNullException>(() => { new BlueprintDeckRegistryFactory(new List<NodeRegistration>(), null); });
+            Assert.Throws<ArgumentNullException>(() => { new BlueprintDeckRegistryFactory(null, null); });
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace BlueprintDeck
         {
             var nodeRegistration = new NodeRegistration("id", "title", typeof(DelayNode), new List<PortRegistration>(),
                 new List<string>(), new List<PropertyRegistration>() { new(typeof(DelayNode).GetProperty("DefaultDelay")) });
-            var sut = new RegistryFactory(new List<NodeRegistration> { nodeRegistration }, new List<DataTypeRegistration>());
+            var sut = new BlueprintDeckRegistryFactory(new List<NodeRegistration> { nodeRegistration }, new List<DataTypeRegistration>());
 
             Assert.Throws<Exception>(() => { sut.CreateNodeRegistry(); });
         }
