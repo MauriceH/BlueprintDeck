@@ -51,7 +51,7 @@ namespace BlueprintDeck.DependencyInjection
         }
 
 
-        private class RegistryBuilder : IBlueprintRegistryBuilder
+        private class RegistrationBuilder : IBlueprintRegistryBuilder
         {
             private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new();
             private readonly NodeRegistrationFactory _factory;
