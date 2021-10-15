@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports;
@@ -35,11 +36,6 @@ namespace BlueprintDeck.Instance
         public void Activate()
         {
             Node.Activate();
-        }
-
-        public override string ToString()
-        {
-            return $"Node {Registration.NodeType} id {LifeTimeId}";
         }
     }
 }

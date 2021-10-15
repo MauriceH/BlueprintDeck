@@ -12,7 +12,7 @@ namespace BlueprintDeck.Design.Registry
         private readonly List<DataTypeRegistration> _dataTypeRegistrations;
         
 
-        public RegistryFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations)
+        public RegistryFactory(List<NodeRegistration> nodeRegistrations, List<DataTypeRegistration> dataTypeRegistrations)
         {
             if (nodeRegistrations == null) throw new ArgumentNullException(nameof(nodeRegistrations));
             if (dataTypeRegistrations == null) throw new ArgumentNullException(nameof(dataTypeRegistrations));

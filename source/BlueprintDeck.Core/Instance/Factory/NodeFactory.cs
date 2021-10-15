@@ -14,10 +14,10 @@ namespace BlueprintDeck.Instance.Factory
         private readonly Dictionary<string, DataTypeRegistration> _dataTypeRegistrations;
         private readonly Dictionary<string, NodeRegistration> _nodeRegistrations;
 
-        public NodeFactory(IServiceProvider serviceProvider)
+        public NodeFactory(IEnumerable<NodeRegistration> nodeRegistrations, IEnumerable<DataTypeRegistration> dataTypeRegistrations)
         {
-            _nodeRegistrations = serviceProvider.GetServices<NodeRegistration>().ToDictionary(x => x.Id, _ => _);
-            _dataTypeRegistrations = serviceProvider.GetServices<DataTypeRegistration>().ToDictionary(x => x.Id, _ => _);
+            _nodeRegistrations = nodeRegistrations.ToDictionary(x => x.Id, _ => _);
+            _dataTypeRegistrations = dataTypeRegistrations.ToDictionary(x => x.Id, _ => _);
         }
 
         public CreateNodeResult CreateNode(IServiceScope scope, string nodeTypeKey, Design.Node designNode)

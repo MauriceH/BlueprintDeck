@@ -79,11 +79,13 @@ namespace BlueprintDeck.Instance.Factory
                     var outputPorts = node.Ports.Where(x => x.Registration.Direction == Direction.Output);
                     foreach (var outputPort in outputPorts)
                     {
+                        if (outputPort == null) throw new Exception("output not initialized");
+                        
                         _portConnectionManager.InitializePortAsOutput(node, outputPort);
                         //outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
                         node.Node.GetType().GetProperty(outputPort.Registration.Property.Name)!.SetValue(node.Node, outputPort.InputOutput);
 
-                        if (outputPort == null) throw new Exception("output not initialized");
+
 
                         var portConnections = openConnections
                             .Where(x => x.NodeFrom == node.Design.Id && x.NodePortFrom == outputPort.Registration.Key)
@@ -96,7 +98,7 @@ namespace BlueprintDeck.Instance.Factory
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
                             if (toPort == null) throw new Exception("invalid connection");
                             _portConnectionManager.InitializePortAsInput(toNode!, toPort, outputPort.InputOutput!);
-                            toNode.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node, toPort.InputOutput);
+                            toNode!.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node, toPort.InputOutput);
                         }
                     }
                 }

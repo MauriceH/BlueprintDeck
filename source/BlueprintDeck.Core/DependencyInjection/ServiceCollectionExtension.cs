@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -36,6 +37,9 @@ namespace BlueprintDeck.DependencyInjection
 
             services.AddSingleton<NodeFactory>();
             services.AddSingleton<INodeFactory>(provider => provider.GetRequiredService<NodeFactory>());
+
+            services.AddTransient(provider => provider.GetServices<NodeRegistration>().ToList());
+            services.AddTransient(provider => provider.GetServices<DataTypeRegistration>().ToList());
 
             services.AddTransient<IPortConnectionManager, PortConnectionManager>();
 
