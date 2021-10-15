@@ -25,7 +25,29 @@ namespace BlueprintDeck.Instance
         {
             foreach (var nodeInstance in _nodes)
             {
-                nodeInstance.Node.Deactivate();
+                try
+                {
+                    nodeInstance.Node.Deactivate();
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
+
+                foreach (var port in nodeInstance.Ports)
+                {
+                    try
+                    {
+                        if( port.InputOutput is IDisposable disposable)
+                        {
+                            disposable.Dispose();
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                }
             }
 
             _scope.Dispose();
