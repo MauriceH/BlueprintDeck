@@ -2,7 +2,7 @@ using System;
 
 namespace BlueprintDeck.Instance
 {
-    public class GenericTypeParameterInstance
+    internal class GenericTypeParameterInstance
     {
         
         public string Key { get;  }

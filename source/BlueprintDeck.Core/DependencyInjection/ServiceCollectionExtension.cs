@@ -24,7 +24,7 @@ namespace BlueprintDeck.DependencyInjection
                 services.AddBlueprintDeck(_ => { });
         }
 
-        public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistrationBuilder> config)
+        public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintRegistryBuilder> config)
         {
             services.AddSingleton<ValueSerializerRepository>();
             services.AddSingleton<IValueSerializerRepository>(provider => provider.GetRequiredService<ValueSerializerRepository>());
@@ -51,7 +51,7 @@ namespace BlueprintDeck.DependencyInjection
         }
 
 
-        private class RegistrationBuilder : IBlueprintDeckRegistrationBuilder
+        private class RegistryBuilder : IBlueprintRegistryBuilder
         {
             private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new();
             private readonly NodeRegistrationFactory _factory;
