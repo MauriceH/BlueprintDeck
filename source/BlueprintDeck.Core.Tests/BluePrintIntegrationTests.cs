@@ -68,7 +68,7 @@ namespace BlueprintDeck.Instance.Factory
                 Title = "Test2",
                 GenericTypes = new List<NodeGenericType> { new() { GenericParameter = "TTestData", TypeId = "T1" } },
                 NodeTypeKey = "TestableNode",
-                Location = new NodeLocation(300, 500),
+                Location = new NodeLocation {X = 300, Y = 500},
                 Properties = new Dictionary<string, string>
                 {
                     ["TestProperty"] = "Test2"
