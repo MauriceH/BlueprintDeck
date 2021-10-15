@@ -21,11 +21,11 @@ namespace BlueprintDeck.Node.Default
                 DefaultDelay = TimeSpan.FromSeconds(2)
             };
 
-            await TestDelayNodeInternal(sut);
+            await TestDelayNodeInternal(sut, 1.0);
         }
 
        
-        private static async Task TestDelayNodeInternal(DelayNode sut)
+        private static async Task TestDelayNodeInternal(DelayNode sut, double failIfReadyBeforeTotalSeconds = 2.0)
         {
             var trigger = new Subject<object>();
             var triggerInput = new SimpleInput(trigger);
@@ -45,12 +45,12 @@ namespace BlueprintDeck.Node.Default
             await Task.WhenAny(timeout, tcs.Task);
             sw.Stop();
 
-            if (sw.Elapsed.TotalSeconds < 2.0)
+            if (sw.Elapsed.TotalSeconds < failIfReadyBeforeTotalSeconds)
             {
                 throw new Exception("Delay output reached before delay duration elapsed");
             }
 
-            if (timeout.IsCompleted || sw.Elapsed.TotalSeconds < 2.0)
+            if (timeout.IsCompleted || sw.Elapsed.TotalSeconds < failIfReadyBeforeTotalSeconds)
             {
                 throw new Exception("Delay timout reached");
             }
