@@ -1,4 +1,4 @@
-name: deploy
+name: deploy-version
 
 on:
   workflow_dispatch:
@@ -70,7 +70,7 @@ jobs:
 
     - name: Pack with dotnet
       working-directory: ${{env.working-directory}}
-      run: dotnet pack BlueprintDeck.Core/BlueprintDeck.Core.csproj --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-pre${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }} 
+      run: dotnet pack BlueprintDeck.Core/BlueprintDeck.Core.csproj --output nuget-packages --configuration Release /p:ContinuousIntegrationBuild=true -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }} 
 
     - name: Push with dotnet
       working-directory: ${{env.working-directory}}
