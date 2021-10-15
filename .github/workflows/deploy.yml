@@ -70,7 +70,7 @@ jobs:
 
     - name: Pack with dotnet
       working-directory: ${{env.working-directory}}
-      run: dotnet pack BlueprintDeck.Core/BlueprintDeck.Core.csproj --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }} 
+      run: dotnet pack BlueprintDeck.Core/BlueprintDeck.Core.csproj --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-pre${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }} 
 
     - name: Push with dotnet
       working-directory: ${{env.working-directory}}
