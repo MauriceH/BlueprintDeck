@@ -4,7 +4,7 @@ using BlueprintDeck.Node;
 
 namespace BlueprintDeck.DependencyInjection
 {
-    public interface IBlueprintDeckRegistryBuilder
+    public interface IBlueprintRegistryBuilder
     {
         void RegisterNode<T>() where T : INode; 
         void RegisterNode(Type type); 
