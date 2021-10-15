@@ -40,7 +40,7 @@ namespace BlueprintDeck.PrototypeTestApp
 
             var container = services.BuildServiceProvider();
 
-            var registry = container.GetRequiredService<IRegistryFactory>().CreateNodeRegistry();
+            var registry = container.GetRequiredService<IBlueprintDeckRegistryFactory>().CreateNodeRegistry();
             var json = JsonConvert.SerializeObject(registry, Formatting.Indented, new JsonSerializerSettings()
             {
                 NullValueHandling = NullValueHandling.Ignore

@@ -24,13 +24,13 @@ namespace BlueprintDeck.DependencyInjection
                 services.AddBlueprintDeck(_ => { });
         }
 
-        public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistryBuilder> config)
+        public static void AddBlueprintDeck(this IServiceCollection services, Action<IBlueprintDeckRegistrationBuilder> config)
         {
             services.AddSingleton<ValueSerializerRepository>();
             services.AddSingleton<IValueSerializerRepository>(provider => provider.GetRequiredService<ValueSerializerRepository>());
 
-            services.AddSingleton<RegistryFactory>();
-            services.AddSingleton<IRegistryFactory>(provider => provider.GetRequiredService<RegistryFactory>());
+            services.AddSingleton<BlueprintDeckRegistryFactory>();
+            services.AddSingleton<IBlueprintDeckRegistryFactory>(provider => provider.GetRequiredService<BlueprintDeckRegistryFactory>());
 
             services.AddSingleton<BlueprintFactory>();
             services.AddSingleton<IBlueprintFactory>(provider => provider.GetRequiredService<BlueprintFactory>());
@@ -43,7 +43,7 @@ namespace BlueprintDeck.DependencyInjection
 
             services.AddTransient<IPortConnectionManager, PortConnectionManager>();
 
-            var blueprintDeckBuilder = new RegistryBuilder(services);
+            var blueprintDeckBuilder = new RegistrationBuilder(services);
 
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
 
@@ -51,14 +51,14 @@ namespace BlueprintDeck.DependencyInjection
         }
 
 
-        private class RegistryBuilder : IBlueprintDeckRegistryBuilder
+        private class RegistrationBuilder : IBlueprintDeckRegistrationBuilder
         {
             private readonly Dictionary<Type, DataTypeRegistration> _dataTypes = new();
             private readonly NodeRegistrationFactory _factory;
             private readonly IServiceCollection _services;
             private readonly SHA1 _sha1 = SHA1.Create();
 
-            public RegistryBuilder(IServiceCollection services)
+            public RegistrationBuilder(IServiceCollection services)
             {
                 _services = services;
                 _factory = new NodeRegistrationFactory(new AssemblyTypesResolver(), new PortRegistrationFactory(), new GenericTypeParametersFactory(),

@@ -52,7 +52,7 @@ namespace BlueprintDeck.DependencyInjection
             services.AddBlueprintDeck();
             var provider = services.BuildServiceProvider();
             provider.GetRequiredService<IValueSerializerRepository>();
-            provider.GetRequiredService<IRegistryFactory>();
+            provider.GetRequiredService<IBlueprintDeckRegistryFactory>();
             provider.GetRequiredService<IBlueprintFactory>();
             provider.GetRequiredService<INodeFactory>();
             provider.GetRequiredService<IPortConnectionManager>();

@@ -1,8 +1,9 @@
+using System;
+
 namespace BlueprintDeck.Instance
 {
-    public interface IBlueprintInstance
+    public interface IBlueprintInstance : IDisposable
     {
-        void Dispose();
         void Activate();
     }
 }
