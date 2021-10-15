@@ -16,8 +16,15 @@ namespace BlueprintDeck.ASPNetCoreIntegration.Controllers
     public class BlueprintControllerController : ControllerBase
     {
 
+        private readonly IBlueprintFactory _blueprintFactory;
+        
         private Blueprint _latestBlueprint;
-       
+
+        public BlueprintControllerController(IBlueprintFactory blueprintFactory)
+        {
+            _blueprintFactory = blueprintFactory ?? throw new ArgumentNullException(nameof(blueprintFactory));
+        }
+
         [HttpGet("registry")]
         public ActionResult<BlueprintRegistry> GetRegistry([FromServices] IBlueprintDeckRegistryFactory registryFactory)
         {
@@ -38,10 +45,12 @@ namespace BlueprintDeck.ASPNetCoreIntegration.Controllers
         }
         
         
-        public void Start(IBlueprintFactory blueprintFactory)
+        
+        //Start Blueprint from any location
+        public void Start()
         {
             if (_latestBlueprint == null) throw new Exception("Blueprint not initialized");
-            using var blueprintInstance = blueprintFactory.CreateBlueprint(_latestBlueprint);
+            using var blueprintInstance = _blueprintFactory.CreateBlueprint(_latestBlueprint);
             blueprintInstance.Activate();
         }
         
