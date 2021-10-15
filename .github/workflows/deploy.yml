@@ -7,6 +7,8 @@ jobs:
   build:
   
     runs-on: ubuntu-latest
+    env:
+        working-directory: ./source/
       
     steps:
     - uses: actions/checkout@v2
@@ -59,13 +61,17 @@ jobs:
         dotnet-version: 5.0.x
 
     - name: Build with dotnet
+      working-directory: ${{env.working-directory}}
       run: dotnet build --configuration Release
 
     - name: Test with dotnet
+      working-directory: ${{env.working-directory}}
       run: dotnet test
 
     - name: Pack with dotnet
+      working-directory: ${{env.working-directory}}
       run: dotnet pack source/BlueprintDeck.Core/BlueprintDeck.Core.csproj --output nuget-packages --configuration Release -p:PackageVersion=${{ steps.gitversion.outputs.nuGetVersionV2 }}-${{ steps.gitversion.outputs.CommitsSinceVersionSourcePadded }} 
 
     - name: Push with dotnet
+      working-directory: ${{env.working-directory}}
       run: dotnet nuget push nuget-packages/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
