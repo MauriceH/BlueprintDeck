@@ -11,6 +11,7 @@ namespace BlueprintDeck.Node.Properties.Registration
         {
             var propertyInfos = nodeType.GetProperties();
             var result = new List<PropertyRegistration>();
+            var includeAllProperties = nodeType.GetCustomAttribute<ExcludePropertiesAttribute>() == null;
 
             foreach (var property in propertyInfos)
             {
@@ -18,8 +19,12 @@ namespace BlueprintDeck.Node.Properties.Registration
 
                 if (propertyType.IsInput() || propertyType.IsOutput()) continue;
                 if (propertyType == typeof(Design.Node)) continue;
-                if (property.GetCustomAttribute<ExcludeFromPropertiesAttribute>() != null) continue;
-
+                if (property.GetCustomAttribute<ExcludePropertyAttribute>() != null) continue;
+                if (property.GetCustomAttribute<IncludePropertyAttribute>() == null)
+                {
+                    if(!includeAllProperties) continue;    
+                }
+                
                 var registration = new PropertyRegistration(property);
 
                 var customAttributes = property.GetCustomAttributes(true);

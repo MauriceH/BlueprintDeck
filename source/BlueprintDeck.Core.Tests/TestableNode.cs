@@ -6,6 +6,7 @@ using BlueprintDeck.Node.Properties;
 namespace BlueprintDeck
 {
     [Node("TestableNode", "TestableNode")]
+    [ExcludeProperties]
     public class TestableNode<TTestData> : INode
     {
         private readonly TaskCompletionSource _tcsActivationDone = new();
@@ -13,28 +14,20 @@ namespace BlueprintDeck
         private readonly TaskCompletionSource _tcsSimpleInput = new();
         private readonly TaskCompletionSource<TTestData> _tcsComplexInput = new();
         
-        [ExcludeFromProperties]
         public bool SimpleInputTriggered { get; private set; }
         
-        [ExcludeFromProperties]
         public TTestData ComplexInputValue { get; private set; }
         
-        [ExcludeFromProperties]
         public bool Activated { get; private set; }
         
-        [ExcludeFromProperties]
         public bool Deactivated { get; private set; }
 
-        [ExcludeFromProperties]
         public Task ActivationDoneTask => _tcsActivationDone.Task;
         
-        [ExcludeFromProperties]
         public Task DeactivationDoneTask => _tcsDeactivationDone.Task;
         
-        [ExcludeFromProperties]
         public Task SimpleInputReceiveTask => _tcsSimpleInput.Task;
         
-        [ExcludeFromProperties]
         public Task<TTestData> ComplexInputReceiveTask => _tcsComplexInput.Task;
         
         [PortOptional]
@@ -49,6 +42,8 @@ namespace BlueprintDeck
         [PortOptional]
         public IOutput<TTestData> ComplexOutput { get; set; }
         
+        [PropertyTitle("Test Property")]
+        [IncludeProperty]
         public string TestProperty { get; set; }
         
         public TestableNode(TestableNodeAccessor<TTestData> nodeAccessor)
