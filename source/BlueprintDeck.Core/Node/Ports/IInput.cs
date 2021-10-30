@@ -6,7 +6,8 @@ namespace BlueprintDeck.Node.Ports
     
     public interface IInput  : IPort
     {
-        void OnData(Func<Task> action);
+        IObservable<object> Observable { get; }
+        IDisposable Subscribe(Func<Task> action);
     }
 
     public interface IInput<out T> : IDisposable,  IPort

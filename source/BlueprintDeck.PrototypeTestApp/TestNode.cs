@@ -23,7 +23,7 @@ namespace BlueprintDeck.PrototypeTestApp
         public Task Activate()
         {
             _logger.LogDebug("Start initializing test node");
-            Trigger?.OnData(() =>
+            Trigger?.Subscribe(() =>
             {
                 _logger.LogInformation("TestNode {ShortTitle} trigger event received", DesignValues.Title);
                 return Task.CompletedTask;

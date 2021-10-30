@@ -54,7 +54,7 @@ namespace BlueprintDeck
 
         public Task Activate()
         {
-            SimpleInput?.OnData(() =>
+            SimpleInput?.Subscribe(() =>
             {
                 SimpleInputTriggered = true;
                 _tcsSimpleInput.SetResult();

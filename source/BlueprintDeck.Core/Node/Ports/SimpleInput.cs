@@ -8,33 +8,27 @@ namespace BlueprintDeck.Node.Ports
 {
     public class SimpleInput : IInput, IDisposable
     {
-        private readonly IDisposable _subscription;
-        private readonly List<Func<Task>> _actions = new();
+        private readonly IObservable<object> _rootObservable;
 
+        public IObservable<object> Observable => _rootObservable.AsObservable();
 
-        public SimpleInput(IObservable<object> observable)
+        public SimpleInput(IObservable<object> rootObservable)
         {
-            var connectable = observable.SelectMany(a => OnValueAsync()).Replay();
-            _subscription = connectable.Connect();
-        }
-        
-        
-        private async Task<object> OnValueAsync()
-        {
-            var tasks = _actions.Select(x => x());
-            await Task.WhenAll(tasks);
-            return new object();
-        }
-        
-        public void OnData(Func<Task> action)
-        {
-            _actions.Add(action);
+            _rootObservable = rootObservable;
         }
 
+        public IDisposable Subscribe(Func<Task> action)
+        {
+            var connectable = _rootObservable.SelectMany(async _ =>
+            {
+                await action();
+                return _;
+            }).Replay();
+            return connectable.Connect();
+        }
 
         public void Dispose()
         {
-            _subscription?.Dispose();
         }
     }
 }
