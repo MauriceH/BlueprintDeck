@@ -18,7 +18,7 @@ jobs:
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.10
       with:
-          versionSpec: '6.0.x'
+          versionSpec: '5.x'
 
     - name: Use GitVersion
       id: gitversion # step id used as reference for output values
@@ -58,8 +58,9 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 5.0.x
-
+        dotnet-version: '6.0.x'
+        include-prerelease: true
+        
     - name: Build with dotnet
       working-directory: ${{env.working-directory}}
       run: dotnet build --configuration Release
