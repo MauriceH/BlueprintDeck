@@ -64,7 +64,8 @@ namespace BlueprintDeck.Instance.Factory
 
                 foreach (var propertyRegistration in nodeCreateResult.Registration.Properties)
                 {
-                    if (!(designNode.Properties?.TryGetValue(propertyRegistration.Name, out var rawValue) ?? false))
+                    var props = designNode?.Properties?.Keys.ToDictionary(x=>x.ToLower(),x=> designNode.Properties[x]);
+                    if (!(props?.TryGetValue(propertyRegistration.Name.ToLower(), out var rawValue) ?? false))
                     {
                         continue;
                     }
