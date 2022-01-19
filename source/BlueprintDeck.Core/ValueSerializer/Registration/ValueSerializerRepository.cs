@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.Node.Ports;
 
 namespace BlueprintDeck.ConstantValue.Registration
 {
@@ -16,13 +17,31 @@ namespace BlueprintDeck.ConstantValue.Registration
 
         public IRawValueSerializer LoadSerializer(Type type)
         {
+            if (TryLoadSerializer(type, out var serializer)) return serializer!;
+            throw  new ValueSerializerNotFoundException(type);
+        }
+        
+        public bool TryLoadSerializer(Type type, out IRawValueSerializer? serializer)
+        {
             lock (_serializers)
             {
-                if (_serializers.TryGetValue(type, out var serializer)) return serializer;
+                if (_serializers.TryGetValue(type, out var loadedSerializer))
+                {
+                    serializer = loadedSerializer;
+                    return true;
+                }
+
                 var serializerType = typeof(IValueSerializer<>).MakeGenericType(type);
-                var newSerializer = (IRawValueSerializer?)_serviceProvider.GetService(serializerType);
-                _serializers[type] = newSerializer ?? throw new ValueSerializerNotFoundException(type);
-                return newSerializer;
+                loadedSerializer = (IRawValueSerializer?)_serviceProvider.GetService(serializerType);
+                if (loadedSerializer == null)
+                {
+                    serializer = null;
+                    return false;
+                }
+
+                _serializers[type] = loadedSerializer;
+                serializer = loadedSerializer;
+                return true;
             }
         }
     }

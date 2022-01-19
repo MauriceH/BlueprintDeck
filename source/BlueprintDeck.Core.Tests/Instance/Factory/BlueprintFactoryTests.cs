@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Misc;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
@@ -21,8 +22,10 @@ namespace BlueprintDeck.Instance.Factory
 
             serviceScopeFactory.CreateScope().Returns(scope);
             serviceProvider.GetService(Arg.Any<Type>()).Returns(serviceScopeFactory);
+
+            var serializerRepo = Substitute.For<IValueSerializerRepository>();
             
-            var sut = new BlueprintFactory(serviceProvider, nodeFactory, portConnectionManager);
+            var sut = new BlueprintFactory(serviceProvider, nodeFactory, portConnectionManager, serializerRepo);
 
             Assert.Throws<ArgumentNullException>(() =>
             {

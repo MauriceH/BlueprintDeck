@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace BlueprintDeck.Instance.Factory
 {
@@ -14,12 +16,14 @@ namespace BlueprintDeck.Instance.Factory
         private readonly INodeFactory _nodeFactory;
         private readonly IPortConnectionManager _portConnectionManager;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IValueSerializerRepository _valueSerializerRepository;
 
-        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IPortConnectionManager portConnectionManager)
+        public BlueprintFactory(IServiceProvider serviceProvider, INodeFactory nodeFactory, IPortConnectionManager portConnectionManager, IValueSerializerRepository valueSerializerRepository)
         {
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _nodeFactory = nodeFactory ?? throw new ArgumentNullException(nameof(nodeFactory));
             _portConnectionManager = portConnectionManager ?? throw new ArgumentNullException(nameof(portConnectionManager));
+            _valueSerializerRepository = valueSerializerRepository ?? throw new ArgumentNullException(nameof(valueSerializerRepository));
         }
 
 
@@ -58,6 +62,33 @@ namespace BlueprintDeck.Instance.Factory
                     nodeInstance.Ports.Add(portInstance);
                 }
 
+                foreach (var propertyRegistration in nodeCreateResult.Registration.Properties)
+                {
+                    if (!(designNode.Properties?.TryGetValue(propertyRegistration.Name, out var rawValue) ?? false))
+                    {
+                        continue;
+                    }
+
+                    object? value = null;
+                    if (propertyRegistration.Type == typeof(string))
+                    {
+                        value = rawValue;
+                    }
+                    else
+                    {
+                        if (_valueSerializerRepository.TryLoadSerializer(propertyRegistration.Type, out var serializer))
+                        {
+                            value = serializer?.Deserialize(rawValue);
+                        }
+
+                        value ??= JsonConvert.DeserializeObject(rawValue, propertyRegistration.Type);
+                    }
+
+                    if (value == null) continue;
+                    var prop = nodeInstance.Node.GetType().GetProperty(propertyRegistration.Name) ?? throw new Exception($"Property {propertyRegistration.Name} not found on type {nodeInstance.Node.GetType().Name}");
+                    prop.SetValue(nodeInstance.Node, value);
+                }
+
                 nodes.Add(nodeInstance);
             }
 
@@ -80,11 +111,10 @@ namespace BlueprintDeck.Instance.Factory
                     foreach (var outputPort in outputPorts)
                     {
                         if (outputPort == null) throw new Exception("output not initialized");
-                        
+
                         _portConnectionManager.InitializePortAsOutput(node, outputPort);
                         //outputPort.Registration.Property.SetValue(node.Node,outputPort.InputOutput);
                         node.Node.GetType().GetProperty(outputPort.Registration.Property.Name)!.SetValue(node.Node, outputPort.InputOutput);
-
 
 
                         var portConnections = openConnections

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.DependencyInjection;
 using BlueprintDeck.Design;
 using BlueprintDeck.Design.Registry;
@@ -39,7 +40,10 @@ namespace BlueprintDeck.Instance.Factory
                     new(typeof(TestableNode<>).GetProperty("ComplexInput"), Direction.Input, null, "TTestData") { Mandatory = false },
                     new(typeof(TestableNode<>).GetProperty("ComplexOutput"), Direction.Output, null, "TTestData") { Mandatory = false }
                 },
-                new List<string> { "TTestData" }, new List<PropertyRegistration>());
+                new List<string> { "TTestData" }, new List<PropertyRegistration>()
+                {
+                    new(typeof(TestableNode<>).GetProperty("TestProperty"))
+                });
 
 
             var createResult1 = new CreateNodeResult(nodeRegistration, new TestableNode<string>(testableNodeAccessor1),
@@ -47,8 +51,9 @@ namespace BlueprintDeck.Instance.Factory
             var createResult2 = new CreateNodeResult(nodeRegistration, new TestableNode<string>(testableNodeAccessor2),
                 new List<GenericTypeParameterInstance> { new("TTestData", typeof(string)) });
 
+            var valueSerializerRepository = Substitute.For<IValueSerializerRepository>();
 
-            var sut = new BlueprintFactory(provider, nodeFactory, new PortConnectionManager());
+            var sut = new BlueprintFactory(provider, nodeFactory, new PortConnectionManager(),valueSerializerRepository);
 
             Design.Node node1 = new()
             {
@@ -113,6 +118,8 @@ namespace BlueprintDeck.Instance.Factory
             var portResult = await testableNodeAccessor2.Node.ComplexInputReceiveTask;
             Assert.Equal("TestValue", portResult);
 
+            Assert.Equal("Test1", testableNodeAccessor1.Node.TestProperty);
+            
             blueprintInstance.Dispose();
 
             await testableNodeAccessor1.Node.DeactivationDoneTask;
