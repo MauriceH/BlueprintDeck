@@ -1,28 +1,22 @@
 using System;
+using BlueprintDeck.ValueSerializer.Serializer;
 using Xunit;
 
 namespace BlueprintDeck.ConstantValue.Serializer
 {
-    public class Int32ConstantValueSerializerTests
+    public class NullableTimeSpanValueSerializerTests
     {
-        private readonly Int32ConstantValueSerializer _sut = new ();
+        private readonly NullableTimeSpanValueSerializer _sut = new ();
 
         [Fact]
-        public void TestSerialization_WhenInt32MaxValue_ConvertedCorrect()
+        public void TestSerialization_WhenTimeSpanValue_ConvertedCorrect()
         {
-            var expected = int.MaxValue;
+            var expected = TimeSpan.FromMilliseconds(3660);
             var serializedValue = _sut.Serialize(expected);
             var actual = _sut.Deserialize(serializedValue);
             Assert.Equal(expected, actual);
         }
-        [Fact]
-        public void TestSerialization_WhenInt32MinValue_ConvertedCorrect()
-        {
-            var expected = int.MinValue;
-            var serializedValue = _sut.Serialize(expected);
-            var actual = _sut.Deserialize(serializedValue);
-            Assert.Equal(expected, actual);
-        }
+       
         [Fact]
         public void TestSerialization_WhenNullValue_SerializesToNull()
         {
@@ -32,7 +26,7 @@ namespace BlueprintDeck.ConstantValue.Serializer
         [Fact]
         public void TestSerialization_WhenInvalidValue_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => _sut.Serialize("t"));
+            Assert.Throws<Exception>(() => _sut.Serialize("t"));
         }
         [Fact]
         public void TestDeSerialization_WhenNullValue_DeSerializesToNull()
@@ -43,7 +37,13 @@ namespace BlueprintDeck.ConstantValue.Serializer
         [Fact]
         public void TestDeSerialization_WhenInvalidValue_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => _sut.Deserialize("t"));
+            Assert.Throws<Exception>(() => _sut.Deserialize("t"));
+        }
+        [Fact]
+        public void TestDeSerialization_WhenNullValue_ReturnsNull()
+        {
+            Assert.Null(_sut.Serialize(null));
+            Assert.Null(_sut.Deserialize(null));
         }
     }
 }

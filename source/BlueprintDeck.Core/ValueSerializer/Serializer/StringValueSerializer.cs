@@ -1,9 +1,9 @@
 using System;
 
-namespace BlueprintDeck.ConstantValue.Serializer
+namespace BlueprintDeck.ValueSerializer.Serializer
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class StringConstantValueSerializer : IValueSerializer<string>
+    public class StringValueSerializer : IValueSerializer<string>
     {
         public string? Serialize(object? value)
         {

@@ -1,20 +1,22 @@
 using System;
+using BlueprintDeck.ValueSerializer.Serializer;
 using Xunit;
 
 namespace BlueprintDeck.ConstantValue.Serializer
 {
-    public class StringConstantValueSerializerTests
+    public class TimeSpanValueSerializerTests
     {
-        private readonly StringConstantValueSerializer _sut = new ();
+        private readonly TimeSpanValueSerializer _sut = new ();
 
         [Fact]
-        public void TestSerialization_WhenString_ConvertedCorrect()
+        public void TestSerialization_WhenTimeSpanValue_ConvertedCorrect()
         {
-            var expected = "Test";
+            var expected = TimeSpan.FromMilliseconds(3660);
             var serializedValue = _sut.Serialize(expected);
             var actual = _sut.Deserialize(serializedValue);
             Assert.Equal(expected, actual);
         }
+       
         [Fact]
         public void TestSerialization_WhenNullValue_SerializesToNull()
         {
@@ -24,13 +26,18 @@ namespace BlueprintDeck.ConstantValue.Serializer
         [Fact]
         public void TestSerialization_WhenInvalidValue_ThrowsException()
         {
-            Assert.Throws<ArgumentException>(() => _sut.Serialize(765));
+            Assert.Throws<ArgumentException>(() => _sut.Serialize("t"));
         }
         [Fact]
         public void TestDeSerialization_WhenNullValue_DeSerializesToNull()
         {
             var deserializedValue = _sut.Deserialize(null);
             Assert.Null(deserializedValue);
+        }
+        [Fact]
+        public void TestDeSerialization_WhenInvalidValue_ThrowsException()
+        {
+            Assert.Throws<ArgumentException>(() => _sut.Deserialize("t"));
         }
     }
 }

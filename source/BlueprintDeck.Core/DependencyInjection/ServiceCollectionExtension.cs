@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
@@ -13,6 +12,8 @@ using BlueprintDeck.Node;
 using BlueprintDeck.Node.Ports.Registration;
 using BlueprintDeck.Node.Properties.Registration;
 using BlueprintDeck.Node.Registration;
+using BlueprintDeck.ValueSerializer;
+using BlueprintDeck.ValueSerializer.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlueprintDeck.DependencyInjection
@@ -105,6 +106,11 @@ namespace BlueprintDeck.DependencyInjection
                 var dataTypeRegistration = new DataTypeRegistration($"{type.Name}-{typeHash}", type, title);
                 _dataTypes[type] = dataTypeRegistration;
                 _services.AddSingleton(dataTypeRegistration);
+            }
+
+            public void RegisterSerializer<T, TValueType>() where T : IValueSerializer<TValueType>
+            {
+                
             }
 
             private void RegisterRegistration(NodeRegistration registration)

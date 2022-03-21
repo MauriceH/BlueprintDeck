@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Design;
 using BlueprintDeck.Misc;
 using BlueprintDeck.Node.Ports;
+using BlueprintDeck.ValueSerializer.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

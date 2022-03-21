@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.Misc;
+using BlueprintDeck.ValueSerializer.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Xunit;

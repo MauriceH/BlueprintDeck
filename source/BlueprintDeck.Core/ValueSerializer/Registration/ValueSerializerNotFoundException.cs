@@ -1,6 +1,6 @@
 using System;
 
-namespace BlueprintDeck.ConstantValue.Serializer
+namespace BlueprintDeck.ValueSerializer.Registration
 {
     public class ValueSerializerNotFoundException : Exception
     {
