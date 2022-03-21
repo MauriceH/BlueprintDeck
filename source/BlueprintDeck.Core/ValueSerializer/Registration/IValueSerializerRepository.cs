@@ -1,7 +1,6 @@
 using System;
-using BlueprintDeck.ConstantValue.Serializer;
 
-namespace BlueprintDeck.ConstantValue.Registration
+namespace BlueprintDeck.ValueSerializer.Registration
 {
     internal interface IValueSerializerRepository
     {

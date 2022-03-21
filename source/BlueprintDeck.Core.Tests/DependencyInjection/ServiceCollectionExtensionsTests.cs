@@ -1,11 +1,11 @@
 using System;
 using System.Linq;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
 using BlueprintDeck.Instance.Factory;
 using BlueprintDeck.Node.Default.DataTypes;
 using BlueprintDeck.Node.Registration;
+using BlueprintDeck.ValueSerializer.Registration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 

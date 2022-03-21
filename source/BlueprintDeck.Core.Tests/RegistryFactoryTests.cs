@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
 using BlueprintDeck.DataTypes.Registration;
 using BlueprintDeck.Design.Registry;
@@ -12,6 +11,8 @@ using BlueprintDeck.Node.Ports;
 using BlueprintDeck.Node.Ports.Registration;
 using BlueprintDeck.Node.Properties.Registration;
 using BlueprintDeck.Node.Registration;
+using BlueprintDeck.ValueSerializer.Registration;
+using BlueprintDeck.ValueSerializer.Serializer;
 using NSubstitute;
 using Xunit;
 
@@ -43,7 +44,7 @@ namespace BlueprintDeck
 
             var constantValueSerializerRepository = Substitute.For<IValueSerializerRepository>();
 
-            constantValueSerializerRepository.LoadSerializer(typeof(double)).Returns(new DoubleConstantValueSerializer());
+            constantValueSerializerRepository.LoadSerializer(typeof(double)).Returns(new DoubleValueSerializer());
 
             var sut = new BlueprintDeckRegistryFactory(nodeRegistrations, dataTypeRegistrations);
             var registry = sut.CreateNodeRegistry();

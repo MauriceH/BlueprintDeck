@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using BlueprintDeck.ConstantValue.Serializer;
-using BlueprintDeck.Node.Ports;
 
-namespace BlueprintDeck.ConstantValue.Registration
+namespace BlueprintDeck.ValueSerializer.Registration
 {
     internal class ValueSerializerRepository : IValueSerializerRepository
     {

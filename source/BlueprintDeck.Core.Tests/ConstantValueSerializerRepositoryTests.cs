@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
-using BlueprintDeck.ConstantValue.Registration;
 using BlueprintDeck.ConstantValue.Serializer;
+using BlueprintDeck.ValueSerializer;
+using BlueprintDeck.ValueSerializer.Registration;
+using BlueprintDeck.ValueSerializer.Serializer;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -10,7 +12,7 @@ namespace BlueprintDeck
     public class ConstantValueSerializerRepositoryTests
     {
         private readonly IValueSerializerRepository _sut;
-        private readonly DoubleConstantValueSerializer _doubleSerializer = new();
+        private readonly DoubleValueSerializer _doubleSerializer = new();
         
         public ConstantValueSerializerRepositoryTests()
         {

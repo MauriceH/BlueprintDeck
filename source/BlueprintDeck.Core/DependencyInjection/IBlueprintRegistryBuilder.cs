@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using BlueprintDeck.Node;
+using BlueprintDeck.ValueSerializer;
 
 namespace BlueprintDeck.DependencyInjection
 {
@@ -13,5 +14,6 @@ namespace BlueprintDeck.DependencyInjection
         void RegisterDataType<TDataType>(string title);
         void RegisterDataType(Type type);
         void RegisterDataType(Type type, string title);
+        void RegisterSerializer<T, TValueType>() where T : IValueSerializer<TValueType>;
     }
 }

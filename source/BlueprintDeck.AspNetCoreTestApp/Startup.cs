@@ -1,4 +1,6 @@
+using System;
 using BlueprintDeck.DependencyInjection;
+using BlueprintDeck.ValueSerializer.Serializer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,7 +24,10 @@ namespace BlueprintDeck.AspNetCoreTestApp
         {
             services.AddBlueprintDeck(builder =>
             {
-
+                builder.RegisterSerializer<NullableTimeSpanValueSerializer,TimeSpan?>();
+                builder.RegisterSerializer<TimeSpanValueSerializer,TimeSpan>();
+                builder.RegisterSerializer<DoubleValueSerializer,double>();
+                builder.RegisterSerializer<Int32ValueSerializer,int>();
             });
             services.AddSingleton<BlueprintInstance>();
             services.AddControllers();

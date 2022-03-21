@@ -1,16 +1,16 @@
 using System;
+using System.Globalization;
 
-namespace BlueprintDeck.ConstantValue.Serializer
+namespace BlueprintDeck.ValueSerializer.Serializer
 {
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class TimeSpanConstantValueSerializer : IValueSerializer<TimeSpan>
+    public class TimeSpanValueSerializer : IValueSerializer<TimeSpan>
     {
         public string? Serialize(object? value)
         {
             return value switch
             {
                 null => null,
-                TimeSpan ts => (ts.TotalMilliseconds).ToString(),
+                TimeSpan ts => (ts.TotalMilliseconds).ToString(CultureInfo.CurrentCulture),
                 _ => throw new ArgumentException($"Invalid value type {value.GetType().Name}")
             };
         }
