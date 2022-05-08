@@ -14,6 +14,6 @@ namespace BlueprintDeck.DependencyInjection
         void RegisterDataType<TDataType>(string title);
         void RegisterDataType(Type type);
         void RegisterDataType(Type type, string title);
-        void RegisterSerializer<T, TValueType>() where T : IValueSerializer<TValueType>;
+        void RegisterSerializer<T, TValueType>() where T : class, IValueSerializer<TValueType>;
     }
 }
