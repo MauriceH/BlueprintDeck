@@ -14,6 +14,7 @@ using BlueprintDeck.Node.Properties.Registration;
 using BlueprintDeck.Node.Registration;
 using BlueprintDeck.ValueSerializer;
 using BlueprintDeck.ValueSerializer.Registration;
+using BlueprintDeck.ValueSerializer.Serializer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlueprintDeck.DependencyInjection
@@ -43,11 +44,16 @@ namespace BlueprintDeck.DependencyInjection
             services.AddTransient(provider => provider.GetServices<DataTypeRegistration>().ToList());
 
             services.AddTransient<IPortConnectionManager, PortConnectionManager>();
+            
+            
 
             var blueprintDeckBuilder = new RegistrationBuilder(services);
 
             blueprintDeckBuilder.RegisterAssemblyNodes(Assembly.GetExecutingAssembly());
-
+            blueprintDeckBuilder.RegisterSerializer<NullableTimeSpanValueSerializer, TimeSpan?>();
+            blueprintDeckBuilder.RegisterSerializer<TimeSpanValueSerializer, TimeSpan>();
+            blueprintDeckBuilder.RegisterSerializer<Int32ValueSerializer, int>();
+            blueprintDeckBuilder.RegisterSerializer<DoubleValueSerializer, double>();
             config(blueprintDeckBuilder);
         }
 
@@ -108,9 +114,9 @@ namespace BlueprintDeck.DependencyInjection
                 _services.AddSingleton(dataTypeRegistration);
             }
 
-            public void RegisterSerializer<T, TValueType>() where T : IValueSerializer<TValueType>
+            public void RegisterSerializer<T, TValueType>() where T : class, IValueSerializer<TValueType>
             {
-                
+                _services.AddTransient<IValueSerializer<TValueType>,T>();
             }
 
             private void RegisterRegistration(NodeRegistration registration)
