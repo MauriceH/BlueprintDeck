@@ -129,7 +129,7 @@ namespace BlueprintDeck.Instance.Factory
                             var toPort = toNode?.Ports.FirstOrDefault(x => x.Registration.Key == connection.NodePortTo);
                             if (toPort == null) throw new Exception("invalid connection");
                             _portConnectionManager.InitializePortAsInput(toNode!, toPort, outputPort.InputOutput!);
-                            toNode!.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode!.Node, toPort.InputOutput);
+                            toNode!.Node.GetType().GetProperty(toPort.Registration.Property.Name)!.SetValue(toNode.Node, toPort.InputOutput);
                         }
                     }
                 }
