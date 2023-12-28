@@ -47,6 +47,10 @@ public class FixedTimeTimerNode : INode
         {
             _logger.LogDebug("Node {nodeTitle} triggers not after {maximumTriggerTime}", _design.Title, TriggerTimeMaximum);
         }
+        TriggerTime?.OnData((value) =>
+        {
+            _logger.LogDebug("Node {nodeTitle} receives TriggerTime {triggerTime}", _design.Title, value);
+        });
         return Task.CompletedTask;
     }
 
