@@ -28,13 +28,19 @@ namespace BlueprintDeck.Node.Default
 
         public Task Activate()
         {
-            _logger.LogDebug("Start initializing delay node");
+            _logger.LogDebug("Start initializing delay node with default delay {defaultDelay}", DefaultDelay);
             Input?.Subscribe(async () =>
             {
                 var valueTimeSpan = DelayDuration?.LastValue;
                 valueTimeSpan ??= DefaultDelay;
-                if (valueTimeSpan == null) return;
-                await Task.Delay(valueTimeSpan.Value);
+                if (valueTimeSpan == null)
+                {
+                    _logger.LogWarning("Delay node has no delay configured");
+                    return;
+                }
+                var delay = valueTimeSpan.Value;
+                _logger.LogTrace("Delay node triggered. Waiting {delay} to emit output",delay);
+                await Task.Delay(delay);
                 Output?.Emit();
             });
             return Task.CompletedTask;
